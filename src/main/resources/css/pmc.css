@@ -1,0 +1,28 @@
+.main {
+    -fx-background-color: -primary-color;
+    -fx-padding: 10;
+}
+
+.topbar {
+    -fx-background-radius: 5;
+    -fx-background-color: -topbar-color;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.sidebar {
+    -fx-background-radius: 5;
+    -fx-background-color: -sidebar-color;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.icon {
+    -fx-fill: -icon-color;
+    -fx-font-size: 20;
+}
+
+.logo {
+    -fx-text-fill: -accent-color;
+    -fx-font-size: 20;
+}

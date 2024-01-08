@@ -1,0 +1,9 @@
+.root {
+    -primary-color : #323232;
+    -accent-color: #E5A10C;
+
+    -sidebar-color: derive(-primary-color, -20%);
+    -topbar-color: derive(-primary-color, -80%);
+
+    -icon-color: grey;
+}

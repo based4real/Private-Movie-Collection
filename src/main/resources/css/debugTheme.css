@@ -1,0 +1,11 @@
+.root {
+    -border-color: red;
+}
+
+.sidebar {
+    -fx-border-color: -border-color;
+}
+
+.topbar {
+    -fx-border-color: -border-color;
+}
