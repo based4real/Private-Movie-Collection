@@ -4,7 +4,8 @@ package pmc.util;
  * Repræsenterer en checked exception specifikt for fejl, der opstår i forbindelse med håndtering af Movie entiteter.<br>
  * Anvendes for at give en klar og relevant fejlbesked relateret til Movie entiteter.<br>
  * <br>
- * Brugen af denne exception indikerer potentielle fejl i forbindelse med Movie entiteter.
+ * Hvis en metode kaster denne exception indikerer det, at metoden kan støde på en situation,
+ * hvor der opstås fejl i forbindelse med Movie entiteter.
  */
 public class MovieException extends Exception {
     /**
