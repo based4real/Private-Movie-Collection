@@ -3,9 +3,7 @@ package pmc;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pmc.gui.pmc.PMCController;
-
-import java.util.Locale;
+import pmc.gui.components.pmc.PMCController;
 
 /**
  * Indgangen til applikationen.

@@ -1,4 +1,4 @@
-package pmc.gui.pmc;
+package pmc.gui.components.pmc;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,10 +9,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Builder;
 
 import java.util.Locale;
@@ -32,10 +29,14 @@ import pmc.gui.widgets.LabelWidgets;
 public class PMCViewBuilder implements Builder<Region> {
     private final PMCModel model;
     private final ResourceBundle labelsBundle;
+    private final Region homeView;
+    private final Region categoriesView;
 
-    public PMCViewBuilder(PMCModel model) {
+    public PMCViewBuilder(PMCModel model, Region homeView, Region categoriesView) {
         this.model = model;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
+        this.homeView = homeView;
+        this.categoriesView = categoriesView;
     }
 
     @Override
@@ -53,7 +54,8 @@ public class PMCViewBuilder implements Builder<Region> {
         BorderPane.setMargin(sidebar, new Insets(0, 5, 0, 0));
 
         results.setTop(topbar);
-        results.setLeft(createSidebar());
+        results.setLeft(sidebar);
+        results.setCenter(createContent());
 
         return results;
     }
@@ -103,8 +105,18 @@ public class PMCViewBuilder implements Builder<Region> {
         categories.addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEvent);
         categories.addEventFilter(KeyEvent.KEY_PRESSED, consumeKeyPressEvent);
 
+        model.homeSelectedProperty().bind(home.selectedProperty());
+        model.categoriesSelectedProperty().bind(categories.selectedProperty());
+
         results.getChildren().addAll(home, categories);
 
         return results;
+    }
+
+    private Region createContent() {
+        homeView.visibleProperty().bind(model.homeSelectedProperty());
+        categoriesView.visibleProperty().bind(model.categoriesSelectedProperty());
+
+        return new StackPane(homeView, categoriesView);
     }
 }

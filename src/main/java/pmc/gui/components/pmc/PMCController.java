@@ -1,9 +1,11 @@
-package pmc.gui.pmc;
+package pmc.gui.components.pmc;
 
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
+import pmc.gui.components.categories.CategoriesController;
+import pmc.gui.components.home.HomeController;
 
 /**
  * Hoved Controller for Private Movie Collection (PMC) applikationen.<br>
@@ -15,7 +17,9 @@ public class PMCController implements IViewController {
 
     public PMCController(Stage stage) {
         this.model = new PMCModel();
-        this.viewBuilder = new PMCViewBuilder(model);
+        this.viewBuilder = new PMCViewBuilder(model,
+                new HomeController().getView(),
+                new CategoriesController().getView());
     }
 
     @Override
