@@ -5,9 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pmc.gui.components.pmc.PMCController;
 
-/**
- * Indgangen til applikationen.
- */
 public class Main extends Application {
     @Override
     public void start(Stage stage) {

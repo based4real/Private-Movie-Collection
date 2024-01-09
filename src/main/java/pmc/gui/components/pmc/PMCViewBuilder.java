@@ -19,9 +19,7 @@ import java.util.ResourceBundle;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
-import pmc.gui.widgets.ButtonWidgets;
-import pmc.gui.widgets.IconWidgets;
-import pmc.gui.widgets.LabelWidgets;
+import pmc.gui.widgets.*;
 
 /**
  * Ansvarlig for at bygge brugergrænsefladen for det overordnede View i Private Movie Collection (PMC) applikationen.
@@ -74,43 +72,17 @@ public class PMCViewBuilder implements Builder<Region> {
     }
 
     private Region createSidebar() {
-        VBox results = new VBox();
-        results.getStyleClass().add("sidebar");
+        NavigationGroup navGroup = new NavigationGroup("sidebar");
 
-        ToggleButton home = ButtonWidgets.navButton(Material2AL.HOME, labelsBundle.getString("home"));
-        ToggleButton categories = ButtonWidgets.navButton(Material2AL.CATEGORY, labelsBundle.getString("categories"));
+        NavigationButton home = new NavigationButton(Material2AL.HOME, labelsBundle.getString("home"));
+        NavigationButton categories = new NavigationButton(Material2AL.CATEGORY, labelsBundle.getString("categories"));
 
-        ToggleGroup toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().addAll(home, categories);
+        navGroup.add(home, model.homeSelectedProperty());
+        navGroup.add(categories, model.categoriesSelectedProperty());
 
         home.setSelected(true);
 
-        // Bruges til at konsumere MOUSE_PRESSED event på ToggleButtons så en knap ikke kan blive deselected.
-        EventHandler<MouseEvent> consumeMouseEvent = event -> {
-            if (((ToggleButton) event.getSource()).isSelected()) {
-                event.consume();
-            }
-        };
-
-        // Bruges til at konsumere KEY_PRESSED event på ToggleButtons så en kan knap ikke kan
-        // blive reselected/deselected ved at trykke space
-        EventHandler<KeyEvent> consumeKeyPressEvent = event -> {
-            if (((ToggleButton) event.getSource()).isSelected() && event.getCode() == KeyCode.SPACE) {
-                event.consume();
-            }
-        };
-
-        home.addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEvent);
-        home.addEventFilter(KeyEvent.KEY_PRESSED, consumeKeyPressEvent);
-        categories.addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEvent);
-        categories.addEventFilter(KeyEvent.KEY_PRESSED, consumeKeyPressEvent);
-
-        model.homeSelectedProperty().bind(home.selectedProperty());
-        model.categoriesSelectedProperty().bind(categories.selectedProperty());
-
-        results.getChildren().addAll(home, categories);
-
-        return results;
+        return navGroup.getView();
     }
 
     private Region createContent() {
