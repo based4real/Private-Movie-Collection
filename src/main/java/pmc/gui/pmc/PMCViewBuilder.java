@@ -3,10 +3,11 @@ package pmc.gui.pmc;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,7 +20,9 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
+import pmc.gui.widgets.ButtonWidgets;
 import pmc.gui.widgets.IconWidgets;
 import pmc.gui.widgets.LabelWidgets;
 
@@ -72,8 +75,8 @@ public class PMCViewBuilder implements Builder<Region> {
         VBox results = new VBox();
         results.getStyleClass().add("sidebar");
 
-        ToggleButton home = new ToggleButton(labelsBundle.getString("home"));
-        ToggleButton categories = new ToggleButton(labelsBundle.getString("categories"));
+        ToggleButton home = ButtonWidgets.navButton(Material2AL.HOME, labelsBundle.getString("home"));
+        ToggleButton categories = ButtonWidgets.navButton(Material2AL.CATEGORY, labelsBundle.getString("categories"));
 
         ToggleGroup toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(home, categories);
@@ -87,8 +90,18 @@ public class PMCViewBuilder implements Builder<Region> {
             }
         };
 
+        // Bruges til at konsumere KEY_PRESSED event på ToggleButtons så en kan knap ikke kan
+        // blive reselected/deselected ved at trykke space
+        EventHandler<KeyEvent> consumeKeyPressEvent = event -> {
+            if (((ToggleButton) event.getSource()).isSelected() && event.getCode() == KeyCode.SPACE) {
+                event.consume();
+            }
+        };
+
         home.addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEvent);
+        home.addEventFilter(KeyEvent.KEY_PRESSED, consumeKeyPressEvent);
         categories.addEventFilter(MouseEvent.MOUSE_PRESSED, consumeMouseEvent);
+        categories.addEventFilter(KeyEvent.KEY_PRESSED, consumeKeyPressEvent);
 
         results.getChildren().addAll(home, categories);
 

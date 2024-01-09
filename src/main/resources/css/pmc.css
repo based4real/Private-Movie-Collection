@@ -13,7 +13,7 @@
 .sidebar {
     -fx-background-radius: 5;
     -fx-background-color: -sidebar-color;
-    -fx-padding: 10;
+    -fx-padding: 0 10 0 0;
     -fx-spacing: 10;
 }
 
@@ -25,4 +25,43 @@
 .logo {
     -fx-text-fill: -accent-color;
     -fx-font-size: 20;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.nav-button .font-icon {
+    -fx-fill: -icon-color;
+    -fx-font-size: 24;
+}
+
+.nav-button .label {
+    -fx-text-fill: -icon-color;
+    -fx-font-size: 16;
+}
+
+.nav-button:selected .indicator {
+    -fx-background-color: -accent-color;
+}
+
+.nav-button:selected:hover .indicator {
+    -fx-background-color: white;
+}
+
+.nav-button:hover .label,
+.nav-button:hover .font-icon,
+.nav-button:selected:hover .label,
+.nav-button:selected:hover .font-icon {
+    -fx-text-fill: white;
+    -fx-fill: white;
+}
+
+.nav-button:selected .label,
+.nav-button:selected .font-icon,
+.nav-button:selected .indicator {
+    -fx-text-fill: -accent-color;
+    -fx-fill: -accent-color;
 }
