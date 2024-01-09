@@ -1,16 +1,12 @@
 package pmc.gui.widgets;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -33,6 +29,9 @@ public class ButtonWidgets {
         indicator.setMinWidth(1);
         indicator.setVisible(false);
 
+        // Juster højden på indicator baseret på højden af ikonet.
+        icon.layoutBoundsProperty().addListener((obs, ov, nv) -> indicator.setMinHeight(nv.getHeight() + 8));
+
         HBox hbox = new HBox(indicator, icon, label);
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.setSpacing(10);
@@ -47,7 +46,7 @@ public class ButtonWidgets {
 
         FadeTransition fadeIn = new FadeTransition(Duration.millis(200), hbox);
         fadeIn.setToValue(1.0);
-        fadeIn.setFromValue(0.5);
+        fadeIn.setFromValue(0.8);
 
         FadeTransition fadeOut = new FadeTransition(Duration.millis(200), hbox);
         fadeOut.setToValue(1.0);

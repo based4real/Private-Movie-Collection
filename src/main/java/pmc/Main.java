@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pmc.gui.pmc.PMCController;
 
+import java.util.Locale;
+
 /**
  * Indgangen til applikationen.
  */
