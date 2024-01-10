@@ -31,25 +31,25 @@ public class OMDBSearch extends OMDBConnector {
             if (responseJson.has("Error"))
                 return;
 
-            movieFound = parseMovieJson(responseJson);
+            movieFound = parseJson(responseJson);
 
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private OMDBMovieEntity parseMovieJson(JSONObject movieJson) throws JSONException {
+    private OMDBMovieEntity parseJson(JSONObject json) throws JSONException {
         return new OMDBMovieEntity(
-                movieJson.getString("Title"),
-                movieJson.getString("Rated"),
-                movieJson.getString("Released"),
-                movieJson.getString("Director"),
-                movieJson.getString("Country"),
-                movieJson.getString("Awards"),
-                movieJson.getString("BoxOffice"),
-                movieJson.getString("imdbID"),
-                movieJson.getString("imdbRating"),
-                movieJson.getString("imdbVotes")
+                json.getString("Title"),
+                json.getString("Rated"),
+                json.getString("Released"),
+                json.getString("Director"),
+                json.getString("Country"),
+                json.getString("Awards"),
+                json.getString("BoxOffice"),
+                json.getString("imdbID"),
+                json.getString("imdbRating"),
+                json.getString("imdbVotes")
         );
     }
 

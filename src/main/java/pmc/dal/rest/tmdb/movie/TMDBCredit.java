@@ -58,7 +58,7 @@ public class TMDBCredit extends TMDBConnector {
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject creditJson = results.getJSONObject(i);
-                TMDBCreditEntity credit = parseCreditJson(creditJson);
+                TMDBCreditEntity credit = parseJson(creditJson);
                 credits.add(credit);
             }
 
@@ -67,18 +67,18 @@ public class TMDBCredit extends TMDBConnector {
         }
     }
 
-    private TMDBCreditEntity parseCreditJson(JSONObject movieJson) throws JSONException, IOException {
-        String img = movieJson.getString("profile_path");
+    private TMDBCreditEntity parseJson(JSONObject json) throws JSONException, IOException {
+        String img = json.getString("profile_path");
 
         return new TMDBCreditEntity(
-                movieJson.getInt("gender"),
-                movieJson.getInt("id"),
-                movieJson.getString("known_for_department"),
-                movieJson.getString("name"),
-                movieJson.getString("original_name"),
+                json.getInt("gender"),
+                json.getInt("id"),
+                json.getString("known_for_department"),
+                json.getString("name"),
+                json.getString("original_name"),
                 !img.equals("null") ? getImageUrl() + img : null,
-                movieJson.getString("character"),
-                movieJson.getInt("order")
+                json.getString("character"),
+                json.getInt("order")
         );
     }
 

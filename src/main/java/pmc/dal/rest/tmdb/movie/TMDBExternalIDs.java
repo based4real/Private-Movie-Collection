@@ -37,7 +37,7 @@ public class TMDBExternalIDs extends TMDBConnector {
             JSONObject responseJson = new JSONObject(response.body());
 
             if (responseJson.length() > 0) {
-                externalIDs = parseMovieJson(responseJson);
+                externalIDs = parseJson(responseJson);
             }
 
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
@@ -45,14 +45,14 @@ public class TMDBExternalIDs extends TMDBConnector {
         }
     }
 
-    private TMDBExternalIDEntity parseMovieJson(JSONObject movieJson) throws JSONException {
+    private TMDBExternalIDEntity parseJson(JSONObject json) throws JSONException {
         return new TMDBExternalIDEntity(
-                movieJson.getInt("id"),
-                movieJson.getString("imdb_id"),
-                movieJson.getString("wikidata_id"),
-                movieJson.getString("facebook_id"),
-                movieJson.getString("instagram_id"),
-                movieJson.getString("twitter_id")
+                json.getInt("id"),
+                json.getString("imdb_id"),
+                json.getString("wikidata_id"),
+                json.getString("facebook_id"),
+                json.getString("instagram_id"),
+                json.getString("twitter_id")
                 );
     }
 

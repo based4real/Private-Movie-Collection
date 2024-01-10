@@ -38,7 +38,7 @@ public class TMDBGenre extends TMDBConnector {
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject creditJson = results.getJSONObject(i);
-                TMDBGenreEntity genre = parseGenreJson(creditJson);
+                TMDBGenreEntity genre = parseJson(creditJson);
                 genres.add(genre);
             }
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
@@ -46,10 +46,10 @@ public class TMDBGenre extends TMDBConnector {
         }
     }
 
-    private TMDBGenreEntity parseGenreJson(JSONObject movieJson) throws JSONException {
+    private TMDBGenreEntity parseJson(JSONObject json) throws JSONException {
         return new TMDBGenreEntity(
-                movieJson.getInt("id"),
-                movieJson.getString("name")
+                json.getInt("id"),
+                json.getString("name")
         );
     }
 

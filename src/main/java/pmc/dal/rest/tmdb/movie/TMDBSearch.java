@@ -51,7 +51,7 @@ public class TMDBSearch extends TMDBConnector {
 
             if (results.length() > 0) {
                 JSONObject movieJson = results.getJSONObject(0);
-                movieFound = parseMovieJson(movieJson, lang);
+                movieFound = parseJson(movieJson, lang);
             }
 
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
@@ -59,16 +59,16 @@ public class TMDBSearch extends TMDBConnector {
         }
     }
 
-    private TMDBMovieEntity parseMovieJson(JSONObject movieJson, TMDBLang lang) throws JSONException {
+    private TMDBMovieEntity parseJson(JSONObject json, TMDBLang lang) throws JSONException {
         return new TMDBMovieEntity(
-                movieJson.getString("overview"),
-                movieJson.getString("original_title"),
-                movieJson.getString("title"),
-                JsonHelper.getInstance().jsonArrayToList(movieJson.getJSONArray("genre_ids")),
-                movieJson.getString("poster_path"),
-                movieJson.optString("backdrop_path", null),
-                movieJson.getString("release_date"),
-                movieJson.getInt("id"),
+                json.getString("overview"),
+                json.getString("original_title"),
+                json.getString("title"),
+                JsonHelper.getInstance().jsonArrayToList(json.getJSONArray("genre_ids")),
+                json.getString("poster_path"),
+                json.optString("backdrop_path", null),
+                json.getString("release_date"),
+                json.getInt("id"),
                 lang
         );
     }
