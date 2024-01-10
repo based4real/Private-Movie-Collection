@@ -69,7 +69,7 @@ public class TMDBConnector {
     }
 
     public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException {
-        TMDBSearch tmdbSearch = new TMDBSearch("fight club", TMDBLang.DANISH);
+        TMDBSearch tmdbSearch = new TMDBSearch("green street hooligan", TMDBLang.DANISH);
 
         TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult();
         OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
