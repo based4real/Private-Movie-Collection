@@ -22,9 +22,9 @@ public class OMDBConnector {
                 .build();
     }
 
-    protected HttpResponse<String> getResponse(URI uri) throws IOException, InterruptedException, URISyntaxException {
+    protected HttpResponse<String> getResponse(String uri) throws IOException, InterruptedException, URISyntaxException {
         HttpClient httpClient = HttpClient.newHttpClient();
-        URI baseUri = new URI(getAPI() + configSystem.getOMDBToken() + uri.toString());
+        URI baseUri = new URI(getAPI() + configSystem.getOMDBToken() + uri);
         return httpClient.send(getRequest(baseUri), HttpResponse.BodyHandlers.ofString());
     }
 

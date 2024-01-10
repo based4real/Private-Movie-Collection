@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.bll.utils.ConfigSystem;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 import pmc.dal.rest.omdb.movie.OMDBSearch;
@@ -33,13 +34,6 @@ public class TMDBConnector {
                 .build();
     }
 
-    /**
-     *
-     * @param uri
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
-     */
     protected HttpResponse<String> getResponse(URI uri) throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
         return httpClient.send(getRequest(uri), HttpResponse.BodyHandlers.ofString());
@@ -64,12 +58,8 @@ public class TMDBConnector {
         return configSystem.getTMDBImageUrl();
     }
 
-    public String getPreferedLang() {
-        return "&language=en";
-    }
-
     public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException {
-        TMDBSearch tmdbSearch = new TMDBSearch("the departed", TMDBLang.DANISH);
+        TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
 
         TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult();
         OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
@@ -89,11 +79,14 @@ public class TMDBConnector {
         //     System.out.println(tmdbCredit.getName() + " " + tmdbCredit.getCharacterName() + " " + tmdbCredit.getImage());
         //}
 
-        TMDBGenre tmdbGenre = new TMDBGenre(TMDBLang.FRENCH);
-        for (TMDBGenreEntity tmdbGenre1 : tmdbGenre.getResult())
-            System.out.println(tmdbGenre1.getName());
+        for (TMDBVideoEntity tmdbVideo1 : tmdbMovieEntity.getVideos())
+            System.out.println(tmdbVideo1.getName());
 
-        OMDBSearch omdbSearch = new OMDBSearch("tt0048058", OMDBSearchMethod.IMDB);
-        System.out.println(omdbSearch.getResult().getTitle());
+        //  TMDBGenre tmdbGenre = new TMDBGenre(TMDBLang.FRENCH);
+        //   for (TMDBGenreEntity tmdbGenre1 : tmdbGenre.getResult())
+        //      System.out.println(tmdbGenre1.getName());
+
+       //  OMDBSearch omdbSearch = new OMDBSearch("tt0048058", OMDBSearchMethod.IMDB);
+        //  System.out.println(omdbSearch.getResult().getTitle());
     }
 }

@@ -23,12 +23,19 @@ public class TMDBCredit extends TMDBConnector {
     List<TMDBCreditEntity> credits = new ArrayList<>();
 
     public TMDBCredit(TMDBMovieEntity movie) {
-        this.moveId = movie.getId();
+        this.moveId = movie.getID();
         searchQuery(moveId, movie.getLang());
+    }
+
+    public TMDBCredit(TMDBMovieEntity movie, TMDBLang lang) {
+        this.moveId = movie.getID();
+        this.lang = lang;
+        searchQuery(moveId, lang);
     }
 
     public TMDBCredit(int moveId, TMDBLang lang) {
         this.moveId = moveId;
+        this.lang = lang;
         searchQuery(moveId, lang);
     }
 
