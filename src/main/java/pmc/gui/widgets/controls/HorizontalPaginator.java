@@ -1,5 +1,6 @@
 package pmc.gui.widgets.controls;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -36,7 +37,7 @@ public class HorizontalPaginator<T> extends VBox {
 
         ScrollPane scrollPane = createScrollPane(contentBox);
         HBox navigationBox = createNavigationBox(scrollPane);
-        HBox titleAndNavigation = createTitleAndNavigationBox(LabelWidgets.styledLabel("hpage-title"), navigationBox);
+        HBox titleAndNavigation = createTitleAndNavigationBox(LabelWidgets.styledLabel(title, "hpage-title"), navigationBox);
 
         this.getChildren().addAll(titleAndNavigation, scrollPane);
 
@@ -46,7 +47,7 @@ public class HorizontalPaginator<T> extends VBox {
     private HBox createContentBox() {
         HBox results = new HBox(itemSpacing);
 
-        results.setAlignment(Pos.CENTER);
+        results.setAlignment(Pos.CENTER_LEFT);
         results.setStyle("-fx-background-color: #323232");
         results.setPadding(new Insets(10, 5, 10, 5));
 
@@ -59,7 +60,8 @@ public class HorizontalPaginator<T> extends VBox {
         results.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         results.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         results.setFitToHeight(true);
-        results.setStyle("-fx-background-color: transparent");
+        results.setFitToWidth(true);
+        results.setStyle("-fx-background-color: transparent"); // bruges til at fjerne border på ScrollPane åbenbart
         results.setPadding(new Insets(0, 5, 0, 5));
 
         return results;

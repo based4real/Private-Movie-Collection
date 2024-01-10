@@ -28,6 +28,8 @@ public class NavigationButton extends ToggleButton {
 
         FontIcon icon = IconWidgets.styledIcon(iconCode, CSS_CLASS_NAV_BUTTON, CSS_CLASS_ICON);
         Label label = LabelWidgets.styledLabel(text, CSS_CLASS_NAV_BUTTON, CSS_CLASS_LABEL);
+
+
         Region indicator = createIndicator(icon);
         Region content = createContent(indicator, icon, label);
 

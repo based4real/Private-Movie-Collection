@@ -44,6 +44,7 @@ public class PMCViewBuilder implements Builder<Region> {
         Region topbar = createTopbar();
         Region sidebar = createSidebar();
 
+
         BorderPane.setMargin(topbar, new Insets(0, 0, 5, 0));
         BorderPane.setMargin(sidebar, new Insets(0, 5, 0, 0));
 
@@ -78,7 +79,10 @@ public class PMCViewBuilder implements Builder<Region> {
 
         home.setSelected(true);
 
-        return navGroup.getView();
+        Region sidebar = navGroup.getView();
+//        sidebar.setMinWidth(120);
+
+        return sidebar;
     }
 
     private Region createContent() {
