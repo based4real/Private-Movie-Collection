@@ -1,8 +1,5 @@
 package pmc.gui.widgets.controls;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -16,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.kordamp.ikonli.material2.Material2MZ;
+import pmc.gui.utils.Animations;
 import pmc.gui.widgets.ButtonWidgets;
 import pmc.gui.widgets.LabelWidgets;
 
@@ -107,8 +105,8 @@ public class HorizontalPaginator<T> extends VBox {
     private HBox createNavigationBox(ScrollPane scrollPane) {
         HBox results = new HBox(10);
 
-        Button prevButton = ButtonWidgets.actionIconButton(Material2MZ.NAVIGATE_BEFORE,"hpage-nav", event -> animateScrollByVisibleItems(-1, scrollPane));
-        Button nextButton = ButtonWidgets.actionIconButton(Material2MZ.NAVIGATE_NEXT,"hpage-nav", event -> animateScrollByVisibleItems(1, scrollPane));
+        Button prevButton = ButtonWidgets.actionIconButton(Material2MZ.NAVIGATE_BEFORE,"hpage-nav", event -> animateScroll(-1, scrollPane));
+        Button nextButton = ButtonWidgets.actionIconButton(Material2MZ.NAVIGATE_NEXT,"hpage-nav", event -> animateScroll(1, scrollPane));
 
         results.getChildren().addAll(prevButton, nextButton);
 
@@ -123,21 +121,16 @@ public class HorizontalPaginator<T> extends VBox {
         return results;
     }
 
-    private void animateScrollByVisibleItems(int direction, ScrollPane scrollPane) {
+    private void animateScroll(int direction, ScrollPane scrollPane) {
         double viewportWidth = scrollPane.getViewportBounds().getWidth();
         int visibleItems = (int) Math.floor(viewportWidth / (itemWidth + itemSpacing));
 
         double totalContentWidth = items.size() * (itemWidth + itemSpacing);
         double maxScrollWidth = totalContentWidth - viewportWidth;
 
-        double hvalueIncrement = (visibleItems * (itemWidth + itemSpacing)) / maxScrollWidth;
-        double newTargetHvalue = Math.max(Math.min(scrollPane.getHvalue() + (hvalueIncrement * direction), 1.0), 0.0);
+        double increment = (visibleItems * (itemWidth + itemSpacing)) / maxScrollWidth;
+        double targetVal = Math.max(Math.min(scrollPane.getHvalue() + (increment * direction), 1.0), 0.0);
 
-        Duration duration = Duration.millis(500);
-        Timeline timeline = new Timeline();
-        KeyValue keyValue = new KeyValue(scrollPane.hvalueProperty(), newTargetHvalue);
-        KeyFrame keyFrame = new KeyFrame(duration, keyValue);
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.play();
+        Animations.animate(scrollPane.hvalueProperty(), targetVal, Duration.millis(500));
     }
 }
