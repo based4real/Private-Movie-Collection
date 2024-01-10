@@ -1,6 +1,5 @@
-package pmc.gui.widgets;
+package pmc.gui.widgets.controls;
 
-import javafx.animation.FadeTransition;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -11,6 +10,8 @@ import javafx.util.Duration;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.javafx.FontIcon;
 import pmc.gui.utils.Animations;
+import pmc.gui.widgets.IconWidgets;
+import pmc.gui.widgets.LabelWidgets;
 
 public class NavigationButton extends ToggleButton {
     private static final PseudoClass HOVER = PseudoClass.getPseudoClass("hover");

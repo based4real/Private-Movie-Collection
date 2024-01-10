@@ -1,4 +1,4 @@
-package pmc.gui.widgets;
+package pmc.gui.widgets.controls;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.event.EventHandler;

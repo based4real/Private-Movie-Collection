@@ -4,7 +4,7 @@ import pmc.be.Movie;
 import pmc.dal.IDAO;
 import pmc.dal.MovieDAO_Mock;
 import pmc.dal.exception.DataAccessException;
-import pmc.util.MovieException;
+import pmc.utils.MovieException;
 
 import java.util.List;
 

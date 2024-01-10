@@ -66,3 +66,34 @@
     -fx-text-fill: -accent-color;
     -fx-fill: -accent-color;
 }
+
+.movie-poster {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+.hpage-nav {
+    -fx-font-size: 24;
+    -fx-fill: lightgrey;
+    -fx-cursor: hand;
+}
+
+.hpage-nav:hover {
+    -fx-fill: white;
+}
+
+.hpage-title {
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.hpage-nav .button:no-prev {
+    -fx-fill: firebrick;
+    -fx-cursor: default;
+}
+
+.hpage-nav:no-next {
+    -fx-fill: deeppink;
+    -fx-cursor: default;
+}

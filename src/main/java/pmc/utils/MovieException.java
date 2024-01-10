@@ -1,4 +1,4 @@
-package pmc.util;
+package pmc.utils;
 
 /**
  * Repræsenterer en checked exception specifikt for fejl, der opstår i forbindelse med håndtering af Movie entiteter.<br>

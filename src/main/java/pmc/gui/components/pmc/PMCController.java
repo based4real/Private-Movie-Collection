@@ -12,7 +12,6 @@ import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.home.HomeController;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ public class PMCController implements IViewController {
         this.model = new PMCModel();
         this.movieManager = new MovieManager();
         this.viewBuilder = new PMCViewBuilder(model,
-                new HomeController().getView(),
+                new HomeController(model.movieModels()).getView(),
                 new CategoriesController().getView());
 
         fetchData();
@@ -51,7 +50,6 @@ public class PMCController implements IViewController {
         // Håndter successful hentning af data
         fetchTask.setOnSucceeded(evt -> {
             model.movieModels().setAll(convertToMovieModels(fetchTask.getValue()));
-            System.out.println(model.movieModels());
         });
 
         // Håndter exceptions

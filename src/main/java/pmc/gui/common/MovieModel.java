@@ -11,6 +11,6 @@ public class MovieModel {
     }
 
     public StringProperty posterPathProperty() {
-        return posterPathProperty();
+        return posterPath;
     }
 }
