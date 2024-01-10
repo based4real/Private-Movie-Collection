@@ -48,21 +48,21 @@
     -fx-background-color: -accent-color;
 }
 
-.nav-button:selected:hover .indicator {
+.nav-button:active:hover .indicator {
     -fx-background-color: white;
 }
 
 .nav-button:hover .label,
 .nav-button:hover .font-icon,
-.nav-button:selected:hover .label,
-.nav-button:selected:hover .font-icon {
+.nav-button:active:hover .label,
+.nav-button:active:hover .font-icon {
     -fx-text-fill: white;
     -fx-fill: white;
 }
 
-.nav-button:selected .label,
-.nav-button:selected .font-icon,
-.nav-button:selected .indicator {
+.nav-button:active .label,
+.nav-button:active .font-icon,
+.nav-button:active .indicator {
     -fx-text-fill: -accent-color;
     -fx-fill: -accent-color;
 }

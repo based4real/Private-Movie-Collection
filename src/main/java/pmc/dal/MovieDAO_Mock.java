@@ -39,7 +39,7 @@ public class MovieDAO_Mock implements IDAO<Movie> {
 
         movies.add(new Movie(-1, "FIRST", generateRandomRating(), generateRandomRating(), "", POSTER_DIR + "madmax_resized.jpg", generateRandomDateTime()));
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 50; i++) {
             movies.add(generateRandomMovie());
         }
 

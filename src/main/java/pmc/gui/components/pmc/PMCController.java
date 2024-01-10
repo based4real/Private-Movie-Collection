@@ -10,6 +10,8 @@ import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.home.HomeController;
+import pmc.gui.components.info.InfoController;
+import pmc.gui.components.info.InfoViewBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +23,25 @@ import java.util.List;
 public class PMCController implements IViewController {
     private final PMCModel model;
     private final Builder<Region> viewBuilder;
+
+    private final HomeController homeController;
+    private final CategoriesController categoriesController;
+    private final InfoController infoController;
+
     private final MovieManager movieManager;
 
     public PMCController(Stage stage) {
         this.model = new PMCModel();
         this.movieManager = new MovieManager();
+
+        this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick);
+        this.categoriesController = new CategoriesController();
+        this.infoController = new InfoController();
+
         this.viewBuilder = new PMCViewBuilder(model,
-                new HomeController(model.movieModels()).getView(),
-                new CategoriesController().getView());
+                homeController.getView(),
+                categoriesController.getView(),
+                infoController.getView());
 
         fetchData();
     }
@@ -69,5 +82,10 @@ public class PMCController implements IViewController {
         }
 
         return movieModels;
+    }
+
+    private void handleMoviePosterClick(MovieModel movieModel) {
+        infoController.setModel(movieModel);
+        model.activeViewProperty().set(ViewType.INFO);
     }
 }

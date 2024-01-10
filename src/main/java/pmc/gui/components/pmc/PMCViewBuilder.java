@@ -2,6 +2,7 @@ package pmc.gui.components.pmc;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
@@ -25,12 +26,14 @@ public class PMCViewBuilder implements Builder<Region> {
     private final ResourceBundle labelsBundle;
     private final Region homeView;
     private final Region categoriesView;
+    private final Region infoView;
 
-    public PMCViewBuilder(PMCModel model, Region homeView, Region categoriesView) {
+    public PMCViewBuilder(PMCModel model, Region homeView, Region categoriesView, Region infoView) {
         this.model = model;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
         this.homeView = homeView;
         this.categoriesView = categoriesView;
+        this.infoView = infoView;
     }
 
     @Override
@@ -69,26 +72,19 @@ public class PMCViewBuilder implements Builder<Region> {
     }
 
     private Region createSidebar() {
-        NavigationGroup navGroup = new NavigationGroup("sidebar");
+        NavigationGroup results = new NavigationGroup("sidebar", model.activeViewProperty());
 
-        NavigationButton home = new NavigationButton(Material2AL.HOME, labelsBundle.getString("home"));
-        NavigationButton categories = new NavigationButton(Material2AL.CATEGORY, labelsBundle.getString("categories"));
+        results.add(Material2AL.HOME, labelsBundle.getString("home"), ViewType.HOME);
+        results.add(Material2AL.CATEGORY, labelsBundle.getString("categories"), ViewType.CATEGORIES);
 
-        navGroup.add(home, model.homeSelectedProperty());
-        navGroup.add(categories, model.categoriesSelectedProperty());
-
-        home.setSelected(true);
-
-        Region sidebar = navGroup.getView();
-//        sidebar.setMinWidth(120);
-
-        return sidebar;
+        return results.getView();
     }
 
     private Region createContent() {
-        homeView.visibleProperty().bind(model.homeSelectedProperty());
-        categoriesView.visibleProperty().bind(model.categoriesSelectedProperty());
+        homeView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.HOME));
+        categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
+        infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
 
-        return new StackPane(homeView, categoriesView);
+        return new StackPane(homeView, categoriesView, infoView);
     }
 }
