@@ -1,7 +1,6 @@
 package pmc.be.rest.tmdb;
 
 public class TMDBVideoEntity {
-
     private String name;
     private String youtubeUrl;
     private String site;
@@ -11,11 +10,13 @@ public class TMDBVideoEntity {
     private String publishedAt;
     private String id;
 
+    private static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
+
     public TMDBVideoEntity(String name, String youtubeUrl, String site,
                            int size, String type, boolean official,
                            String publishedAt, String id) {
         this.name = name;
-        this.youtubeUrl = youtubeUrl;
+        this.youtubeUrl = YOUTUBE_URL + youtubeUrl;
         this.site = site;
         this.size = size;
         this.type = type;

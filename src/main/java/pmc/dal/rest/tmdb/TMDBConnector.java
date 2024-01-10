@@ -82,7 +82,7 @@ public class TMDBConnector {
         //}
 
         for (TMDBVideoEntity tmdbVideo1 : tmdbMovieEntity.getVideos())
-            System.out.println(tmdbVideo1.getName());
+            System.out.println(tmdbVideo1.getYoutubeUrl());
 
         //  TMDBGenre tmdbGenre = new TMDBGenre(TMDBLang.FRENCH);
         //   for (TMDBGenreEntity tmdbGenre1 : tmdbGenre.getResult())
