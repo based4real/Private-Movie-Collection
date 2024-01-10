@@ -5,6 +5,7 @@ import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 import pmc.dal.rest.omdb.movie.OMDBSearch;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 import pmc.dal.rest.tmdb.movie.TMDBCredit;
+import pmc.dal.rest.tmdb.movie.TMDBExternalIDs;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.dal.rest.tmdb.movie.TMDBVideo;
 
@@ -21,6 +22,7 @@ public class TMDBMovieEntity {
     private TMDBLang lang;
 
     private OMDBMovieEntity omdbMovieEntity;
+    private TMDBExternalIDEntity externalIDs;
     private List<TMDBCreditEntity> credits;
     private List<TMDBGenreEntity> genres;
     private List<TMDBVideoEntity> videos;
@@ -39,13 +41,18 @@ public class TMDBMovieEntity {
         this.lang = lang;
     }
 
+    private TMDBExternalIDEntity searchExternalIDs() {
+        TMDBExternalIDs tmdbExternalIDs = new TMDBExternalIDs(this);
+        return tmdbExternalIDs.getResult();
+    }
+
     private List<TMDBCreditEntity> searchCredits() {
         TMDBCredit tmdbGetCredit = new TMDBCredit(this);
         return tmdbGetCredit.getResult();
     }
 
     private OMDBMovieEntity searchOmdb() {
-        OMDBSearch omdbSearch = new OMDBSearch(this.originalTitle, OMDBSearchMethod.TITLE);
+        OMDBSearch omdbSearch = new OMDBSearch(getExternalIDs().getImdbID(), OMDBSearchMethod.IMDB);
         return omdbSearch.getResult();
     }
 
@@ -71,6 +78,13 @@ public class TMDBMovieEntity {
 
     public List<Integer> getGenreIds() {
         return genreIds;
+    }
+
+    public TMDBExternalIDEntity getExternalIDs() {
+        if (externalIDs == null)
+            externalIDs = searchExternalIDs();
+
+        return externalIDs;
     }
 
     public List<TMDBVideoEntity> getVideos() {

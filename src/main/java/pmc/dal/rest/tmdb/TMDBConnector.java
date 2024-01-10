@@ -71,6 +71,8 @@ public class TMDBConnector {
         System.out.println(omdbMovieEntity.getImdbID());
         System.out.println(omdbMovieEntity.getImdbRating());
 
+        System.out.println(tmdbMovieEntity.getExternalIDs().getImdbID());
+
         //for (TMDBGenreEntity tmdbGenre : tmdbMovieEntity.getGenres()) {
         //     System.out.println(tmdbGenre.getID() + " " + tmdbGenre.getName());
         // }
