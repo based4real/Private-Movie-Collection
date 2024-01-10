@@ -1,6 +1,7 @@
 package pmc.gui.components.pmc;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
@@ -12,6 +13,7 @@ import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
 import pmc.gui.components.info.InfoViewBuilder;
+import pmc.utils.MovieException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class PMCController implements IViewController {
         // Håndter exceptions
         fetchTask.setOnFailed(evt -> {
             Throwable error = fetchTask.getException();
-            System.out.println(error.getMessage()); // todo: skal ændres så det bliver vist til brugeren
+            errorDialog("Database fejl", "Der var et problem at hente data: " + error.getMessage());
         });
 
         new Thread(fetchTask).start();
@@ -82,6 +84,14 @@ public class PMCController implements IViewController {
         }
 
         return movieModels;
+    }
+
+    private void errorDialog(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {
