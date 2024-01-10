@@ -50,7 +50,7 @@ public class TMDBMovieEntity {
     }
 
     public List<TMDBGenreEntity> searchGenre() {
-        TMDBGenre tmdbGenre = new TMDBGenre();
+        TMDBGenre tmdbGenre = new TMDBGenre(lang);
         List<TMDBGenreEntity> allGenres = tmdbGenre.getResult();
 
         List<TMDBGenreEntity> match = allGenres.stream()
