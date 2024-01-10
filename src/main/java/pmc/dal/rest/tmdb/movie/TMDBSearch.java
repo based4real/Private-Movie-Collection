@@ -1,12 +1,12 @@
-package pmc.dal.rest.movie;
+package pmc.dal.rest.tmdb.movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pmc.be.rest.TMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.utils.JsonHelper;
-import pmc.dal.rest.TMDBConnector;
-import pmc.dal.rest.extra.TMDBLang;
+import pmc.dal.rest.tmdb.TMDBConnector;
+import pmc.dal.rest.tmdb.extra.TMDBLang;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,4 +1,4 @@
-package pmc.dal;
+package pmc.dal.database;
 
 import pmc.be.Movie;
 import pmc.dal.exception.DataAccessException;

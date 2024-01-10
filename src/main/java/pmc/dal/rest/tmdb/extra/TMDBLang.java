@@ -1,4 +1,4 @@
-package pmc.dal.rest.extra;
+package pmc.dal.rest.tmdb.extra;
 
 import java.util.Locale;
 

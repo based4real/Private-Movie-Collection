@@ -1,8 +1,11 @@
-package pmc.be.rest;
+package pmc.be.rest.tmdb;
 
-import pmc.dal.rest.extra.TMDBLang;
-import pmc.dal.rest.movie.TMDBCredit;
-import pmc.dal.rest.movie.TMDBGenre;
+import pmc.be.rest.omdb.OMDBMovieEntity;
+import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
+import pmc.dal.rest.omdb.movie.OMDBSearch;
+import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.dal.rest.tmdb.movie.TMDBCredit;
+import pmc.dal.rest.tmdb.movie.TMDBGenre;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +19,7 @@ public class TMDBMovieEntity {
 
     private TMDBLang lang;
 
-    //private OMDBMovieEntity omdbMovieEntity;
+    private OMDBMovieEntity omdbMovieEntity;
     private List<TMDBCreditEntity> credits;
     private List<TMDBGenreEntity> genres;
 
@@ -33,8 +36,6 @@ public class TMDBMovieEntity {
         this.id = id;
         this.lang = lang;
 
-        //omdbMovieEntity = searchOmdb();
-        credits = searchCredits();
         genres = searchGenre();
     }
 
@@ -43,10 +44,10 @@ public class TMDBMovieEntity {
         return tmdbGetCredit.getResult();
     }
 
-   // private OMDBMovieEntity searchOmdb() {
-   //     OMDBSearch omdbSearch = new OMDBSearch(this.originalTitle, OMDBSearchMethod.TITLE);
-   //     return omdbSearch.getResult();
-   // }
+    private OMDBMovieEntity searchOmdb() {
+        OMDBSearch omdbSearch = new OMDBSearch(this.originalTitle, OMDBSearchMethod.TITLE);
+        return omdbSearch.getResult();
+    }
 
     public List<TMDBGenreEntity> searchGenre() {
         TMDBGenre tmdbGenre = new TMDBGenre();
@@ -68,10 +69,16 @@ public class TMDBMovieEntity {
     }
 
     public List<TMDBCreditEntity> getCredits() {
+        if (credits == null)
+            credits = searchCredits();
+
         return credits;
     }
 
     public List<TMDBGenreEntity> getGenres() {
+        if (genres == null)
+            genres = searchGenre();
+
         return genres;
     }
 
@@ -79,9 +86,12 @@ public class TMDBMovieEntity {
         return overview;
     }
 
-   // public OMDBMovieEntity getOMDBMovie() {
-   //     return omdbMovieEntity;
-  //  }
+    public OMDBMovieEntity getOMDBMovie() {
+        if (omdbMovieEntity == null)
+            omdbMovieEntity = searchOmdb();
+
+        return omdbMovieEntity;
+    }
 
     public TMDBLang getLang() {
         return lang;

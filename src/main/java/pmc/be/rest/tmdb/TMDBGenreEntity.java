@@ -1,4 +1,4 @@
-package pmc.be.rest;
+package pmc.be.rest.tmdb;
 
 public class TMDBGenreEntity {
     private int id;

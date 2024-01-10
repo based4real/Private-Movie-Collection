@@ -1,13 +1,16 @@
-package pmc.dal.rest;
+package pmc.dal.rest.tmdb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import pmc.be.rest.TMDBGenreEntity;
-import pmc.be.rest.TMDBMovieEntity;
+import pmc.be.rest.omdb.OMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.utils.ConfigSystem;
-import pmc.dal.rest.extra.TMDBLang;
-import pmc.dal.rest.movie.TMDBGenre;
-import pmc.dal.rest.movie.TMDBSearch;
+import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
+import pmc.dal.rest.omdb.movie.OMDBSearch;
+import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.dal.rest.tmdb.movie.TMDBGenre;
+import pmc.dal.rest.tmdb.movie.TMDBSearch;
 
 import java.io.IOException;
 import java.net.URI;
@@ -69,14 +72,14 @@ public class TMDBConnector {
         TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
 
         TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult();
-        //OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
+        OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
 
         System.out.println(tmdbMovieEntity.getTitle());
         System.out.println(tmdbMovieEntity.getDescription());
 
-     //   System.out.println(omdbMovieEntity.getAwards());
-      //  System.out.println(omdbMovieEntity.getImdbID());
-      //  System.out.println(omdbMovieEntity.getImdbRating());
+        System.out.println(omdbMovieEntity.getAwards());
+        System.out.println(omdbMovieEntity.getImdbID());
+        System.out.println(omdbMovieEntity.getImdbRating());
 
         //for (TMDBGenreEntity tmdbGenre : tmdbMovieEntity.getGenres()) {
         //     System.out.println(tmdbGenre.getID() + " " + tmdbGenre.getName());
@@ -90,7 +93,7 @@ public class TMDBConnector {
         for (TMDBGenreEntity tmdbGenre1 : tmdbGenre.getResult())
             System.out.println(tmdbGenre1.getName());
 
-     //   OMDBSearch omdbSearch = new OMDBSearch("tt0048058", OMDBSearchMethod.IMDB);
-     //   System.out.println(omdbSearch.getResult().getTitle());
+        OMDBSearch omdbSearch = new OMDBSearch("tt0048058", OMDBSearchMethod.IMDB);
+        System.out.println(omdbSearch.getResult().getTitle());
     }
 }
