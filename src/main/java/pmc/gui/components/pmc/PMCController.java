@@ -1,7 +1,11 @@
 package pmc.gui.components.pmc;
 
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
@@ -10,6 +14,8 @@ import pmc.bll.MovieManager;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.categories.CategoriesController;
+import pmc.gui.components.dialog.DialogBuilder;
+import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
 import pmc.gui.components.info.InfoViewBuilder;
@@ -40,7 +46,7 @@ public class PMCController implements IViewController {
         this.categoriesController = new CategoriesController();
         this.infoController = new InfoController();
 
-        this.viewBuilder = new PMCViewBuilder(model,
+        this.viewBuilder = new PMCViewBuilder(model, this::handleAddMovieResponse,
                 homeController.getView(),
                 categoriesController.getView(),
                 infoController.getView());
@@ -97,5 +103,9 @@ public class PMCController implements IViewController {
     private void handleMoviePosterClick(MovieModel movieModel) {
         infoController.setModel(movieModel);
         model.activeViewProperty().set(ViewType.INFO);
+    }
+
+    private void handleAddMovieResponse(MovieModel movieModel) { // skal ikke være MovieModel bare lige for at teste
+        System.out.println("hej");
     }
 }

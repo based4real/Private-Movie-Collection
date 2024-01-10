@@ -1,8 +1,12 @@
 package pmc.gui.components.pmc;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
@@ -10,10 +14,15 @@ import javafx.util.Builder;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
+import org.kordamp.ikonli.material2.Material2OutlinedAL;
+import pmc.gui.common.MovieModel;
+import pmc.gui.components.dialog.DialogBuilder;
+import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.widgets.*;
 import pmc.gui.widgets.controls.NavigationButton;
 import pmc.gui.widgets.controls.NavigationGroup;
@@ -23,13 +32,15 @@ import pmc.gui.widgets.controls.NavigationGroup;
  */
 public class PMCViewBuilder implements Builder<Region> {
     private final PMCModel model;
+    private final Consumer<MovieModel> responseHandler;
     private final ResourceBundle labelsBundle;
     private final Region homeView;
     private final Region categoriesView;
     private final Region infoView;
 
-    public PMCViewBuilder(PMCModel model, Region homeView, Region categoriesView, Region infoView) {
+    public PMCViewBuilder(PMCModel model, Consumer<MovieModel> responseHandler, Region homeView, Region categoriesView, Region infoView) {
         this.model = model;
+        this.responseHandler = responseHandler;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
         this.homeView = homeView;
         this.categoriesView = categoriesView;
@@ -46,7 +57,6 @@ public class PMCViewBuilder implements Builder<Region> {
 
         Region topbar = createTopbar();
         Region sidebar = createSidebar();
-
 
         BorderPane.setMargin(topbar, new Insets(0, 0, 5, 0));
         BorderPane.setMargin(sidebar, new Insets(0, 5, 0, 0));
@@ -65,7 +75,12 @@ public class PMCViewBuilder implements Builder<Region> {
         FontIcon menuIcon = IconWidgets.styledIcon(Material2MZ.MENU, "icon");
         Label pmc = LabelWidgets.styledLabel("PMC", "logo");
 
-        results.getChildren().addAll(menuIcon, pmc);
+        Region space = new Region();
+        HBox.setHgrow(space, Priority.ALWAYS);
+
+        Button addMovieIcon = ButtonWidgets.actionIconButton(Material2AL.ADD_BOX, "icon", e -> showAddMovieDialog(responseHandler));
+
+        results.getChildren().addAll(menuIcon, pmc, space, addMovieIcon);
         results.setAlignment(Pos.CENTER_LEFT);
 
         return results;
@@ -74,8 +89,8 @@ public class PMCViewBuilder implements Builder<Region> {
     private Region createSidebar() {
         NavigationGroup results = new NavigationGroup("sidebar", model.activeViewProperty());
 
-        results.add(Material2AL.HOME, labelsBundle.getString("home"), ViewType.HOME);
-        results.add(Material2AL.CATEGORY, labelsBundle.getString("categories"), ViewType.CATEGORIES);
+        results.add(Material2OutlinedAL.HOME, labelsBundle.getString("home"), ViewType.HOME);
+        results.add(Material2OutlinedAL.CATEGORY, labelsBundle.getString("categories"), ViewType.CATEGORIES);
 
         return results.getView();
     }
@@ -86,5 +101,14 @@ public class PMCViewBuilder implements Builder<Region> {
         infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
 
         return new StackPane(homeView, categoriesView, infoView);
+    }
+
+    private void showAddMovieDialog(Consumer<MovieModel> responseHandler) {
+        Dialog<MovieModel> dialog = new DialogBuilder<>(new AddMovieController())
+                .withTitle("Tilføj film")
+                .addButtonTypes(ButtonType.OK, ButtonType.CANCEL)
+                .build();
+
+        dialog.showAndWait().ifPresent(responseHandler);
     }
 }
