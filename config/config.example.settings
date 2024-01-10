@@ -1,0 +1,6 @@
+tmdb.link.api=https://api.themoviedb.org/3
+tmdb.link.api_img=https://image.tmdb.org/t/p/original
+tmdb.token=
+
+omdb.link.api=http://www.omdbapi.com/?apikey=
+omdb.token=
