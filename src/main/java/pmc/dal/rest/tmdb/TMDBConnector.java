@@ -42,9 +42,7 @@ public class TMDBConnector {
 
     private boolean isValidToken() throws IOException, URISyntaxException, JSONException, InterruptedException {
         URI uri = new URI(getAPI() + "/authentication");
-
-        HttpResponse<String> getResponse = getResponse(uri);
-        JSONObject responseJson = new JSONObject(getResponse.body());
+        JSONObject responseJson = getJsonHelper().httpResponseToObject(getResponse(uri));
 
         // {"status_message":"Success.","status_code":1,"success":true}
         // {"status_code": 7,"status_message": "Invalid API key: You must be granted a valid key.","success": false}
