@@ -13,6 +13,7 @@ import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 import pmc.dal.rest.omdb.movie.OMDBSearch;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
+import pmc.dal.rest.tmdb.movie.TMDBMovie;
 import pmc.dal.rest.tmdb.movie.TMDBSearch;
 
 import java.io.IOException;
@@ -73,6 +74,9 @@ public class TMDBConnector {
 
         TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult().getFirst();
         OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
+
+        TMDBMovie tmdbMovie = new TMDBMovie(3176);
+        System.out.println(tmdbMovie.getResult().getTitle());
 
         System.out.println(tmdbMovieEntity.getTitle());
         System.out.println(tmdbMovieEntity.getDescription());

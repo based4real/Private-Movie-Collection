@@ -18,6 +18,6 @@ public enum TMDBLang {
     }
 
     public String get() {
-        return "&language=" + language;
+        return "language=" + language;
     }
 }

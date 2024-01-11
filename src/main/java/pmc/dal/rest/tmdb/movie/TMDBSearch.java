@@ -37,7 +37,7 @@ public class TMDBSearch extends TMDBConnector {
         try {
             String encQuery = URLEncoder.encode(query, "UTF-8");
 
-            URI uri = new URI(super.getAPI() + "/search/movie?query=" + encQuery + lang.get());
+            URI uri = new URI(super.getAPI() + "/search/movie?query=" + encQuery + "&" + lang.get());
             JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "results");
 
             for (int i = 0; i < results.length(); i++) {
