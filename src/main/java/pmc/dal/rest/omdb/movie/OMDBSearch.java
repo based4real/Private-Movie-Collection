@@ -24,9 +24,7 @@ public class OMDBSearch extends OMDBConnector {
     public void searchQuery(String query, OMDBSearchMethod method) {
         try {
             String encQuery = URLEncoder.encode(query, "UTF-8");
-
-            HttpResponse<String> response = super.getResponse(method.get() + encQuery);
-            JSONObject responseJson = new JSONObject(response.body());
+            JSONObject responseJson = super.getJsonHelper().httpResponseToObject(super.getResponse(method.get() + encQuery));
 
             if (responseJson.has("Error"))
                 return;

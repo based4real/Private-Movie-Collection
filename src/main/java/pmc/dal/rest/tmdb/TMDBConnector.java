@@ -8,6 +8,7 @@ import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.bll.utils.ConfigSystem;
 import pmc.bll.utils.JsonHelper;
+import pmc.dal.rest.omdb.OMDBConnector;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 import pmc.dal.rest.omdb.movie.OMDBSearch;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
@@ -57,7 +58,7 @@ public class TMDBConnector {
         return configSystem.getTMDBImageUrl();
     }
 
-    public JsonHelper getJsonHelper() {
+    protected JsonHelper getJsonHelper() {
         return JsonHelper.getInstance();
     }
 
@@ -66,6 +67,9 @@ public class TMDBConnector {
 
         TMDBConnector tmdbConnector = new TMDBConnector();
         System.out.println(tmdbConnector.isValidToken());
+
+        OMDBConnector omdbConnector = new OMDBConnector();
+        System.out.println(omdbConnector.isValidToken());
 
         TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult();
         OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
