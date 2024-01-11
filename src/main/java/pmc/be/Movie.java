@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class Movie {
     private int id;
     private int tmdbId;
+    private String imdbId;
     private String title;
     private float imdbRating;
     private float personalRating;
@@ -12,7 +13,7 @@ public class Movie {
     private String posterPath;
     private LocalDateTime lastSeen;
 
-    public Movie(int id, int tmdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
+    public Movie(int id, int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
         this.id = id;
         this.tmdbId = tmdbId;
         this.title = title;
@@ -23,8 +24,8 @@ public class Movie {
         this.lastSeen = lastSeen;
     }
 
-    public Movie(int tmdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
-        this(-1, tmdbId, title, imdbRating, personalRating, filePath, posterPath, lastSeen);
+    public Movie(int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
+        this(-1, tmdbId, imdbId, title, imdbRating, personalRating, filePath, posterPath, lastSeen);
     }
 
     public int getId() {
@@ -42,6 +43,15 @@ public class Movie {
     public void setTmdbId(int tmdbId) {
         this.tmdbId = tmdbId;
     }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
+
 
     public String getTitle() {
         return title;

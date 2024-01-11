@@ -7,7 +7,7 @@ public class MovieModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
 
     public MovieModel(String posterPath) {
-        this.posterPath.set(posterPath);
+        this.posterPath.set("data/posters/" + posterPath);
     }
 
     public StringProperty posterPathProperty() {

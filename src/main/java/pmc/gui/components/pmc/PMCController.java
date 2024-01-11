@@ -39,12 +39,18 @@ public class PMCController implements IViewController {
     private final InfoController infoController;
     private final PlaybackController playbackController;
 
-    private final MovieManager movieManager;
+    private MovieManager movieManager;
 
     public PMCController(Stage stage) {
         this.model = new PMCModel();
         this.viewHandler = new ViewHandler(model);
-        this.movieManager = new MovieManager();
+
+
+        try {
+            this.movieManager = new MovieManager();
+        } catch (MovieException e) {
+            errorDialog("Fejl", e.getMessage());
+        }
 
         this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
         this.categoriesController = new CategoriesController();
@@ -82,7 +88,7 @@ public class PMCController implements IViewController {
         // Håndter exceptions
         fetchTask.setOnFailed(evt -> {
             Throwable error = fetchTask.getException();
-            errorDialog("Database fejl", "Der var et problem at hente data: " + error.getMessage());
+            errorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage());
         });
 
         new Thread(fetchTask).start();

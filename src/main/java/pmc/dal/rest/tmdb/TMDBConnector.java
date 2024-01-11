@@ -109,17 +109,29 @@ public class TMDBConnector {
 
 //        System.out.println(first);
 
-        List<String> titles = List.of("Shutter Island", "Battle Royale", "Druk", "Shawshank", "Oppenheimer", "barbie");
+        List<String> titles = List.of(
+                "Shutter Island",
+                "Battle Royale",
+                "Druk",
+                "Shawshank",
+                "Oppenheimer",
+                "barbie",
+                "far til fire",
+                "james bond",
+                "fast and furious",
+                "harakiri",
+                "Rojo Amanecer",
+                "Kho Gaye Hum Kahan");
 
         for(String title : titles) {
             TMDBMovieEntity first = new TMDBSearch(title).getResult().getFirst();
 
             System.out.println("tmdb id: " + first.getID());
             System.out.println("imdb id: " + first.getExternalIDs().getImdbID());
-            System.out.println("title: " + first.getTitle());
+            System.out.println("title: " + first.getOriginalTitle());
             System.out.println("imdb rating: " + first.getOMDBMovie().getImdbRating());
             System.out.println("posterPath: " + first.getPosterPath());
-            System.out.println("gernes: " + first.getGenreIds());
+            System.out.println("genres: " + first.getGenreIds());
             System.out.println("\n");
         }
 
