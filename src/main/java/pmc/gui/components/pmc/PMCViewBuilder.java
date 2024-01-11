@@ -1,9 +1,8 @@
 package pmc.gui.components.pmc;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -24,8 +23,9 @@ import pmc.gui.common.MovieModel;
 import pmc.gui.components.dialog.DialogBuilder;
 import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.widgets.*;
-import pmc.gui.widgets.controls.NavigationButton;
 import pmc.gui.widgets.controls.NavigationGroup;
+
+import javax.swing.text.View;
 
 /**
  * Ansvarlig for at bygge brugergrænsefladen for det overordnede View i Private Movie Collection (PMC) applikationen.
@@ -39,6 +39,7 @@ public class PMCViewBuilder implements Builder<Region> {
     private final Region categoriesView;
     private final Region infoView;
     private final Region playbackView;
+    private final Region mediaView;
 
     public PMCViewBuilder(PMCModel model,
                           Consumer<MovieModel> responseHandler,
@@ -53,6 +54,7 @@ public class PMCViewBuilder implements Builder<Region> {
         this.categoriesView = categoriesView;
         this.infoView = infoView;
         this.playbackView = playbackView;
+        this.mediaView = new MediaViewWidget("C:\\Plex\\Film\\The.Shawshank.Redemption.1994.1080p.x264.YIFY.mp4");
     }
 
     @Override
@@ -63,17 +65,53 @@ public class PMCViewBuilder implements Builder<Region> {
         results.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/css/pmc.css")).toExternalForm());
         results.getStyleClass().add("main");
 
-        Region topbar = createTopbar();
-        Region sidebar = createSidebar();
+        Region top = createTop();
+        Region left = createLeft();
 
-        BorderPane.setMargin(topbar, new Insets(0, 0, 5, 0));
-        BorderPane.setMargin(sidebar, new Insets(0, 5, 0, 0));
+        BorderPane.setMargin(top, new Insets(0, 0, 5, 0));
+        BorderPane.setMargin(left, new Insets(0, 5, 0, 0));
 
-        results.setTop(topbar);
-        results.setLeft(sidebar);
-        results.setCenter(createContent());
+        results.setTop(top);
+        results.setLeft(left);
+        results.setCenter(createCenter());
+        results.setBottom(createBottom());
 
         return results;
+    }
+
+    private Region createTop() {
+        Region topbar = createTopbar();
+        Region playbackTopbar = createPlaybackTopbar();
+
+        topbar.visibleProperty().bind(model.activeViewProperty().isNotEqualTo(ViewType.PLAYBACK));
+        playbackTopbar.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
+
+        return new StackPane(topbar, playbackTopbar);
+    }
+
+    private Region createLeft() {
+        Region sidebar = createSidebar();
+
+        sidebar.visibleProperty().bind(model.activeViewProperty().isNotEqualTo(ViewType.PLAYBACK));
+        sidebar.managedProperty().bind(model.activeViewProperty().isNotEqualTo(ViewType.PLAYBACK));
+
+        return sidebar;
+    }
+
+    private Region createCenter() {
+        homeView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.HOME));
+        categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
+        infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
+        mediaView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
+
+        return new StackPane(homeView, categoriesView, infoView, mediaView);
+    }
+
+    private Region createBottom() {
+        playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
+        playbackView.managedProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
+
+        return playbackView;
     }
 
     private Region createTopbar() {
@@ -94,6 +132,17 @@ public class PMCViewBuilder implements Builder<Region> {
         return results;
     }
 
+    private Region createPlaybackTopbar() {
+        HBox results = new HBox();
+        results.getStyleClass().add("topbar");
+
+        FontIcon backIcon = IconWidgets.styledIcon(Material2AL.BACKSPACE, "icon");
+
+        results.getChildren().add(backIcon);
+
+        return results;
+    }
+
     private Region createSidebar() {
         NavigationGroup results = new NavigationGroup("sidebar", model.activeViewProperty());
 
@@ -101,15 +150,6 @@ public class PMCViewBuilder implements Builder<Region> {
         results.add(Material2OutlinedAL.CATEGORY, labelsBundle.getString("categories"), ViewType.CATEGORIES);
 
         return results.getView();
-    }
-
-    private Region createContent() {
-        homeView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.HOME));
-        categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
-        infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
-        playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
-
-        return new StackPane(homeView, categoriesView, infoView, playbackView);
     }
 
     private void showAddMovieDialog(Consumer<MovieModel> responseHandler) {

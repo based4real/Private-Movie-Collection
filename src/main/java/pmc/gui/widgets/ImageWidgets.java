@@ -5,8 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class ImageWidgets {
     public static ImageView scaledRoundedImage(String url, double fitWidth, double fitHeight, double rounding) {
         ImageView results = scaledImage(url, fitWidth, fitHeight);
