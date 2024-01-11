@@ -22,6 +22,10 @@ public class MediaViewWidget extends Region {
         this.getChildren().add(mediaView);
     }
 
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
     @Override
     protected void layoutChildren() {
         super.layoutChildren();

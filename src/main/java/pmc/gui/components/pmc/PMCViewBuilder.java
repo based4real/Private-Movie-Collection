@@ -40,7 +40,6 @@ public class PMCViewBuilder implements Builder<Region> {
     private final Region categoriesView;
     private final Region infoView;
     private final Region playbackView;
-    private final Region mediaView;
 
     public PMCViewBuilder(PMCModel model,
                           ViewHandler viewHandler,
@@ -57,7 +56,6 @@ public class PMCViewBuilder implements Builder<Region> {
         this.categoriesView = categoriesView;
         this.infoView = infoView;
         this.playbackView = playbackView;
-        this.mediaView = new MediaViewWidget("C:\\Plex\\Film\\The.Shawshank.Redemption.1994.1080p.x264.YIFY.mp4");
     }
 
     @Override
@@ -71,25 +69,23 @@ public class PMCViewBuilder implements Builder<Region> {
         Region top = createTop();
         Region left = createLeft();
 
-        BorderPane.setMargin(top, new Insets(0, 0, 5, 0));
-        BorderPane.setMargin(left, new Insets(0, 5, 0, 0));
+        BorderPane.setMargin(top, new Insets(0, 5, 5, 5));
+        BorderPane.setMargin(left, new Insets(5, 5, 5, 5));
 
         results.setTop(top);
         results.setLeft(left);
         results.setCenter(createCenter());
-        results.setBottom(createBottom());
 
         return results;
     }
 
     private Region createTop() {
         Region topbar = createTopbar();
-        Region playbackTopbar = createPlaybackTopbar();
 
         topbar.visibleProperty().bind(model.activeViewProperty().isNotEqualTo(ViewType.PLAYBACK));
-        playbackTopbar.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
+        topbar.managedProperty().bind(model.activeViewProperty().isNotEqualTo(ViewType.PLAYBACK));
 
-        return new StackPane(topbar, playbackTopbar);
+        return topbar;
     }
 
     private Region createLeft() {
@@ -105,16 +101,9 @@ public class PMCViewBuilder implements Builder<Region> {
         homeView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.HOME));
         categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
         infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
-        mediaView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
-
-        return new StackPane(homeView, categoriesView, infoView, mediaView);
-    }
-
-    private Region createBottom() {
         playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
-        playbackView.managedProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
 
-        return playbackView;
+        return new StackPane(homeView, categoriesView, infoView, playbackView);
     }
 
     private Region createTopbar() {
@@ -135,16 +124,6 @@ public class PMCViewBuilder implements Builder<Region> {
         return results;
     }
 
-    private Region createPlaybackTopbar() {
-        HBox results = new HBox();
-        results.getStyleClass().add("topbar");
-
-        Button backIcon = ButtonWidgets.actionIconButton(Material2AL.BACKSPACE, "icon", e -> viewHandler.previousView());
-
-        results.getChildren().add(backIcon);
-
-        return results;
-    }
 
     private Region createSidebar() {
         NavigationGroup results = new NavigationGroup("sidebar", model.activeViewProperty());

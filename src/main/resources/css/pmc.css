@@ -1,6 +1,6 @@
 .main {
     -fx-background-color: -primary-color;
-    -fx-padding: 5; /* skal være <= 5 p.t., mere end 5 gør at horizontal paginator vibrerer på resize af vindue */
+    /*-fx-padding: 5; !* skal være <= 5 p.t., mere end 5 gør at horizontal paginator vibrerer på resize af vindue *!*/
 }
 
 .topbar {
