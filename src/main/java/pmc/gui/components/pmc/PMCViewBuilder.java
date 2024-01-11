@@ -34,17 +34,25 @@ public class PMCViewBuilder implements Builder<Region> {
     private final PMCModel model;
     private final Consumer<MovieModel> responseHandler;
     private final ResourceBundle labelsBundle;
+
     private final Region homeView;
     private final Region categoriesView;
     private final Region infoView;
+    private final Region playbackView;
 
-    public PMCViewBuilder(PMCModel model, Consumer<MovieModel> responseHandler, Region homeView, Region categoriesView, Region infoView) {
+    public PMCViewBuilder(PMCModel model,
+                          Consumer<MovieModel> responseHandler,
+                          Region homeView,
+                          Region categoriesView,
+                          Region infoView,
+                          Region playbackView) {
         this.model = model;
         this.responseHandler = responseHandler;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
         this.homeView = homeView;
         this.categoriesView = categoriesView;
         this.infoView = infoView;
+        this.playbackView = playbackView;
     }
 
     @Override
@@ -99,8 +107,9 @@ public class PMCViewBuilder implements Builder<Region> {
         homeView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.HOME));
         categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
         infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
+        playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
 
-        return new StackPane(homeView, categoriesView, infoView);
+        return new StackPane(homeView, categoriesView, infoView, playbackView);
     }
 
     private void showAddMovieDialog(Consumer<MovieModel> responseHandler) {

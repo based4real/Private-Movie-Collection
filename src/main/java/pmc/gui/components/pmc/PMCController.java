@@ -19,6 +19,7 @@ import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
 import pmc.gui.components.info.InfoViewBuilder;
+import pmc.gui.components.playback.PlaybackController;
 import pmc.utils.MovieException;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class PMCController implements IViewController {
     private final HomeController homeController;
     private final CategoriesController categoriesController;
     private final InfoController infoController;
+    private final PlaybackController playbackController;
 
     private final MovieManager movieManager;
 
@@ -42,14 +44,16 @@ public class PMCController implements IViewController {
         this.model = new PMCModel();
         this.movieManager = new MovieManager();
 
-        this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick);
+        this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
         this.categoriesController = new CategoriesController();
         this.infoController = new InfoController();
+        this.playbackController = new PlaybackController();
 
         this.viewBuilder = new PMCViewBuilder(model, this::handleAddMovieResponse,
                 homeController.getView(),
                 categoriesController.getView(),
-                infoController.getView());
+                infoController.getView(),
+                playbackController.getView());
 
         fetchData();
     }
@@ -105,7 +109,11 @@ public class PMCController implements IViewController {
         model.activeViewProperty().set(ViewType.INFO);
     }
 
-    private void handleAddMovieResponse(MovieModel movieModel) { // skal ikke være MovieModel bare lige for at teste
-        System.out.println("hej");
+    private void handlePlayButtonClick(MovieModel movieModel) {
+        model.activeViewProperty().set(ViewType.PLAYBACK);
+    }
+
+    private void handleAddMovieResponse(MovieModel movieModel) { // todo: skal nok ikke være MovieModel bare lige for at teste
+        System.out.println("håndter tilføj movie dialog respons");
     }
 }

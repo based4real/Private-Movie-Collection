@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 public class HomeController implements IViewController {
     private final Builder<Region> viewBuilder;
 
-    public HomeController(ObservableList<MovieModel> model, Consumer<MovieModel> viewChangeHandler) {
-        this.viewBuilder = new HomeViewBuilder(model, viewChangeHandler);
+    public HomeController(ObservableList<MovieModel> model, Consumer<MovieModel> viewChangeHandler, Consumer<MovieModel> playMovieHandler) {
+        this.viewBuilder = new HomeViewBuilder(model, viewChangeHandler, playMovieHandler);
     }
 
     @Override

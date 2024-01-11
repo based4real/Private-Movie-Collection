@@ -61,7 +61,7 @@ public class NavigationButton extends Button {
         results.setMinWidth(1);
         results.setVisible(false);
 
-        // Juster højden på indicator baseret på højden af ikonet.
+        // Juster højden på indicator baseret på højden af ikonet da det ikke umiddelbart lige kan gøres via CSS.
         icon.layoutBoundsProperty().addListener((obs, ov, nv) -> results.setMinHeight(nv.getHeight() + 8));
 
         return results;

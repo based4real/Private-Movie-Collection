@@ -12,10 +12,14 @@ import java.util.function.Consumer;
 public class HomeViewBuilder implements Builder<Region> {
     private final ObservableList<MovieModel> model;
     private final Consumer<MovieModel> moviePosterClickHandler;
+    private final Consumer<MovieModel> playButtonClickHandler;
 
-    public HomeViewBuilder(ObservableList<MovieModel> model, Consumer<MovieModel> moviePosterClickHandler) {
+    public HomeViewBuilder(ObservableList<MovieModel> model,
+                           Consumer<MovieModel> moviePosterClickHandler,
+                           Consumer<MovieModel> playButtonClickHandler) {
         this.model = model;
         this.moviePosterClickHandler = moviePosterClickHandler;
+        this.playButtonClickHandler = playButtonClickHandler;
     }
 
     @Override
@@ -28,8 +32,8 @@ public class HomeViewBuilder implements Builder<Region> {
     }
 
     private MoviePoster createMoviePoster(MovieModel model) {
-        MoviePoster poster = new MoviePoster("file:" + model.posterPathProperty().get(), 150, 224, 10);
-        poster.setOnMouseClicked(e -> moviePosterClickHandler.accept(model));
-        return poster;
+        return new MoviePoster(model, 150, 224, 10,
+                moviePosterClickHandler,
+                playButtonClickHandler);
     }
 }
