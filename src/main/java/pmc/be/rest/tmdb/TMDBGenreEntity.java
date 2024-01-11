@@ -16,4 +16,12 @@ public class TMDBGenreEntity {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "TMDBGenreEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

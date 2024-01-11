@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 public class TMDBConnector {
     private ConfigSystem configSystem;
@@ -64,7 +65,7 @@ public class TMDBConnector {
     }
 
     public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException {
-        TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
+/*        TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
 
         TMDBConnector tmdbConnector = new TMDBConnector();
         System.out.println(tmdbConnector.isValidToken());
@@ -103,6 +104,27 @@ public class TMDBConnector {
         //      System.out.println(tmdbGenre1.getName());
 
        //  OMDBSearch omdbSearch = new OMDBSearch("tt0048058", OMDBSearchMethod.IMDB);
-        //  System.out.println(omdbSearch.getResult().getTitle());
+        //  System.out.println(omdbSearch.getResult().getTitle());*/
+
+
+//        System.out.println(first);
+
+        List<String> titles = List.of("Shutter Island", "Battle Royale", "Druk", "Shawshank", "Oppenheimer", "barbie");
+
+        for(String title : titles) {
+            TMDBMovieEntity first = new TMDBSearch(title).getResult().getFirst();
+
+            System.out.println("tmdb id: " + first.getID());
+            System.out.println("imdb id: " + first.getExternalIDs().getImdbID());
+            System.out.println("title: " + first.getTitle());
+            System.out.println("imdb rating: " + first.getOMDBMovie().getImdbRating());
+            System.out.println("posterPath: " + first.getPosterPath());
+            System.out.println("gernes: " + first.getGenreIds());
+            System.out.println("\n");
+        }
+
+
+
+//        System.out.println(new TMDBSearch("a", lang).getResult());
     }
 }

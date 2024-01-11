@@ -42,4 +42,15 @@ public class TMDBExternalIDEntity {
         return twitterID;
     }
 
+    @Override
+    public String toString() {
+        return "TMDBExternalIDEntity{" +
+                "id=" + id +
+                ", imdbID='" + imdbID + '\'' +
+                ", wikidataID='" + wikidataID + '\'' +
+                ", facebookID='" + facebookID + '\'' +
+                ", instagramID='" + instagramID + '\'' +
+                ", twitterID='" + twitterID + '\'' +
+                '}';
+    }
 }

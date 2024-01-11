@@ -56,4 +56,18 @@ public class TMDBVideoEntity {
     public String getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "TMDBVideoEntity{" +
+                "name='" + name + '\'' +
+                ", youtubeUrl='" + youtubeUrl + '\'' +
+                ", site='" + site + '\'' +
+                ", size=" + size +
+                ", type='" + type + '\'' +
+                ", official=" + official +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

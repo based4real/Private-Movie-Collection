@@ -55,4 +55,17 @@ public class TMDBCreditEntity {
         return orderID;
     }
 
+    @Override
+    public String toString() {
+        return "TMDBCreditEntity{" +
+                "gender=" + gender +
+                ", id=" + id +
+                ", knownForDepartment='" + knownForDepartment + '\'' +
+                ", name='" + name + '\'' +
+                ", originalName='" + originalName + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                ", characterName='" + characterName + '\'' +
+                ", orderID=" + orderID +
+                '}';
+    }
 }

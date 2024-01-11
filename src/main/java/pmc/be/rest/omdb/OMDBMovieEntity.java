@@ -67,4 +67,19 @@ public class OMDBMovieEntity {
         return imdbVotes;
     }
 
+    @Override
+    public String toString() {
+        return "OMDBMovieEntity{" +
+                "title='" + title + '\'' +
+                ", rated='" + rated + '\'' +
+                ", released='" + released + '\'' +
+                ", director='" + director + '\'' +
+                ", country='" + country + '\'' +
+                ", awards='" + awards + '\'' +
+                ", boxOffice='" + boxOffice + '\'' +
+                ", imdbID='" + imdbID + '\'' +
+                ", imdbRating='" + imdbRating + '\'' +
+                ", imdbVotes='" + imdbVotes + '\'' +
+                '}';
+    }
 }

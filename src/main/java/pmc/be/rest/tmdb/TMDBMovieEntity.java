@@ -9,6 +9,7 @@ import pmc.dal.rest.tmdb.movie.TMDBExternalIDs;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.dal.rest.tmdb.movie.TMDBVideo;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -137,4 +138,32 @@ public class TMDBMovieEntity {
         return releaseDate;
     }
 
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    @Override
+    public String toString() {
+        return "TMDBMovieEntity{\n" +
+                "    description='" + getDescription() + "',\n" +
+                "    originalTitle='" + getOriginalTitle() + "',\n" +
+                "    title='" + getTitle() + "',\n" +
+                "    genreIds=" + getGenreIds() + ",\n" +
+                "    posterPath='" + getPosterPath() + "',\n" +
+                "    backdropPath='" + getBackdropPath() + "',\n" +
+                "    releaseDate='" + getReleaseDate() + "',\n" +
+                "    id=" + getID() + ",\n" +
+                "    lang=" + getLang() + ",\n" +
+                "    omdbMovieEntity=" + getOMDBMovie() + ",\n" +
+                "    externalIDs=" + getExternalIDs() + ",\n" +
+                "    credits=" + getCredits() + ",\n" +
+                "    genres=" + getGenres() + ",\n" +
+                "    videos=" + getVideos() + ",\n" +
+                "}\n";
+    }
 }
