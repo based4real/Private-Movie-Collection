@@ -3,7 +3,6 @@ package pmc.dal.database;
 import pmc.be.Movie;
 import pmc.dal.exception.DataAccessException;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;

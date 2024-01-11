@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Builder;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
@@ -21,10 +22,12 @@ import java.util.function.Consumer;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
+    private PlaybackHandler playbackHandler;
     private final Runnable onBackClicked;
 
-    public PlaybackViewBuilder(PlaybackModel model, Runnable onBackClicked) {
+    public PlaybackViewBuilder(PlaybackModel model, PlaybackHandler playbackHandler, Runnable onBackClicked) {
         this.model = model;
+        this.playbackHandler = playbackHandler;
         this.onBackClicked = onBackClicked;
     }
 
@@ -33,7 +36,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
         BorderPane results = new BorderPane();
 
         results.setTop(createTop());
-        //results.setCenter(createCenter());
+        results.setCenter(createCenter());
         results.setBottom(createBottom());
 
         return results;
@@ -51,11 +54,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
     }
 
     private Region createCenter() {
-        MediaViewWidget results = new MediaViewWidget("C:\\Plex\\Film\\The.Shawshank.Redemption.1994.1080p.x264.YIFY.mp4");
-
-//        results.getMediaPlayer().play();
-
-        return results;
+        return new MediaViewWidget(playbackHandler.getMediaPlayer());
     }
 
     private Region createBottom() {
@@ -102,11 +101,10 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
         HBox playbackControls = new HBox(10);
         FontIcon rewind = new FontIcon(Material2MZ.SKIP_PREVIOUS);
-        FontIcon play = new FontIcon(Material2MZ.PLAY_ARROW);
+        Button play = ButtonWidgets.actionIconButton(Material2MZ.PLAY_ARROW, "icon", e -> playbackHandler.play());
         FontIcon forward = new FontIcon(Material2MZ.SKIP_NEXT);
 
         rewind.setIconSize(24);
-        play.setIconSize(24);
         forward.setIconSize(24);
 
         playbackControls.getChildren().addAll(rewind, play, forward);

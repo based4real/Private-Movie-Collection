@@ -11,19 +11,13 @@ public class MediaViewWidget extends Region {
     private MediaPlayer mediaPlayer;
     private MediaView mediaView;
 
-    public MediaViewWidget(String mediaPath) {
-        Media media = new Media(new File(mediaPath).toURI().toString());
-        this.mediaPlayer = new MediaPlayer(media);
+    public MediaViewWidget(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
         this.mediaView = new MediaView(mediaPlayer);
 
-//        mediaPlayer.setAutoPlay(true);
         mediaView.setPreserveRatio(true);
 
         this.getChildren().add(mediaView);
-    }
-
-    public MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
     }
 
     @Override
