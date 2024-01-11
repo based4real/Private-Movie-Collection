@@ -13,10 +13,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TMDBSearch extends TMDBConnector {
     private String title;
-    private TMDBMovieEntity movieFound;
+    private List<TMDBMovieEntity> moviesFound = new ArrayList<>();
     private TMDBLang lang = TMDBLang.ENGLISH;
 
     public TMDBSearch(String title) {
@@ -31,27 +33,18 @@ public class TMDBSearch extends TMDBConnector {
     }
 
     public void searchQuery(String query, TMDBLang lang) {
-        //List<TMDBMovie> movies = new ArrayList<>();
+        moviesFound.clear();
         try {
             String encQuery = URLEncoder.encode(query, "UTF-8");
 
             URI uri = new URI(super.getAPI() + "/search/movie?query=" + encQuery + lang.get());
             JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "results");
 
-            /* Vi kan beholde dette hvis vi vil give mulighed for at vælge flere film men for nu tager vi bare den første.
             for (int i = 0; i < results.length(); i++) {
                 JSONObject movieJson = results.getJSONObject(i);
-                TMDBMovie movie = parseMovieJson(movieJson);
-
-                System.out.println(movie.getTitle());
-                movies.add(movie);
-            }*/
-
-            if (results.length() > 0) {
-                JSONObject movieJson = results.getJSONObject(0);
-                movieFound = parseJson(movieJson, lang);
+                TMDBMovieEntity movie = parseJson(movieJson, lang);
+                moviesFound.add(movie);
             }
-
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
             e.printStackTrace();
         }
@@ -71,8 +64,8 @@ public class TMDBSearch extends TMDBConnector {
         );
     }
 
-    public TMDBMovieEntity getResult() {
-        return movieFound;
+    public List<TMDBMovieEntity> getResult() {
+        return moviesFound;
     }
 
 }

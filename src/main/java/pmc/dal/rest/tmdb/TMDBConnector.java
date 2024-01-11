@@ -71,7 +71,7 @@ public class TMDBConnector {
         OMDBConnector omdbConnector = new OMDBConnector();
         System.out.println(omdbConnector.isValidToken());
 
-        TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult();
+        TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult().getFirst();
         OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
 
         System.out.println(tmdbMovieEntity.getTitle());
