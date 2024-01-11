@@ -7,6 +7,7 @@ import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.bll.utils.ConfigSystem;
+import pmc.bll.utils.JsonHelper;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 import pmc.dal.rest.omdb.movie.OMDBSearch;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
@@ -58,8 +59,15 @@ public class TMDBConnector {
         return configSystem.getTMDBImageUrl();
     }
 
+    public JsonHelper getJsonHelper() {
+        return JsonHelper.getInstance();
+    }
+
     public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException {
         TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
+
+        TMDBConnector tmdbConnector = new TMDBConnector();
+        System.out.println(tmdbConnector.isValidToken());
 
         TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult();
         OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
@@ -73,9 +81,9 @@ public class TMDBConnector {
 
         System.out.println(tmdbMovieEntity.getExternalIDs().getImdbID());
 
-        //for (TMDBGenreEntity tmdbGenre : tmdbMovieEntity.getGenres()) {
-        //     System.out.println(tmdbGenre.getID() + " " + tmdbGenre.getName());
-        // }
+        for (TMDBGenreEntity tmdbGenre : tmdbMovieEntity.getGenres()) {
+             System.out.println(tmdbGenre.getID() + " " + tmdbGenre.getName());
+         }
 
         //for (TMDBCreditEntity tmdbCredit : tmdbMovieEntity.getCredits()) {
         //     System.out.println(tmdbCredit.getName() + " " + tmdbCredit.getCharacterName() + " " + tmdbCredit.getImage());

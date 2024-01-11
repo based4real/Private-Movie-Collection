@@ -33,7 +33,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
         BorderPane results = new BorderPane();
 
         results.setTop(createTop());
-        results.setCenter(createCenter());
+        //results.setCenter(createCenter());
         results.setBottom(createBottom());
 
         return results;

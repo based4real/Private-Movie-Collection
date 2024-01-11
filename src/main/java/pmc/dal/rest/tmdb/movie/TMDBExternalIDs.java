@@ -31,13 +31,12 @@ public class TMDBExternalIDs extends TMDBConnector {
         try {
             String idtoString = Integer.toString(id);
             String encQuery = URLEncoder.encode(idtoString, "UTF-8");
-            URI uri = new URI(super.getAPI() + "/movie/" + encQuery + "/external_ids");
-            System.out.println(uri);
-            HttpResponse<String> response = super.getResponse(uri);
-            JSONObject responseJson = new JSONObject(response.body());
 
-            if (responseJson.length() > 0) {
-                externalIDs = parseJson(responseJson);
+            URI uri = new URI(super.getAPI() + "/movie/" + encQuery + "/external_ids");
+            JSONObject result = super.getJsonHelper().httpResponseToObject(super.getResponse(uri));
+
+            if (result.length() > 0) {
+                externalIDs = parseJson(result);
             }
 
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
@@ -59,6 +58,4 @@ public class TMDBExternalIDs extends TMDBConnector {
     public TMDBExternalIDEntity getResult() {
         return externalIDs;
     }
-
-
 }

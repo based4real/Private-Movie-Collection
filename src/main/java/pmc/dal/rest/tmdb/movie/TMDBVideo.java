@@ -38,12 +38,8 @@ public class TMDBVideo extends TMDBConnector {
     public void searchQuery(int movieID, TMDBLang lang) {
         videos.clear();
         try {
-            System.out.println(movieID);
             URI uri = new URI(super.getAPI() + "/movie/" + movieID + "/videos?" + lang.get());
-
-            HttpResponse<String> response = super.getResponse(uri);
-            JSONObject responseJson = new JSONObject(response.body());
-            JSONArray results = responseJson.getJSONArray("results");
+            JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "results");
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject creditJson = results.getJSONObject(i);

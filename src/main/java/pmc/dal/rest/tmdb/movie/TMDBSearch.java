@@ -34,11 +34,9 @@ public class TMDBSearch extends TMDBConnector {
         //List<TMDBMovie> movies = new ArrayList<>();
         try {
             String encQuery = URLEncoder.encode(query, "UTF-8");
-            URI uri = new URI(super.getAPI() + "/search/movie?query=" + encQuery + lang.get());
 
-            HttpResponse<String> response = super.getResponse(uri);
-            JSONObject responseJson = new JSONObject(response.body());
-            JSONArray results = responseJson.getJSONArray("results");
+            URI uri = new URI(super.getAPI() + "/search/movie?query=" + encQuery + lang.get());
+            JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "results");
 
             /* Vi kan beholde dette hvis vi vil give mulighed for at vælge flere film men for nu tager vi bare den første.
             for (int i = 0; i < results.length(); i++) {

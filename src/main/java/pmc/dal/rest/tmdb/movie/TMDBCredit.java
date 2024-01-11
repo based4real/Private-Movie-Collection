@@ -48,13 +48,9 @@ public class TMDBCredit extends TMDBConnector {
         try {
             String idToString = Integer.toString(moveId);
             String encQuery = URLEncoder.encode(idToString, "UTF-8");
+
             URI uri = new URI(super.getAPI() + "/movie/" + encQuery + "/credits?" + lang.get());
-
-            System.out.println(uri);
-
-            HttpResponse<String> response = super.getResponse(uri);
-            JSONObject responseJson = new JSONObject(response.body());
-            JSONArray results = responseJson.getJSONArray("cast");
+            JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "cast");
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject creditJson = results.getJSONObject(i);

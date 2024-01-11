@@ -31,10 +31,7 @@ public class TMDBGenre extends TMDBConnector {
 
         try {
             URI uri = new URI(super.getAPI() + "/genre/movie/list?" + lang.get());
-
-            HttpResponse<String> response = super.getResponse(uri);
-            JSONObject responseJson = new JSONObject(response.body());
-            JSONArray results = responseJson.getJSONArray("genres");
+            JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "results");
 
             for (int i = 0; i < results.length(); i++) {
                 JSONObject creditJson = results.getJSONObject(i);
