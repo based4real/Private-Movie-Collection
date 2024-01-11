@@ -18,6 +18,7 @@ public class TMDBMovieEntity {
     private String posterPath, backdropPath;
     private String releaseDate;
     private int id;
+    private String language;
 
     private TMDBLang lang;
 
@@ -29,7 +30,7 @@ public class TMDBMovieEntity {
 
     public TMDBMovieEntity(String overview, String originalTitle, String title,
                            List<Integer> genreIds, String posterPath, String backdropPath, String releaseDate,
-                           int id, TMDBLang lang) {
+                           int id, String language, TMDBLang lang) {
         this.overview = overview;
         this.originalTitle = originalTitle;
         this.title = title;
@@ -38,6 +39,7 @@ public class TMDBMovieEntity {
         this.backdropPath = backdropPath;
         this.releaseDate = releaseDate;
         this.id = id;
+        this.language = language;
         this.lang = lang;
     }
 
