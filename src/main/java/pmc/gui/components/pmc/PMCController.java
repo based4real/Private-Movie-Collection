@@ -32,6 +32,7 @@ import java.util.List;
 public class PMCController implements IViewController {
     private final PMCModel model;
     private final Builder<Region> viewBuilder;
+    private final ViewHandler viewHandler;
 
     private final HomeController homeController;
     private final CategoriesController categoriesController;
@@ -42,6 +43,7 @@ public class PMCController implements IViewController {
 
     public PMCController(Stage stage) {
         this.model = new PMCModel();
+        this.viewHandler = new ViewHandler(model);
         this.movieManager = new MovieManager();
 
         this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
@@ -49,7 +51,7 @@ public class PMCController implements IViewController {
         this.infoController = new InfoController();
         this.playbackController = new PlaybackController();
 
-        this.viewBuilder = new PMCViewBuilder(model, this::handleAddMovieResponse,
+        this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::handleAddMovieResponse,
                 homeController.getView(),
                 categoriesController.getView(),
                 infoController.getView(),
@@ -106,11 +108,11 @@ public class PMCController implements IViewController {
 
     private void handleMoviePosterClick(MovieModel movieModel) {
         infoController.setModel(movieModel);
-        model.activeViewProperty().set(ViewType.INFO);
+        viewHandler.changeView(ViewType.INFO);
     }
 
     private void handlePlayButtonClick(MovieModel movieModel) {
-        model.activeViewProperty().set(ViewType.PLAYBACK);
+        viewHandler.changeView(ViewType.PLAYBACK);
     }
 
     private void handleAddMovieResponse(MovieModel movieModel) { // todo: skal nok ikke være MovieModel bare lige for at teste

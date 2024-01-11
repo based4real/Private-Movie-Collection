@@ -32,6 +32,7 @@ import javax.swing.text.View;
  */
 public class PMCViewBuilder implements Builder<Region> {
     private final PMCModel model;
+    private final ViewHandler viewHandler;
     private final Consumer<MovieModel> responseHandler;
     private final ResourceBundle labelsBundle;
 
@@ -42,12 +43,14 @@ public class PMCViewBuilder implements Builder<Region> {
     private final Region mediaView;
 
     public PMCViewBuilder(PMCModel model,
+                          ViewHandler viewHandler,
                           Consumer<MovieModel> responseHandler,
                           Region homeView,
                           Region categoriesView,
                           Region infoView,
                           Region playbackView) {
         this.model = model;
+        this.viewHandler = viewHandler;
         this.responseHandler = responseHandler;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
         this.homeView = homeView;
@@ -136,7 +139,7 @@ public class PMCViewBuilder implements Builder<Region> {
         HBox results = new HBox();
         results.getStyleClass().add("topbar");
 
-        FontIcon backIcon = IconWidgets.styledIcon(Material2AL.BACKSPACE, "icon");
+        Button backIcon = ButtonWidgets.actionIconButton(Material2AL.BACKSPACE, "icon", e -> viewHandler.previousView());
 
         results.getChildren().add(backIcon);
 
