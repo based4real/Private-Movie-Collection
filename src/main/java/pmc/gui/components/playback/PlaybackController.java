@@ -26,6 +26,7 @@ public class PlaybackController implements IViewController {
     }
 
     public void handlePlay() {
-        playbackHandler.play();
+        if (model.isPlayingProperty().get()) playbackHandler.pause();
+        else playbackHandler.play();
     }
 }

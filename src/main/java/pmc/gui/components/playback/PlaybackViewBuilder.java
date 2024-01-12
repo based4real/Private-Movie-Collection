@@ -100,7 +100,15 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
         HBox playbackControls = new HBox(10);
         FontIcon rewind = new FontIcon(Material2MZ.SKIP_PREVIOUS);
-        Button play = ButtonWidgets.actionIconButton(Material2MZ.PLAY_ARROW, "icon", e -> onPlay.run());
+//        Button play = ButtonWidgets.actionIconButton(Material2MZ.PLAY_ARROW, "icon", e -> onPlay.run());
+
+        Button play = ButtonWidgets.toggleableActionIconButton(
+                Material2MZ.PLAY_CIRCLE_OUTLINE,
+                Material2MZ.PAUSE_CIRCLE_OUTLINE,
+                "icon",
+                model.isPlayingProperty(),
+                e -> onPlay.run());
+
         FontIcon forward = new FontIcon(Material2MZ.SKIP_NEXT);
 
         rewind.setIconSize(24);

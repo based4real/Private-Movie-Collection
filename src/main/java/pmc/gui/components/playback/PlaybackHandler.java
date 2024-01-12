@@ -20,6 +20,11 @@ public class PlaybackHandler {
         model.isPlayingProperty().set(true);
     }
 
+    public void pause() {
+        mediaPlayer.pause();
+        model.isPlayingProperty().set(false);
+    }
+
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
