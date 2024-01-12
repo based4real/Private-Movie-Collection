@@ -17,11 +17,15 @@ public class PlaybackController implements IViewController {
     public PlaybackController(Runnable goBackHandler) {
         this.model = new PlaybackModel();
         this.playbackHandler = new PlaybackHandler(model, "C:\\Plex\\Film\\The.Shawshank.Redemption.1994.1080p.x264.YIFY.mp4");
-        this.viewBuilder = new PlaybackViewBuilder(model, playbackHandler, goBackHandler);
+        this.viewBuilder = new PlaybackViewBuilder(model, playbackHandler.getMediaPlayer(), this::handlePlay, goBackHandler);
     }
 
     @Override
     public Region getView() {
         return viewBuilder.build();
+    }
+
+    public void handlePlay() {
+        playbackHandler.play();
     }
 }

@@ -22,12 +22,14 @@ import java.util.function.Consumer;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
-    private PlaybackHandler playbackHandler;
+    private final MediaPlayer mediaPlayer;
+    private final Runnable onPlay;
     private final Runnable onBackClicked;
 
-    public PlaybackViewBuilder(PlaybackModel model, PlaybackHandler playbackHandler, Runnable onBackClicked) {
+    public PlaybackViewBuilder(PlaybackModel model, MediaPlayer mediaPlayer, Runnable onPlay, Runnable onBackClicked) {
         this.model = model;
-        this.playbackHandler = playbackHandler;
+        this.mediaPlayer = mediaPlayer;
+        this.onPlay = onPlay;
         this.onBackClicked = onBackClicked;
     }
 
@@ -54,7 +56,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
     }
 
     private Region createCenter() {
-        return new MediaViewWidget(playbackHandler.getMediaPlayer());
+        return new MediaViewWidget(mediaPlayer);
     }
 
     private Region createBottom() {
@@ -101,7 +103,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
         HBox playbackControls = new HBox(10);
         FontIcon rewind = new FontIcon(Material2MZ.SKIP_PREVIOUS);
-        Button play = ButtonWidgets.actionIconButton(Material2MZ.PLAY_ARROW, "icon", e -> playbackHandler.play());
+        Button play = ButtonWidgets.actionIconButton(Material2MZ.PLAY_ARROW, "icon", e -> onPlay.run());
         FontIcon forward = new FontIcon(Material2MZ.SKIP_NEXT);
 
         rewind.setIconSize(24);
