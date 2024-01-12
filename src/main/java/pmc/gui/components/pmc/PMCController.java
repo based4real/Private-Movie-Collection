@@ -13,6 +13,7 @@ import pmc.be.Movie;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.MovieManager;
 import pmc.bll.TMDBMovieManager;
+import pmc.bll.utils.ConfigSystem;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
@@ -109,7 +110,8 @@ public class PMCController implements IViewController {
     }
 
     private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity movie) {
-        return new MovieDetailsModel(movie.getDescription());
+        model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
+        return new MovieDetailsModel(movie.getDescription(), "https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {

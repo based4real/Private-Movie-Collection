@@ -3,6 +3,9 @@ package pmc.gui.widgets;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.shape.Rectangle;
 
 public class ImageWidgets {
@@ -30,5 +33,12 @@ public class ImageWidgets {
         urlProperty.addListener((obs, ov, nv) -> results.setImage(new Image("file:" + nv, true)));
 
         return results;
+    }
+
+    public static Background stretchedBackground(String url) {
+        BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
+        Image image = new Image(url, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image, null, null, null, backgroundSize);
+        return new Background(backgroundImage);
     }
 }

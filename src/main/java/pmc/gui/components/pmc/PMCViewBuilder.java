@@ -79,6 +79,12 @@ public class PMCViewBuilder implements Builder<Region> {
         main.setLeft(left);
         main.setCenter(createCenter());
 
+        // Eksmepl på at få backdrop på baggrund, skal dog laves ordentligt hvis det er
+/*        model.backdropPathProperty().addListener((obs, ov, nv) -> {
+            System.out.println(nv);
+            if (nv != null && !nv.isEmpty()) main.setBackground(ImageWidgets.stretchedBackground(nv));
+        });*/
+
         Pane overlay = new Pane();
         overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
 
