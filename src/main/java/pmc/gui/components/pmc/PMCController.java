@@ -21,6 +21,8 @@ import pmc.utils.MovieException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 /**
  * Hoved Controller for Private Movie Collection (PMC) applikationen.<br>
@@ -72,26 +74,11 @@ public class PMCController implements IViewController {
     }
 
     private void fetchData() {
-        // Hent data asynkront så vi ikke bloker Java FX Application Thread (FXAT), hvis forbindelsen f.eks. er langsom
-        Task<List<Movie>> fetchTask = new Task<>() {
-            @Override
-            protected List<Movie> call() throws MovieException {
-                return movieManager.getAllMovies();
-            }
-        };
-
-        // Håndter successful hentning af data
-        fetchTask.setOnSucceeded(evt -> {
-            model.movieModels().setAll(convertToMovieModels(fetchTask.getValue()));
-        });
-
-        // Håndter exceptions
-        fetchTask.setOnFailed(evt -> {
-            Throwable error = fetchTask.getException();
-            errorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage());
-        });
-
-        new Thread(fetchTask).start();
+        performBackgroundTask(
+                () -> movieManager.getAllMovies(),
+                movies -> model.movieModels().setAll(convertToMovieModels(movies)),
+                error -> errorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
+        );
     }
 
     private List<MovieModel> convertToMovieModels(List<Movie> movies) {
@@ -124,27 +111,11 @@ public class PMCController implements IViewController {
         viewHandler.changeView(ViewType.INFO);
         infoController.setModel(movieModel);
 
-        Task<MovieDetailsModel> fetchTask = new Task<>() {
-            @Override
-            protected MovieDetailsModel call() throws Exception {
-                TMDBMovieEntity tmdbMovie = tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get());
-                return convertToMovieDetailsModel(tmdbMovie);
-            }
-        };
-
-        fetchTask.setOnSucceeded(evt -> {
-            MovieDetailsModel movieDetails = fetchTask.getValue();
-            Platform.runLater(() -> {
-                infoController.setDetailsModel(movieDetails);
-            });
-        });
-
-        fetchTask.setOnFailed(EVT -> {
-            Throwable error = fetchTask.getException();
-            errorDialog("Fejl", "Der var et problem med at hente data: " + error.getMessage());
-        });
-
-        new Thread(fetchTask).start();
+        performBackgroundTask(
+                () -> tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get()),
+                tmdbMovie -> Platform.runLater(() -> infoController.setDetailsModel(convertToMovieDetailsModel(tmdbMovie))),
+                error -> errorDialog("Fejl", "Der var et problem med at hente data: " + error.getMessage())
+        );
     }
 
     private void handlePlayButtonClick(MovieModel movieModel) {
@@ -154,5 +125,30 @@ public class PMCController implements IViewController {
 
     private void handleAddMovieResponse(MovieModel movieModel) { // todo: skal nok ikke være MovieModel bare lige for at teste
         System.out.println("håndter tilføj movie dialog respons");
+    }
+
+    private <T> void performBackgroundTask(Callable<T> task, Consumer<T> onSuccess, Consumer<Exception> onError) {
+        // Hent data i baggrunden så vi ikke bloker Java FX Application Thread (FXAT), hvis forbindelsen f.eks. er langsom
+        Task<T> backgroundTask = new Task<T>() {
+            @Override
+            protected T call() throws Exception {
+                return task.call();
+            }
+        };
+
+        // Håndter successful hentning af data
+        backgroundTask.setOnSucceeded(event -> {
+            T result = backgroundTask.getValue();
+            onSuccess.accept(result);
+        });
+
+        // Håndter exceptions
+        backgroundTask.setOnFailed(event -> {
+            Throwable error = backgroundTask.getException();
+            onError.accept((Exception) error);
+        });
+
+        // Start ny tråd
+        new Thread(backgroundTask).start();
     }
 }
