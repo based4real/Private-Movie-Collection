@@ -8,7 +8,7 @@ public class PlaybackModel {
     private final StringProperty filePath = new SimpleStringProperty("");
     private final BooleanProperty isPlaying = new SimpleBooleanProperty(false);
 
-    public ObjectProperty mediaPlayerProperty() { return mediaPlayer; }
+    public ObjectProperty<MediaPlayer> mediaPlayerProperty() { return mediaPlayer; }
     public StringProperty filePathProperty() { return filePath; }
     public BooleanProperty isPlayingProperty() {
         return isPlaying;

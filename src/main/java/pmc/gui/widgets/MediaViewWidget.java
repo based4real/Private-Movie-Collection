@@ -12,22 +12,14 @@ public class MediaViewWidget extends Region {
     private MediaView mediaView;
 
     public MediaViewWidget(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
-        this.mediaView = new MediaView(mediaPlayer);
-
-        mediaView.setPreserveRatio(true);
-
-        this.getChildren().add(mediaView);
+        setMediaPlayer(mediaPlayer);
     }
 
     public void setMediaPlayer(MediaPlayer newMediaPlayer) {
-        if (this.mediaPlayer != null) {
-            this.mediaPlayer.dispose();
-        }
+        if (this.mediaPlayer != null) this.mediaPlayer.dispose();
 
         this.mediaPlayer = newMediaPlayer;
 
-        // Remove the old MediaView and create a new one
         this.getChildren().clear();
         this.mediaView = new MediaView(newMediaPlayer);
         mediaView.setPreserveRatio(true);

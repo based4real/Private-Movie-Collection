@@ -56,10 +56,10 @@ public class PlaybackViewBuilder implements Builder<Region> {
     }
 
     private Region createCenter() {
-        MediaViewWidget results = new MediaViewWidget((MediaPlayer) model.mediaPlayerProperty().get());
+        MediaViewWidget results = new MediaViewWidget(model.mediaPlayerProperty().get());
 
         model.mediaPlayerProperty().addListener((obs, ov, nv) -> {
-            results.setMediaPlayer((MediaPlayer) nv);
+            results.setMediaPlayer(nv);
         });
 
         return results;
