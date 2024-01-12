@@ -13,6 +13,7 @@ import javax.swing.text.View;
 public class PMCModel {
     private final ObjectProperty<ViewType> activeView = new SimpleObjectProperty<>(ViewType.HOME);
     private final ObjectProperty<ViewType> previousView = new SimpleObjectProperty<>(ViewType.HOME);
+    private final BooleanProperty isDialogOpen = new SimpleBooleanProperty(false);
     private final ObservableList<MovieModel> movieModels = FXCollections.observableArrayList();
 
     public ObjectProperty<ViewType> activeViewProperty() {
@@ -22,6 +23,8 @@ public class PMCModel {
     public ObjectProperty<ViewType> previousViewProperty() {
         return previousView;
     }
+
+    public BooleanProperty isDialogOpenProperty() { return isDialogOpen; }
 
     public ObservableList<MovieModel> movieModels(){
         return movieModels;

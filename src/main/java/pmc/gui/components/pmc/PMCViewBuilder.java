@@ -62,21 +62,29 @@ public class PMCViewBuilder implements Builder<Region> {
 
     @Override
     public Region build() {
-        BorderPane results = new BorderPane();
+        StackPane results = new StackPane();
         results.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/css/theme.css")).toExternalForm());
         //results.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/css/debugTheme.css")).toExternalForm());
         results.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/css/pmc.css")).toExternalForm());
-        results.getStyleClass().add("main");
 
+        BorderPane main = new BorderPane();
+        main.getStyleClass().add("main");
         Region top = createTop();
         Region left = createLeft();
 
         BorderPane.setMargin(top, new Insets(0, 5, 5, 5));
         BorderPane.setMargin(left, new Insets(5, 5, 5, 5));
 
-        results.setTop(top);
-        results.setLeft(left);
-        results.setCenter(createCenter());
+        main.setTop(top);
+        main.setLeft(left);
+        main.setCenter(createCenter());
+
+        Pane overlay = new Pane();
+        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
+
+        overlay.visibleProperty().bind(model.isDialogOpenProperty());
+
+        results.getChildren().addAll(main, overlay);
 
         return results;
     }

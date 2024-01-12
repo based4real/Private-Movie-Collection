@@ -163,6 +163,7 @@ public class PMCController implements IViewController {
     }
 
     private <T> void showDialog(IDialogController<T> controller, String title) {
+        model.isDialogOpenProperty().set(true);
         Dialog<T> dialog = new DialogBuilder<>(controller)
                 .withTitle(title)
                 .addButtonTypes(ButtonType.CANCEL, ButtonType.OK)
@@ -172,6 +173,7 @@ public class PMCController implements IViewController {
         setupDialogStyle(dialog);
         dialog.getDialogPane().setPrefSize(600, 400);
         dialog.showAndWait();
+        model.isDialogOpenProperty().set(false);
     }
 
     private void setupDialogButtons(Dialog<?> dialog) {
