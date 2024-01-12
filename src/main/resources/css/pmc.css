@@ -98,11 +98,17 @@
     -fx-font-weight: bold;
 }
 
+
+/*******************************************************************************
+ *                                                                             *
+ * Dialog                                                                      *
+ *                                                                             *
+ ******************************************************************************/
+
 .dialog-pane {
     -fx-background-color: -primary-color;
     -fx-padding: 0;
 }
-
 
 .dialog-pane:header .header-panel {
     -fx-background-color: red;
@@ -122,4 +128,18 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-color: grey;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Playback                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.playback {
+    -fx-background-color: black;
+}
+
+.playback-top, .playback-bottom {
+    -fx-background-color: rgba(50, 50, 50, 0.5);
 }

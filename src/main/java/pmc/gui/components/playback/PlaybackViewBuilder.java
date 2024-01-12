@@ -5,16 +5,15 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Builder;
+import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
+import pmc.gui.utils.Animations;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.MediaViewWidget;
 
@@ -25,6 +24,9 @@ public class PlaybackViewBuilder implements Builder<Region> {
     private final Runnable onPlay;
     private final Runnable onBackClicked;
 
+    private double topHeight = 0;
+    private double bottomHeight = 0;
+
     public PlaybackViewBuilder(PlaybackModel model, Runnable onPlay, Runnable onBackClicked) {
         this.model = model;
         this.onPlay = onPlay;
@@ -33,18 +35,37 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
     @Override
     public Region build() {
-        BorderPane results = new BorderPane();
+        StackPane results = new StackPane();
+        results.getStyleClass().add("playback");
 
-        results.setTop(createTop());
-        results.setCenter(createCenter());
-        results.setBottom(createBottom());
+        BorderPane topAndBottom = new BorderPane();
+        Region top = createTop();
+        Region bottom = createBottom();
+
+        topAndBottom.setTop(top);
+        topAndBottom.setBottom(bottom);
+
+        results.getChildren().addAll(createCenter(), topAndBottom);
+
+        top.boundsInParentProperty().addListener((obs, ov, nv) -> topHeight = nv.getHeight());
+        bottom.boundsInParentProperty().addListener((obs, ov, nv) -> bottomHeight = nv.getHeight());
+
+        results.setOnMouseEntered(e -> {
+            Animations.slideIn(top, Duration.millis(100), -topHeight, 0);
+            Animations.slideIn(bottom, Duration.millis(100), bottomHeight, 0);
+        });
+
+        results.setOnMouseExited(e -> {
+            Animations.slideOut(top, Duration.millis(100), 0, -topHeight);
+            Animations.slideOut(bottom, Duration.millis(100), 0, bottomHeight);
+        });
 
         return results;
     }
 
     private Region createTop() {
         HBox results = new HBox();
-        results.getStyleClass().add("topbar");
+        results.getStyleClass().add("playback-top");
 
         Button backIcon = ButtonWidgets.actionIconButton(Material2AL.BACKSPACE, "icon", e -> {
             model.reset();
@@ -58,6 +79,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
     private Region createCenter() {
         MediaViewWidget results = new MediaViewWidget(model.mediaPlayerProperty().get());
+        results.getStyleClass().add("playback-mediaview");
 
         model.mediaPlayerProperty().addListener((obs, ov, nv) -> {
             results.setMediaPlayer(nv);
@@ -68,8 +90,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
     private Region createBottom() {
         BorderPane results = new BorderPane();
-
-        results.setStyle("-fx-background-color: #fff");
+        results.getStyleClass().add("playback-bottom");
 
         results.setTop(createPlaybackSlider());
         results.setCenter(createPlaybackControls());

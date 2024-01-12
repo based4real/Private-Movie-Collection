@@ -1,9 +1,6 @@
 package pmc.gui.utils;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.beans.value.WritableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -22,6 +19,20 @@ public class Animations {
         fadeOut.setToValue(toOpacity);
         fadeOut.setFromValue(fromOpacity);
         fadeOut.play();
+    }
+
+    public static void slideIn(Node node, Duration duration, double fromY, double toY) {
+        TranslateTransition slideIn = new TranslateTransition(duration, node);
+        slideIn.setFromY(fromY);
+        slideIn.setToY(toY);
+        slideIn.play();
+    }
+
+    public static void slideOut(Node node, Duration duration, double fromY, double toY) {
+        TranslateTransition slideOut = new TranslateTransition(duration, node);
+        slideOut.setFromY(fromY);
+        slideOut.setToY(toY);
+        slideOut.play();
     }
 
     public static void animate(WritableValue<Number> property, Number targetVal, Duration duration) {
