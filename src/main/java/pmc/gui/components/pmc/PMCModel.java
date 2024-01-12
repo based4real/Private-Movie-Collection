@@ -15,7 +15,6 @@ public class PMCModel {
     private final ObjectProperty<ViewType> previousView = new SimpleObjectProperty<>(ViewType.HOME);
     private final ObservableList<MovieModel> movieModels = FXCollections.observableArrayList();
 
-
     public ObjectProperty<ViewType> activeViewProperty() {
         return activeView;
     }

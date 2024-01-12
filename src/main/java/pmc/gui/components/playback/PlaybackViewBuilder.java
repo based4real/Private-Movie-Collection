@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Builder;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -16,6 +17,8 @@ import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.MediaViewWidget;
+
+import java.io.File;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
@@ -53,7 +56,13 @@ public class PlaybackViewBuilder implements Builder<Region> {
     }
 
     private Region createCenter() {
-        return new MediaViewWidget(mediaPlayer);
+        MediaViewWidget results = new MediaViewWidget((MediaPlayer) model.mediaPlayerProperty().get());
+
+        model.mediaPlayerProperty().addListener((obs, ov, nv) -> {
+            results.setMediaPlayer((MediaPlayer) nv);
+        });
+
+        return results;
     }
 
     private Region createBottom() {
@@ -100,7 +109,6 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
         HBox playbackControls = new HBox(10);
         FontIcon rewind = new FontIcon(Material2MZ.SKIP_PREVIOUS);
-//        Button play = ButtonWidgets.actionIconButton(Material2MZ.PLAY_ARROW, "icon", e -> onPlay.run());
 
         Button play = ButtonWidgets.toggleableActionIconButton(
                 Material2MZ.PLAY_CIRCLE_OUTLINE,

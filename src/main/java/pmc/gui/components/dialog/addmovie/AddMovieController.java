@@ -22,6 +22,6 @@ public class AddMovieController implements IDialogController<MovieModel> {
     public void initializeDialog(Dialog<MovieModel> dialog) {
         this.dialog = dialog;
 
-        dialog.setResultConverter(btn -> new MovieModel("hej fra add movie controller"));
+        dialog.setResultConverter(btn -> new MovieModel("hej fra add movie controller", "what"));
     }
 }

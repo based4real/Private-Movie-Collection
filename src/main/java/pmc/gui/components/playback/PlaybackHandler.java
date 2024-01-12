@@ -9,10 +9,33 @@ public class PlaybackHandler {
     private final PlaybackModel model;
     private MediaPlayer mediaPlayer;
 
-    public PlaybackHandler(PlaybackModel model, String mediaPath) {
+    public PlaybackHandler(PlaybackModel model) {
         this.model = model;
-        Media media = new Media(new File(mediaPath).toURI().toString());
-        this.mediaPlayer = new MediaPlayer(media);
+        initializeMediaPlayer(model.filePathProperty().get());
+
+        model.filePathProperty().addListener((obs, ov, nv) -> {
+            if (nv != null && !nv.isEmpty()) initializeMediaPlayer(nv);
+        });
+    }
+
+    private void initializeMediaPlayer(String filePath) {
+        if (mediaPlayer != null) mediaPlayer.dispose();
+
+        if (filePath == null || filePath.isEmpty()) {
+            model.mediaPlayerProperty().set(null);
+            return;
+        }
+
+        try {
+            Media media = new Media(new File(filePath).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            model.mediaPlayerProperty().set(mediaPlayer);
+        } catch (Exception e) {
+            System.out.println("Fejl i PlaybackHandler.initializeMediaPlayer(): " + e.getMessage());
+            mediaPlayer = null;
+            model.mediaPlayerProperty().set(null);
+            // todo: håndter exception ordentligt
+        }
     }
 
     public void play() {
@@ -28,4 +51,5 @@ public class PlaybackHandler {
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
+
 }

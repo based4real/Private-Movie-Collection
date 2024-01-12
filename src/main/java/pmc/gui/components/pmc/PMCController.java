@@ -98,7 +98,7 @@ public class PMCController implements IViewController {
         List<MovieModel> movieModels = new ArrayList<>();
 
         for (Movie movie : movies) {
-            movieModels.add(new MovieModel(movie.getPosterPath()));
+            movieModels.add(new MovieModel(movie.getPosterPath(), movie.getFilePath()));
         }
 
         return movieModels;
@@ -118,6 +118,7 @@ public class PMCController implements IViewController {
     }
 
     private void handlePlayButtonClick(MovieModel movieModel) {
+        playbackController.setModel(movieModel);
         viewHandler.changeView(ViewType.PLAYBACK);
     }
 

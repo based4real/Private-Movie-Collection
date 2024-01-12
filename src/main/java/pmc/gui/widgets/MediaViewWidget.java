@@ -20,9 +20,25 @@ public class MediaViewWidget extends Region {
         this.getChildren().add(mediaView);
     }
 
+    public void setMediaPlayer(MediaPlayer newMediaPlayer) {
+        if (this.mediaPlayer != null) {
+            this.mediaPlayer.dispose();
+        }
+
+        this.mediaPlayer = newMediaPlayer;
+
+        // Remove the old MediaView and create a new one
+        this.getChildren().clear();
+        this.mediaView = new MediaView(newMediaPlayer);
+        mediaView.setPreserveRatio(true);
+        this.getChildren().add(mediaView);
+    }
+
     @Override
     protected void layoutChildren() {
         super.layoutChildren();
+
+        if (mediaPlayer == null || mediaPlayer.getMedia() == null) return;
 
         // max størrelse
         double width = this.getWidth();
