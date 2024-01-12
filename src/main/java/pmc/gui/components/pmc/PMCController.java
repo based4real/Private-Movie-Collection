@@ -1,5 +1,6 @@
 package pmc.gui.components.pmc;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Region;
@@ -93,24 +94,6 @@ public class PMCController implements IViewController {
         new Thread(fetchTask).start();
     }
 
-    private void fetchMovieDetails(MovieModel movieModel) {
-        Task<TMDBMovieEntity> fetchTask = new Task<>() {
-            @Override
-            protected TMDBMovieEntity call() throws Exception {
-                return tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get());
-            }
-        };
-
-        fetchTask.setOnSucceeded(evt -> movieModel.movieDetailsProperty().set(convertToMovieDetailsModel(fetchTask.getValue())));
-
-        fetchTask.setOnFailed(evt -> {
-            Throwable error = fetchTask.getException();
-            errorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage());
-        });
-
-        new Thread(fetchTask).start();
-    }
-
     private List<MovieModel> convertToMovieModels(List<Movie> movies) {
         List<MovieModel> movieModels = new ArrayList<>();
 
@@ -138,9 +121,28 @@ public class PMCController implements IViewController {
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {
-        fetchMovieDetails(movieModel);
-        infoController.setModel(movieModel);
-        viewHandler.changeView(ViewType.INFO);
+        Task<MovieDetailsModel> fetchTask = new Task<>() {
+            @Override
+            protected MovieDetailsModel call() throws Exception {
+                TMDBMovieEntity tmdbMovie = tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get());
+                return convertToMovieDetailsModel(tmdbMovie);
+            }
+        };
+
+        fetchTask.setOnSucceeded(evt -> {
+            MovieDetailsModel movieDetails = fetchTask.getValue();
+            Platform.runLater(() -> {
+                infoController.setModel(movieModel, movieDetails);
+                viewHandler.changeView(ViewType.INFO);
+            });
+        });
+
+        fetchTask.setOnFailed(EVT -> {
+            Throwable error = fetchTask.getException();
+            errorDialog("Fejl", "Der var et problem med at hente data: " + error.getMessage());
+        });
+
+        new Thread(fetchTask).start();
     }
 
     private void handlePlayButtonClick(MovieModel movieModel) {

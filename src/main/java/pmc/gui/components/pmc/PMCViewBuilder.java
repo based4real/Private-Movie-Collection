@@ -102,6 +102,8 @@ public class PMCViewBuilder implements Builder<Region> {
         infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
         playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
 
+        infoView.managedProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
+
         return new StackPane(homeView, categoriesView, infoView, playbackView);
     }
 

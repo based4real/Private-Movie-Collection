@@ -3,6 +3,7 @@ package pmc.gui.components.info;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
+import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
 
 public class InfoController implements IViewController {
@@ -19,8 +20,11 @@ public class InfoController implements IViewController {
         return viewBuilder.build();
     }
 
-    public void setModel(MovieModel model) {
+    public void setModel(MovieModel model, MovieDetailsModel detailsModel) {
         this.model.posterPathProperty().set(model.posterPathProperty().get());
-        this.model.movieDetailsProperty().set(model.movieDetailsProperty().get());
+
+        if (detailsModel != null) {
+            this.model.descriptionProperty().set(detailsModel.descriptionProperty().get());
+        }
     }
 }

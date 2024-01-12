@@ -7,8 +7,6 @@ public class MovieModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
     private final StringProperty filePath = new SimpleStringProperty("");
 
-    private final ObjectProperty<MovieDetailsModel> movieDetails = new SimpleObjectProperty<>();
-
     public MovieModel() {}
 
     public MovieModel(int tmdbid,
@@ -28,6 +26,4 @@ public class MovieModel {
     public StringProperty filePathProperty() {
         return filePath;
     }
-
-    public ObjectProperty<MovieDetailsModel> movieDetailsProperty() { return movieDetails; }
 }

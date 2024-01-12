@@ -8,11 +8,13 @@ import pmc.gui.common.MovieDetailsModel;
 
 public class InfoModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
-    private final ObjectProperty<MovieDetailsModel> movieDetails = new SimpleObjectProperty<>();
+    private final StringProperty description = new SimpleStringProperty("");
 
     public StringProperty posterPathProperty() {
         return posterPath;
     }
 
-    public ObjectProperty<MovieDetailsModel> movieDetailsProperty() { return movieDetails; }
+    public StringProperty descriptionProperty() {
+        return description;
+    }
 }
