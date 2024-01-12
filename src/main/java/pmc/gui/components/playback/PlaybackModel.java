@@ -8,6 +8,17 @@ public class PlaybackModel {
     private final StringProperty filePath = new SimpleStringProperty("");
     private final BooleanProperty isPlaying = new SimpleBooleanProperty(false);
 
+    public void reset() {
+        if (mediaPlayer.get() != null) {
+            mediaPlayer.get().stop();
+            mediaPlayer.get().dispose();
+            mediaPlayer.set(null);
+        }
+
+        filePath.set("");
+        isPlaying.set(false);
+    }
+
     public ObjectProperty<MediaPlayer> mediaPlayerProperty() { return mediaPlayer; }
     public StringProperty filePathProperty() { return filePath; }
     public BooleanProperty isPlayingProperty() {

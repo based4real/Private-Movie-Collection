@@ -18,7 +18,7 @@ public class PlaybackController implements IViewController {
     public PlaybackController(Runnable goBackHandler) {
         this.model = new PlaybackModel();
         this.playbackHandler = new PlaybackHandler(model);
-        this.viewBuilder = new PlaybackViewBuilder(model, playbackHandler.getMediaPlayer(), this::handlePlay, goBackHandler);
+        this.viewBuilder = new PlaybackViewBuilder(model, this::handlePlay, goBackHandler);
     }
 
     @Override

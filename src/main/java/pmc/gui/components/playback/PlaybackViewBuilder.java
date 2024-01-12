@@ -22,13 +22,11 @@ import java.io.File;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
-    private final MediaPlayer mediaPlayer;
     private final Runnable onPlay;
     private final Runnable onBackClicked;
 
-    public PlaybackViewBuilder(PlaybackModel model, MediaPlayer mediaPlayer, Runnable onPlay, Runnable onBackClicked) {
+    public PlaybackViewBuilder(PlaybackModel model, Runnable onPlay, Runnable onBackClicked) {
         this.model = model;
-        this.mediaPlayer = mediaPlayer;
         this.onPlay = onPlay;
         this.onBackClicked = onBackClicked;
     }
@@ -48,7 +46,10 @@ public class PlaybackViewBuilder implements Builder<Region> {
         HBox results = new HBox();
         results.getStyleClass().add("topbar");
 
-        Button backIcon = ButtonWidgets.actionIconButton(Material2AL.BACKSPACE, "icon", e -> onBackClicked.run());
+        Button backIcon = ButtonWidgets.actionIconButton(Material2AL.BACKSPACE, "icon", e -> {
+            model.reset();
+            onBackClicked.run();
+        });
 
         results.getChildren().add(backIcon);
 
