@@ -10,7 +10,7 @@ public class InfoController implements IViewController {
     private final Builder<Region> viewBuilder;
 
     public InfoController() {
-        this.model = new InfoModel();
+        model = new InfoModel();
         this.viewBuilder = new InfoViewBuilder(model);
     }
 
@@ -21,5 +21,6 @@ public class InfoController implements IViewController {
 
     public void setModel(MovieModel model) {
         this.model.posterPathProperty().set(model.posterPathProperty().get());
+        this.model.movieDetailsProperty().set(model.movieDetailsProperty().get());
     }
 }

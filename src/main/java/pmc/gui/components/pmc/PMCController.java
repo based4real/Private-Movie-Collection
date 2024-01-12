@@ -1,24 +1,20 @@
 package pmc.gui.components.pmc;
 
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
 import pmc.be.Movie;
+import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.MovieManager;
+import pmc.bll.TMDBMovieManager;
 import pmc.gui.common.IViewController;
+import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.categories.CategoriesController;
-import pmc.gui.components.dialog.DialogBuilder;
-import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
-import pmc.gui.components.info.InfoViewBuilder;
 import pmc.gui.components.playback.PlaybackController;
 import pmc.utils.MovieException;
 
@@ -40,6 +36,7 @@ public class PMCController implements IViewController {
     private final PlaybackController playbackController;
 
     private MovieManager movieManager;
+    private TMDBMovieManager tmdbMovieManager;
 
     public PMCController(Stage stage) {
         this.model = new PMCModel();
@@ -51,6 +48,8 @@ public class PMCController implements IViewController {
         } catch (MovieException e) {
             errorDialog("Fejl", e.getMessage());
         }
+
+        this.tmdbMovieManager = new TMDBMovieManager();
 
         this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
         this.categoriesController = new CategoriesController();
@@ -75,7 +74,7 @@ public class PMCController implements IViewController {
         // Hent data asynkront så vi ikke bloker Java FX Application Thread (FXAT), hvis forbindelsen f.eks. er langsom
         Task<List<Movie>> fetchTask = new Task<>() {
             @Override
-            protected List<Movie> call() throws Exception {
+            protected List<Movie> call() throws MovieException {
                 return movieManager.getAllMovies();
             }
         };
@@ -94,14 +93,40 @@ public class PMCController implements IViewController {
         new Thread(fetchTask).start();
     }
 
+    private void fetchMovieDetails(MovieModel movieModel) {
+        Task<TMDBMovieEntity> fetchTask = new Task<>() {
+            @Override
+            protected TMDBMovieEntity call() throws Exception {
+                return tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get());
+            }
+        };
+
+        fetchTask.setOnSucceeded(evt -> movieModel.movieDetailsProperty().set(convertToMovieDetailsModel(fetchTask.getValue())));
+
+        fetchTask.setOnFailed(evt -> {
+            Throwable error = fetchTask.getException();
+            errorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage());
+        });
+
+        new Thread(fetchTask).start();
+    }
+
     private List<MovieModel> convertToMovieModels(List<Movie> movies) {
         List<MovieModel> movieModels = new ArrayList<>();
 
         for (Movie movie : movies) {
-            movieModels.add(new MovieModel(movie.getPosterPath(), movie.getFilePath()));
+            movieModels.add(new MovieModel(
+                    movie.getTmdbId(),
+                    movie.getPosterPath(),
+                    movie.getFilePath())
+            );
         }
 
         return movieModels;
+    }
+
+    private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity movie) {
+        return new MovieDetailsModel(movie.getDescription());
     }
 
     private void errorDialog(String title, String msg) {
@@ -113,6 +138,7 @@ public class PMCController implements IViewController {
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {
+        fetchMovieDetails(movieModel);
         infoController.setModel(movieModel);
         viewHandler.changeView(ViewType.INFO);
     }

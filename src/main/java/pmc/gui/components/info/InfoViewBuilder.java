@@ -11,7 +11,7 @@ import pmc.gui.widgets.ImageWidgets;
 import pmc.gui.widgets.MoviePoster;
 
 public class InfoViewBuilder implements Builder<Region> {
-    private InfoModel model;
+    private final InfoModel model;
 
     public InfoViewBuilder(InfoModel model) {
         this.model = model;
