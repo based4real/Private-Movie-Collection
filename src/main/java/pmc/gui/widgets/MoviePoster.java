@@ -7,6 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import pmc.gui.common.MovieModel;
+import pmc.gui.widgets.icons.IconWidgets;
 
 import java.util.function.Consumer;
 
@@ -29,7 +30,7 @@ public class MoviePoster extends StackPane {
         border.setStrokeWidth(1);
         border.setVisible(false);
 
-        Node playButton = new PosterPlayButton(50);
+        Node playButton = IconWidgets.posterPlayButton(50);
         playButton.setVisible(false);
 
         this.setPrefSize(fitWidth, fitHeight);

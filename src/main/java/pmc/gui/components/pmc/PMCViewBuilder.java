@@ -2,7 +2,6 @@ package pmc.gui.components.pmc;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -23,9 +22,9 @@ import pmc.gui.common.MovieModel;
 import pmc.gui.components.dialog.DialogBuilder;
 import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.widgets.*;
+import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.NavigationGroup;
-
-import javax.swing.text.View;
+import pmc.gui.widgets.icons.IconWidgets;
 
 /**
  * Ansvarlig for at bygge brugergrænsefladen for det overordnede View i Private Movie Collection (PMC) applikationen.

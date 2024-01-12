@@ -1,6 +1,5 @@
 package pmc.gui.widgets.controls;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.kordamp.ikonli.material2.Material2MZ;
 import pmc.gui.utils.Animations;
-import pmc.gui.widgets.ButtonWidgets;
+import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.LabelWidgets;
 
 import java.util.function.Function;

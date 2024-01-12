@@ -72,6 +72,16 @@
     -fx-cursor: hand;
 }
 
+.poster-play-button {
+    -fx-font-size: 50;
+    -fx-fill: white;
+}
+
+.poster-play-button:hover {
+    -fx-fill: -accent-color;
+}
+
+
 .hpage-nav {
     -fx-font-size: 24;
     -fx-fill: lightgrey;

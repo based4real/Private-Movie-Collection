@@ -1,12 +1,10 @@
-package pmc.gui.widgets.controls;
+package pmc.gui.widgets.buttons;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
@@ -14,10 +12,8 @@ import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.javafx.FontIcon;
 import pmc.gui.components.pmc.ViewType;
 import pmc.gui.utils.Animations;
-import pmc.gui.widgets.IconWidgets;
+import pmc.gui.widgets.icons.IconWidgets;
 import pmc.gui.widgets.LabelWidgets;
-
-import java.util.function.BooleanSupplier;
 
 public class NavigationButton extends Button {
     private static final PseudoClass HOVER = PseudoClass.getPseudoClass("hover");

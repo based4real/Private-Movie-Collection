@@ -14,11 +14,8 @@ import javafx.util.Builder;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
-import pmc.gui.widgets.ButtonWidgets;
-import pmc.gui.widgets.IconWidgets;
+import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.MediaViewWidget;
-
-import java.util.function.Consumer;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
