@@ -29,7 +29,8 @@ import pmc.gui.widgets.icons.IconWidgets;
 public class PMCViewBuilder implements Builder<Region> {
     private final PMCModel model;
     private final ViewHandler viewHandler;
-    private final Consumer<MovieModel> responseHandler;
+    private final Runnable addMovieClick;
+    private final Runnable addCategoryClick;
     private final ResourceBundle labelsBundle;
 
     private final Region homeView;
@@ -40,7 +41,8 @@ public class PMCViewBuilder implements Builder<Region> {
 
     public PMCViewBuilder(PMCModel model,
                           ViewHandler viewHandler,
-                          Consumer<MovieModel> responseHandler,
+                          Runnable addMovieClick,
+                          Runnable addCategoryClick,
                           Region homeView,
                           Region genresView,
                           Region categoriesView,
@@ -48,7 +50,8 @@ public class PMCViewBuilder implements Builder<Region> {
                           Region playbackView) {
         this.model = model;
         this.viewHandler = viewHandler;
-        this.responseHandler = responseHandler;
+        this.addMovieClick = addMovieClick;
+        this.addCategoryClick = addCategoryClick;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
         this.homeView = homeView;
         this.genresView = genresView;
@@ -118,9 +121,10 @@ public class PMCViewBuilder implements Builder<Region> {
         Region space = new Region();
         HBox.setHgrow(space, Priority.ALWAYS);
 
-        Button addMovieIcon = ButtonWidgets.actionIconButton(Material2AL.ADD_BOX, "icon", e -> showAddMovieDialog(responseHandler));
+        Button addCategoryIcon = ButtonWidgets.actionIconButton(Material2AL.LIBRARY_ADD, "icon", e -> addCategoryClick.run());
+        Button addMovieIcon = ButtonWidgets.actionIconButton(Material2AL.ADD_BOX, "icon", e -> addMovieClick.run());
 
-        results.getChildren().addAll(menuIcon, pmc, space, addMovieIcon);
+        results.getChildren().addAll(menuIcon, pmc, space, addCategoryIcon, addMovieIcon);
         results.setAlignment(Pos.CENTER_LEFT);
 
         return results;
@@ -135,29 +139,5 @@ public class PMCViewBuilder implements Builder<Region> {
         results.add(Material2OutlinedAL.CATEGORY, labelsBundle.getString("categories"), ViewType.CATEGORIES);
 
         return results.getView();
-    }
-
-    private void showAddMovieDialog(Consumer<MovieModel> responseHandler) {
-        Dialog<MovieModel> dialog = new DialogBuilder<>(new AddMovieController())
-                .withTitle("Tilføj film")
-                .addButtonTypes(ButtonType.CANCEL, ButtonType.OK)
-                .build();
-
-        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        okButton.getStyleClass().add("ok-button");
-
-        Button cancelButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelButton.getStyleClass().add("cancel-button");
-
-        dialog.getDialogPane().getScene().getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/css/theme.css")).toExternalForm()
-        );
-        dialog.getDialogPane().getScene().getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/css/pmc.css")).toExternalForm()
-        );
-
-        dialog.getDialogPane().setPrefSize(600, 400);
-
-        dialog.showAndWait().ifPresent(responseHandler);
     }
 }

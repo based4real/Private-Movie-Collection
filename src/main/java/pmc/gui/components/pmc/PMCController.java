@@ -3,6 +3,9 @@ package pmc.gui.components.pmc;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
@@ -15,6 +18,10 @@ import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.Genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
+import pmc.gui.components.dialog.DialogBuilder;
+import pmc.gui.components.dialog.IDialogController;
+import pmc.gui.components.dialog.addcategory.AddCategoryController;
+import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
 import pmc.gui.components.playback.PlaybackController;
@@ -23,6 +30,7 @@ import pmc.utils.MovieException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
@@ -63,7 +71,7 @@ public class PMCController implements IViewController {
         this.infoController = new InfoController();
         this.playbackController = new PlaybackController(viewHandler::previousView);
 
-        this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::handleAddMovieResponse,
+        this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
                 homeController.getView(),
                 genresController.getView(),
                 categoriesController.getView(),
@@ -120,9 +128,6 @@ public class PMCController implements IViewController {
         viewHandler.changeView(ViewType.PLAYBACK);
     }
 
-    private void handleAddMovieResponse(MovieModel movieModel) { // todo: skal nok ikke være MovieModel bare lige for at teste
-        System.out.println("håndter tilføj movie dialog respons");
-    }
 
     private <T> void performBackgroundTask(Callable<T> task, Consumer<T> onSuccess, Consumer<Exception> onError) {
         // Hent data i baggrunden så vi ikke bloker Java FX Application Thread (FXAT), hvis forbindelsen f.eks. er langsom
@@ -147,5 +152,42 @@ public class PMCController implements IViewController {
 
         // Start ny tråd
         new Thread(backgroundTask).start();
+    }
+
+    private void showAddMovieDialog() {
+        showDialog(new AddMovieController(), "Tilføj film");
+    }
+
+    private void showAddCategoryDialog() {
+        showDialog(new AddCategoryController(), "Tilføj kategori");
+    }
+
+    private <T> void showDialog(IDialogController<T> controller, String title) {
+        Dialog<T> dialog = new DialogBuilder<>(controller)
+                .withTitle(title)
+                .addButtonTypes(ButtonType.CANCEL, ButtonType.OK)
+                .build();
+
+        setupDialogButtons(dialog);
+        setupDialogStyle(dialog);
+        dialog.getDialogPane().setPrefSize(600, 400);
+        dialog.showAndWait();
+    }
+
+    private void setupDialogButtons(Dialog<?> dialog) {
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.getStyleClass().add("ok-button");
+
+        Button cancelButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.getStyleClass().add("cancel-button");
+    }
+
+    private void setupDialogStyle(Dialog<?> dialog) {
+        dialog.getDialogPane().getScene().getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/css/theme.css")).toExternalForm()
+        );
+        dialog.getDialogPane().getScene().getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/css/pmc.css")).toExternalForm()
+        );
     }
 }
