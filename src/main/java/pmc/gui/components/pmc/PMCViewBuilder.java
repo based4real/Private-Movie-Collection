@@ -36,6 +36,7 @@ public class PMCViewBuilder implements Builder<Region> {
     private final ResourceBundle labelsBundle;
 
     private final Region homeView;
+    private final Region genresView;
     private final Region categoriesView;
     private final Region infoView;
     private final Region playbackView;
@@ -44,6 +45,7 @@ public class PMCViewBuilder implements Builder<Region> {
                           ViewHandler viewHandler,
                           Consumer<MovieModel> responseHandler,
                           Region homeView,
+                          Region genresView,
                           Region categoriesView,
                           Region infoView,
                           Region playbackView) {
@@ -52,6 +54,7 @@ public class PMCViewBuilder implements Builder<Region> {
         this.responseHandler = responseHandler;
         this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
         this.homeView = homeView;
+        this.genresView = genresView;
         this.categoriesView = categoriesView;
         this.infoView = infoView;
         this.playbackView = playbackView;
@@ -98,13 +101,14 @@ public class PMCViewBuilder implements Builder<Region> {
 
     private Region createCenter() {
         homeView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.HOME));
+        genresView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.GENRES));
         categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
         infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
         playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
 
         infoView.managedProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
 
-        return new StackPane(homeView, categoriesView, infoView, playbackView);
+        return new StackPane(homeView, genresView, categoriesView, infoView, playbackView);
     }
 
     private Region createTopbar() {
@@ -130,6 +134,7 @@ public class PMCViewBuilder implements Builder<Region> {
         NavigationGroup results = new NavigationGroup("sidebar", model.activeViewProperty());
 
         results.add(Material2OutlinedAL.HOME, labelsBundle.getString("home"), ViewType.HOME);
+        results.add(Material2OutlinedAL.COLLECTIONS, labelsBundle.getString("genres"), ViewType.GENRES);
         results.add(Material2OutlinedAL.CATEGORY, labelsBundle.getString("categories"), ViewType.CATEGORIES);
 
         return results.getView();

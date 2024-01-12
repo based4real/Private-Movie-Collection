@@ -13,6 +13,7 @@ import pmc.bll.TMDBMovieManager;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
+import pmc.gui.components.Genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
@@ -35,6 +36,7 @@ public class PMCController implements IViewController {
     private final ViewHandler viewHandler;
 
     private final HomeController homeController;
+    private final GenresController genresController;
     private final CategoriesController categoriesController;
     private final InfoController infoController;
     private final PlaybackController playbackController;
@@ -56,12 +58,14 @@ public class PMCController implements IViewController {
         this.tmdbMovieManager = new TMDBMovieManager();
 
         this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
+        this.genresController = new GenresController();
         this.categoriesController = new CategoriesController();
         this.infoController = new InfoController();
         this.playbackController = new PlaybackController(viewHandler::previousView);
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::handleAddMovieResponse,
                 homeController.getView(),
+                genresController.getView(),
                 categoriesController.getView(),
                 infoController.getView(),
                 playbackController.getView());
