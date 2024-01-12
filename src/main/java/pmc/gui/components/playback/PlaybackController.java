@@ -6,6 +6,7 @@ import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
+import pmc.gui.utils.ErrorHandler;
 
 import java.util.function.Consumer;
 
@@ -27,6 +28,15 @@ public class PlaybackController implements IViewController {
 
     public void setModel(MovieModel model) {
         this.model.filePathProperty().set(model.filePathProperty().get());
+
+        playbackHandler.initializeMediaPlayerAsync(
+                this.model.filePathProperty().get(),
+                this::handleMediaPlayerError
+        );
+    }
+
+    private void handleMediaPlayerError(Exception error) {
+        ErrorHandler.showErrorDialog("Fejl", "Fejl ved at indlæse film: " + error.getMessage());
     }
 
     public void handlePlay() {

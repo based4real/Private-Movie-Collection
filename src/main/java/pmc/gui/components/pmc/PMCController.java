@@ -17,6 +17,7 @@ import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
 import pmc.gui.components.playback.PlaybackController;
+import pmc.gui.utils.ErrorHandler;
 import pmc.utils.MovieException;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class PMCController implements IViewController {
         try {
             this.movieManager = new MovieManager();
         } catch (MovieException e) {
-            errorDialog("Fejl", e.getMessage());
+            ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
 
         this.tmdbMovieManager = new TMDBMovieManager();
@@ -77,7 +78,7 @@ public class PMCController implements IViewController {
         performBackgroundTask(
                 () -> movieManager.getAllMovies(),
                 movies -> model.movieModels().setAll(convertToMovieModels(movies)),
-                error -> errorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
+                error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
         );
     }
 
@@ -99,14 +100,6 @@ public class PMCController implements IViewController {
         return new MovieDetailsModel(movie.getDescription());
     }
 
-    private void errorDialog(String title, String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-
     private void handleMoviePosterClick(MovieModel movieModel) {
         viewHandler.changeView(ViewType.INFO);
         infoController.setModel(movieModel);
@@ -114,7 +107,7 @@ public class PMCController implements IViewController {
         performBackgroundTask(
                 () -> tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get()),
                 tmdbMovie -> Platform.runLater(() -> infoController.setDetailsModel(convertToMovieDetailsModel(tmdbMovie))),
-                error -> errorDialog("Fejl", "Der var et problem med at hente data: " + error.getMessage())
+                error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem med at hente data: " + error.getMessage())
         );
     }
 

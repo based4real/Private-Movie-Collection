@@ -1,9 +1,11 @@
 package pmc.gui.components.playback;
 
+import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 public class PlaybackHandler {
     private final PlaybackModel model;
@@ -11,31 +13,24 @@ public class PlaybackHandler {
 
     public PlaybackHandler(PlaybackModel model) {
         this.model = model;
-        initializeMediaPlayer(model.filePathProperty().get());
-
-        model.filePathProperty().addListener((obs, ov, nv) -> {
-            if (nv != null && !nv.isEmpty()) initializeMediaPlayer(nv);
-        });
     }
 
-    private void initializeMediaPlayer(String filePath) {
-        if (mediaPlayer != null) mediaPlayer.dispose();
+    public void initializeMediaPlayerAsync(String filePath, Consumer<Exception> onError) {
+        new Thread(() -> {
+            try {
+                Media media = new Media(new File(filePath).toURI().toString());
+                MediaPlayer newMediaPlayer = new MediaPlayer(media);
 
-        if (filePath == null || filePath.isEmpty()) {
-            model.mediaPlayerProperty().set(null);
-            return;
-        }
+                Platform.runLater(() -> {
+                    if (mediaPlayer != null) mediaPlayer.dispose();
 
-        try {
-            Media media = new Media(new File(filePath).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-            model.mediaPlayerProperty().set(mediaPlayer);
-        } catch (Exception e) {
-            System.out.println("Fejl i PlaybackHandler.initializeMediaPlayer(): " + e.getMessage());
-            mediaPlayer = null;
-            model.mediaPlayerProperty().set(null);
-            // todo: håndter exception ordentligt
-        }
+                    mediaPlayer = newMediaPlayer;
+                    model.mediaPlayerProperty().set(mediaPlayer);
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> onError.accept(e));
+            }
+        }).start();
     }
 
     public void play() {
