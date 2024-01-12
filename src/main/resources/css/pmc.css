@@ -97,3 +97,29 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+
+.dialog-pane {
+    -fx-background-color: -primary-color;
+    -fx-padding: 0;
+}
+
+
+.dialog-pane:header .header-panel {
+    -fx-background-color: red;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: darkgray;
+}
+
+.dialog-pane .button-bar .ok-button {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: -accent-color;
+}
+
+.dialog-pane .button-bar .cancel-button {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: grey;
+}

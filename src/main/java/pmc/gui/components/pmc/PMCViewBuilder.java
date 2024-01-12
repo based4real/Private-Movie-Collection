@@ -2,10 +2,7 @@ package pmc.gui.components.pmc;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 
@@ -143,8 +140,23 @@ public class PMCViewBuilder implements Builder<Region> {
     private void showAddMovieDialog(Consumer<MovieModel> responseHandler) {
         Dialog<MovieModel> dialog = new DialogBuilder<>(new AddMovieController())
                 .withTitle("Tilføj film")
-                .addButtonTypes(ButtonType.OK, ButtonType.CANCEL)
+                .addButtonTypes(ButtonType.CANCEL, ButtonType.OK)
                 .build();
+
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.getStyleClass().add("ok-button");
+
+        Button cancelButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.getStyleClass().add("cancel-button");
+
+        dialog.getDialogPane().getScene().getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/css/theme.css")).toExternalForm()
+        );
+        dialog.getDialogPane().getScene().getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/css/pmc.css")).toExternalForm()
+        );
+
+        dialog.getDialogPane().setPrefSize(600, 400);
 
         dialog.showAndWait().ifPresent(responseHandler);
     }
