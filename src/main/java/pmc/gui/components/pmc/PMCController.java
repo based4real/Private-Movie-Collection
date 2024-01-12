@@ -121,6 +121,9 @@ public class PMCController implements IViewController {
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {
+        viewHandler.changeView(ViewType.INFO);
+        infoController.setModel(movieModel);
+
         Task<MovieDetailsModel> fetchTask = new Task<>() {
             @Override
             protected MovieDetailsModel call() throws Exception {
@@ -132,8 +135,7 @@ public class PMCController implements IViewController {
         fetchTask.setOnSucceeded(evt -> {
             MovieDetailsModel movieDetails = fetchTask.getValue();
             Platform.runLater(() -> {
-                infoController.setModel(movieModel, movieDetails);
-                viewHandler.changeView(ViewType.INFO);
+                infoController.setDetailsModel(movieDetails);
             });
         });
 

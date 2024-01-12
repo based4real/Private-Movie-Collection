@@ -20,11 +20,11 @@ public class InfoController implements IViewController {
         return viewBuilder.build();
     }
 
-    public void setModel(MovieModel model, MovieDetailsModel detailsModel) {
+    public void setModel(MovieModel model) {
         this.model.posterPathProperty().set(model.posterPathProperty().get());
+    }
 
-        if (detailsModel != null) {
-            this.model.descriptionProperty().set(detailsModel.descriptionProperty().get());
-        }
+    public void setDetailsModel(MovieDetailsModel detailsModel) {
+        this.model.descriptionProperty().set(detailsModel.descriptionProperty().get());
     }
 }
