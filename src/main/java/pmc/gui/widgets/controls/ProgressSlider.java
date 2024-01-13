@@ -27,6 +27,7 @@ public class ProgressSlider extends Region {
     private static final String CSS_PROPERTY_THUMB = "-thumb-color";
     private static final String CSS_PROPERTY_THUMB_RADIUS = "-thumb-radius";
     private static final String CSS_PROPERTY_TRACK_HEIGHT = "-track-height";
+    private static final String CSS_PROPERTY_SLIDER_RADIUS = "-slider-radius";
 
     private final DoubleProperty value = new SimpleDoubleProperty(0);
     private final BooleanProperty hover = new SimpleBooleanProperty(false);
@@ -40,11 +41,13 @@ public class ProgressSlider extends Region {
     private StyleableObjectProperty<Color> thumbColor;
     private StyleableObjectProperty<Number> thumbRadius;
     private StyleableObjectProperty<Number> trackHeight;
+    private StyleableObjectProperty<Number> cornerRadius;
 
 
     public ProgressSlider() {
         this.getStyleClass().add("progress-slider");
         initializeStyleableProperties();
+
         this.minHeightProperty().bind(trackHeight);
         this.prefHeightProperty().bind(trackHeight);
         this.maxHeightProperty().bind(trackHeight);
@@ -60,7 +63,27 @@ public class ProgressSlider extends Region {
 
         bindProperties(usedTrack, unusedTrack, thumb, trackContainer);
 
+        updateClipping(usedTrack, unusedTrack);
+
+        cornerRadius.addListener((obs, ov, nv) -> updateClipping(usedTrack, unusedTrack));
+
         this.getChildren().add(new StackPane(trackContainer, thumb));
+    }
+
+    private void updateClipping(Rectangle usedTrack, Rectangle unusedTrack) {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(this.widthProperty());
+        clip.heightProperty().bind(this.heightProperty());
+        clip.arcWidthProperty().bind(cornerRadius);
+        clip.arcHeightProperty().bind(cornerRadius);
+        usedTrack.setClip(clip);
+
+        Rectangle clip2 = new Rectangle();
+        clip2.widthProperty().bind(this.widthProperty());
+        clip2.heightProperty().bind(this.heightProperty());
+        clip2.arcWidthProperty().bind(cornerRadius);
+        clip2.arcHeightProperty().bind(cornerRadius);
+        unusedTrack.setClip(clip2);
     }
 
     private Rectangle createUnusedTrack() {
@@ -162,6 +185,7 @@ public class ProgressSlider extends Region {
         thumbColor = new SimpleStyleableObjectProperty<>(StyleableProperties.THUMB_COLOR, this, "thumbColor", Color.CRIMSON);
         thumbRadius = new SimpleStyleableObjectProperty<>(StyleableProperties.THUMB_RADIUS, this, "thumbRadius", 5);
         trackHeight = new SimpleStyleableObjectProperty<>(StyleableProperties.TRACK_HEIGHT, this, "trackHeight", 5);
+        cornerRadius = new SimpleStyleableObjectProperty<>(StyleableProperties.CORNER_RADIUS, this, "cornerRadius", 0);
     }
 
     private static class StyleableProperties {
@@ -243,6 +267,19 @@ public class ProgressSlider extends Region {
                     }
                 };
 
+        private static final CssMetaData<ProgressSlider, Number> CORNER_RADIUS =
+                new CssMetaData<>(CSS_PROPERTY_SLIDER_RADIUS, StyleConverter.getSizeConverter(), 0) {
+                    @Override
+                    public boolean isSettable(ProgressSlider slider) {
+                        return !slider.cornerRadius.isBound();
+                    }
+
+                    @Override
+                    public StyleableProperty<Number> getStyleableProperty(ProgressSlider slider) {
+                        return slider.cornerRadius;
+                    }
+                };
+
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
         static {
             final List<CssMetaData<? extends  Styleable, ?>> styleables = new ArrayList<>(Region.getClassCssMetaData());
@@ -252,6 +289,7 @@ public class ProgressSlider extends Region {
             styleables.add(THUMB_COLOR);
             styleables.add(THUMB_RADIUS);
             styleables.add(TRACK_HEIGHT);
+            styleables.add(CORNER_RADIUS);
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
     }
