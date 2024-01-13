@@ -2,9 +2,7 @@ package pmc.bll;
 
 import pmc.be.Movie;
 import pmc.dal.database.IDAO;
-import pmc.dal.database.MovieDAO_DB;
-import pmc.dal.database.MovieDAO_Mock;
-import pmc.dal.database.MovieDAO_MockException;
+import pmc.dal.database.movie.MovieDAO_DB;
 import pmc.dal.exception.DataAccessException;
 import pmc.utils.MovieException;
 

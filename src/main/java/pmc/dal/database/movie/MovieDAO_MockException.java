@@ -1,6 +1,7 @@
-package pmc.dal.database;
+package pmc.dal.database.movie;
 
 import pmc.be.Movie;
+import pmc.dal.database.IDAO;
 import pmc.dal.exception.DataAccessException;
 
 import java.util.List;
