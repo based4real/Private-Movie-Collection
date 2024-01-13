@@ -1,4 +1,4 @@
-package pmc.dal.database;
+package pmc.dal.database.common;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;

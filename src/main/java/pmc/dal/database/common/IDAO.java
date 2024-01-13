@@ -1,4 +1,4 @@
-package pmc.dal.database;
+package pmc.dal.database.common;
 
 import pmc.dal.exception.DataAccessException;
 

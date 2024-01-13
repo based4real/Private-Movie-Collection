@@ -1,8 +1,8 @@
 package pmc.bll;
 
 import pmc.be.Movie;
-import pmc.dal.database.IDAO;
-import pmc.dal.database.movie.MovieDAO_DB;
+import pmc.dal.database.common.IDAO;
+import pmc.dal.database.daos.MovieDAO_DB;
 import pmc.dal.exception.DataAccessException;
 import pmc.utils.MovieException;
 

@@ -1,4 +1,4 @@
-package pmc.dal.database.movie;
+package pmc.dal.database.mocks;
 
 import pmc.be.Movie;
 import pmc.dal.exception.DataAccessException;

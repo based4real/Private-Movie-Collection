@@ -1,7 +1,7 @@
-package pmc.dal.database.movie;
+package pmc.dal.database.mocks;
 
 import pmc.be.Movie;
-import pmc.dal.database.IDAO;
+import pmc.dal.database.common.IDAO;
 import pmc.dal.exception.DataAccessException;
 
 import java.time.LocalDateTime;
