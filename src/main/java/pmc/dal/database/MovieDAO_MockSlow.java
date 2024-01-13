@@ -17,7 +17,7 @@ public class MovieDAO_MockSlow extends MovieDAO_Mock {
     }
 
     @Override
-    public Optional<Movie> get(long id) throws DataAccessException {
+    public Optional<Movie> get(int id) throws DataAccessException {
         delay();
         return super.get(id);
     }

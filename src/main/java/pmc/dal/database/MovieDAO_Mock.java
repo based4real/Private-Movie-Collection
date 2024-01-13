@@ -47,7 +47,7 @@ public class MovieDAO_Mock implements IDAO<Movie> {
     }
 
     @Override
-    public Optional<Movie> get(long id) throws DataAccessException {
+    public Optional<Movie> get(int id) throws DataAccessException {
         return Optional.empty();
     }
 

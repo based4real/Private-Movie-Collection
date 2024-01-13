@@ -22,8 +22,35 @@ public class MovieDAO_DB implements IDAO<Movie> {
     }
 
     @Override
-    public Optional<Movie> get(long id) throws DataAccessException {
-        return Optional.empty();
+    public Optional<Movie> get(int id) throws DataAccessException {
+        String sql = "SELECT * FROM dbo.Movie WHERE id = ?";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int tmdbId = rs.getInt("tmdbId");
+                String imdbId = rs.getString("imdbId");
+                String title = rs.getString("title");
+                float imdbRating = rs.getFloat("imdbRating");
+                float personalRating = rs.getFloat("personalRating");
+                String filePath = rs.getString("filePath");
+                String posterPath = rs.getString("posterPath");
+                Timestamp lastSeenTimestamp = rs.getTimestamp("lastSeen");
+                LocalDateTime lastSeen = lastSeenTimestamp != null ? lastSeenTimestamp.toLocalDateTime() : null;
+
+                Movie movie = new Movie(id, tmdbId, imdbId, title, imdbRating, personalRating, filePath, posterPath, lastSeen);
+
+                return Optional.of(movie);
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Kunne ikke finde Movie entitet med id: " + id + ".\n Fejlbesked: " + e.getMessage());
+        }
     }
 
     @Override
@@ -99,7 +126,27 @@ public class MovieDAO_DB implements IDAO<Movie> {
 
     @Override
     public boolean update(Movie original, Movie updatedData) throws DataAccessException {
-        return false;
+        String sql = "UPDATE dbo.Movie SET tmdbId = ?, imdbId = ?, title = ?, imdbRating = ?, personalRating = ?, filePath = ?, posterPath = ?, lastSeen = ? WHERE id = ?";
+
+        try (Connection conn = connector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, updatedData.getTmdbId());
+            stmt.setString(2, updatedData.getImdbId());
+            stmt.setString(3, updatedData.getTitle());
+            stmt.setFloat(4, updatedData.getImdbRating());
+            stmt.setFloat(5, updatedData.getPersonalRating());
+            stmt.setString(6, updatedData.getFilePath());
+            stmt.setString(7, updatedData.getPosterPath());
+            stmt.setTimestamp(8, updatedData.getLastSeen() != null ? Timestamp.valueOf(updatedData.getLastSeen()) : null);
+
+            stmt.setInt(9, original.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new DataAccessException("Kunne opdatere Movie entitet: " + updatedData + " i DB.\n Fejlbesked: " + e.getMessage());
+        }
     }
 
     @Override
@@ -110,7 +157,22 @@ public class MovieDAO_DB implements IDAO<Movie> {
     public static void main(String[] args) throws DataAccessException {
         IDAO<Movie> dao = new MovieDAO_DB();
 
-        Movie m1 = new Movie(99999, "imdbIDVeryLongStringExceedingNormalLength",
+        Optional<Movie> movie = dao.get(1);
+        movie.ifPresent(System.out::println);
+
+
+        movie.ifPresent(m -> {
+            try {
+                dao.update(m, new Movie(11324, "tt1130884", "james bond", 8.2F, 7.4F, "shutter island 4k.mp4", "4GDy0PHYX3VRXUtwK5ysFbg3kEx.jpg", LocalDateTime.now()));
+            } catch (DataAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        movie.ifPresent(System.out::println);
+
+        // Add
+/*        Movie m1 = new Movie(99999, "imdbIDVeryLongStringExceedingNormalLength",
                 "A very long movie title that exceeds the expected length for a movie title, potentially causing issues with database insertion or retrieval",
                 10.0f, 10.0f, "/path/to/file", "/path/to/poster", LocalDateTime.now());
 
@@ -138,6 +200,6 @@ public class MovieDAO_DB implements IDAO<Movie> {
             System.out.println(m.getTitle());
             Movie addedMovie = dao.add(m);
             System.out.println(addedMovie);
-        }
+        }*/
     }
 }

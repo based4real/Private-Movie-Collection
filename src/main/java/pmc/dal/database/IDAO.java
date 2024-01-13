@@ -21,7 +21,7 @@ public interface IDAO<T> {
      * @param id den unikke identifikator for entiteten.
      * @return en Optional som indeholder entiteten hvis fundet, ellers en empty Optional hvis ikke.
      */
-    Optional<T> get(long id) throws DataAccessException;
+    Optional<T> get(int id) throws DataAccessException;
 
     /**
      * Henter all entiteter af type T.

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class MovieDAO_MockException implements IDAO<Movie> {
     @Override
-    public Optional<Movie> get(long id) throws DataAccessException {
+    public Optional<Movie> get(int id) throws DataAccessException {
         throw new DataAccessException("(Test) Kan ikke forbinde til databasen");
     }
 
