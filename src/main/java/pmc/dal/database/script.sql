@@ -1,8 +1,6 @@
--- Set the default DB
 USE master;
 GO
 
--- Check if the MoviesDB exists and drop it if it does
 IF EXISTS(SELECT * FROM sys.databases WHERE name = 'PMC')
 BEGIN
     ALTER DATABASE PMC SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
@@ -10,15 +8,12 @@ BEGIN
 END
 GO
 
--- Create the new MoviesDB
 CREATE DATABASE PMC;
 GO
 
--- Switch context to the new MoviesDB
 USE PMC;
 GO
 
--- Create the Movie table
 IF OBJECT_ID('dbo.Movie', 'U') IS NOT NULL
     DROP TABLE dbo.Movie;
 GO
@@ -35,7 +30,6 @@ CREATE TABLE Movie (
 );
 GO
 
--- Create the Genre table
 IF OBJECT_ID('dbo.Genre', 'U') IS NOT NULL
     DROP TABLE dbo.Genre;
 GO
@@ -44,7 +38,6 @@ CREATE TABLE Genre (
 );
 GO
 
--- Create the MovieGenre link table
 IF OBJECT_ID('dbo.MovieGenre', 'U') IS NOT NULL
     DROP TABLE dbo.MovieGenre;
 GO
@@ -57,8 +50,27 @@ CREATE TABLE MovieGenre (
 );
 GO
 
--- Insert data into the Movie table
--- Insert data into the Movie table with original titles
+if OBJECT_ID('dbo.Category', 'U') IS NOT NULL
+    DROP TABLE dbo.Category;
+GO
+CREATE TABLE Category (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    name NVARCHAR(80)
+);
+GO
+
+IF OBJECT_ID('dbo.CatMovie', 'U') IS NOT NULL
+    DROP TABLE dbo.CatMovie;
+GO
+CREATE TABLE CatMovie (
+    CategoryId INT,
+    MovieId INT,
+    PRIMARY KEY (MovieId, CategoryId),
+    FOREIGN KEY (MovieId) REFERENCES Movie(id),
+    FOREIGN KEY (CategoryId) REFERENCES Category(id)
+);
+GO
+
 INSERT INTO Movie (tmdbId, imdbId, title, imdbRating, personalRating, filePath, posterPath, lastSeen)
 VALUES
 (11324, 'tt1130884', 'Shutter Island', 8.2, 7.4, 'Shutter.Island.mp4', '4GDy0PHYX3VRXUtwK5ysFbg3kEx.jpg', '2023-05-02 07:04:00'),
@@ -74,13 +86,10 @@ VALUES
 (47916, 'tt0098214', 'Rojo amanecer', 8.0, RAND() * 10, 'Red.Dawn.mp4', 'iM6w5hUnxUAeRkDC4bYaGmD96nl.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
 (875188, 'tt15434074', N'खो गए हम कहाँ', 8.4, RAND() * 10, 'Kho.Gaye.Hum.Kahan.mp4', 'WUptEusy1sMh3s46Ik7QbfoKts.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE()));
 
--- Insert data into the Genre table
--- Note: Insert only unique genres to avoid primary key conflicts
 INSERT INTO Genre (tmdbId)
 VALUES
 (18), (53), (9648), (28), (35), (80), (36), (12), (14), (10751), (99), (10770);
 
--- Insert data into the MovieGenre link table
 INSERT INTO MovieGenre (MovieId, GenreId)
 VALUES
 (1, 18), (1, 53), (1, 9648), -- Shutter Island
@@ -95,3 +104,12 @@ VALUES
 (10, 18), -- Harakiri
 (11, 18), (11, 53), (11, 36), -- Rojo amanecer
 (12, 18); -- Kho Gaye Hum Kahan (खो गए हम कहाँ);
+
+INSERT INTO Category (name) VALUES ('International'), ('Engelsk'), ('Fast n Furious');
+
+INSERT INTO CatMovie (CategoryId, MovieId)
+VALUES
+(1, 2), (1, 3), (1, 7), (1, 10), (1, 11), (1, 12), -- International kategori
+(2, 1), (2, 4), (2, 5), (2, 6), (2, 8), (2, 9), -- Engelsk kategori
+(3, 9); -- Fast n Furious kategori
+
