@@ -14,4 +14,11 @@ public class Genre {
     public void setTmdbId(int tmdbId) {
         this.tmdbId = tmdbId;
     }
+
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "tmdbId=" + tmdbId +
+                '}';
+    }
 }

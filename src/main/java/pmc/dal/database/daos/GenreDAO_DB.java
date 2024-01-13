@@ -1,13 +1,13 @@
 package pmc.dal.database.daos;
 
 import pmc.be.Genre;
-import pmc.dal.database.common.ADAO;
+import pmc.dal.database.common.AbstractDAO;
 import pmc.dal.database.common.IDAO;
 import pmc.dal.exception.DataAccessException;
 
 import java.sql.*;
 
-public class GenreDAO_DB extends ADAO<Genre> {
+public class GenreDAO_DB extends AbstractDAO<Genre> {
     public GenreDAO_DB() throws DataAccessException {
         super();
         addDependency(new MovieGenreDAO_DB());

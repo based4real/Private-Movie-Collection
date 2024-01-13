@@ -1,7 +1,7 @@
 package pmc.dal.database.daos;
 
 import pmc.be.Movie;
-import pmc.dal.database.common.ADAO;
+import pmc.dal.database.common.AbstractDAO;
 import pmc.dal.database.common.IDAO;
 import pmc.dal.exception.DataAccessException;
 
@@ -9,7 +9,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class MovieDAO_DB extends ADAO<Movie> {
+public class MovieDAO_DB extends AbstractDAO<Movie> {
     public MovieDAO_DB() throws DataAccessException {
         super();
         addDependency(new MovieGenreDAO_DB());

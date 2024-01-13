@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ADAO<T> implements IDAO<T> {
+public abstract class AbstractDAO<T> implements IDAO<T> {
     protected DBConnector connector;
     private List<IJunctionDAO<?, ?>> dependencies = new ArrayList<>();
 
-    public ADAO() throws DataAccessException {
+    public AbstractDAO() throws DataAccessException {
         try {
             connector = new DBConnector();
         } catch (IOException e) {

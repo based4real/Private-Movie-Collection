@@ -1,7 +1,7 @@
 package pmc.dal.database.daos;
 
 import pmc.be.Category;
-import pmc.dal.database.common.ADAO;
+import pmc.dal.database.common.AbstractDAO;
 import pmc.dal.database.common.IDAO;
 import pmc.dal.exception.DataAccessException;
 
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CategoryDAO_DB extends ADAO<Category> {
+public class CategoryDAO_DB extends AbstractDAO<Category> {
     public CategoryDAO_DB() throws DataAccessException {
         super();
         addDependency(new CatMovieDAO_DB());
