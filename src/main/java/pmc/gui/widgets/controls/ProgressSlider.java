@@ -152,15 +152,15 @@ public class ProgressSlider extends Region {
     }
 
     private void initializeStyleableProperties() {
-        usedTrackColor = new SimpleStyleableObjectProperty<>(StyleableProperties.USED_TRACK_COLOR, this, "usedTrackColor", Color.BLACK);
-        usedTrackColorHover = new SimpleStyleableObjectProperty<>(StyleableProperties.DEFAULT_TRACK_COLOR, this, "defaultTrackColor", Color.WHITE);
+        usedTrackColor = new SimpleStyleableObjectProperty<>(StyleableProperties.USED_TRACK_COLOR_HOVER, this, "usedTrackColorHover", Color.BLACK);
+        usedTrackColorHover = new SimpleStyleableObjectProperty<>(StyleableProperties.USED_TRACK_COLOR, this, "usedTrackColor", Color.WHITE);
         unusedTrackColor = new SimpleStyleableObjectProperty<>(StyleableProperties.UNUSED_TRACK_COLOR, this, "unusedTrackColor", Color.CHOCOLATE);
         thumbColor = new SimpleStyleableObjectProperty<>(StyleableProperties.THUMB_COLOR, this, "thumbColor", Color.CRIMSON);
     }
 
     private static class StyleableProperties {
-        private static final CssMetaData<ProgressSlider, Color> USED_TRACK_COLOR =
-                new CssMetaData<>(CSS_PROPERTY_USED_TRACK, StyleConverter.getColorConverter(), Color.FIREBRICK) {
+        private static final CssMetaData<ProgressSlider, Color> USED_TRACK_COLOR_HOVER =
+                new CssMetaData<>(CSS_PROPERTY_USED_TRACK_HOVER, StyleConverter.getColorConverter(), Color.FIREBRICK) {
                     @Override
                     public boolean isSettable(ProgressSlider slider) {
                         return !slider.usedTrackColor.isBound();
@@ -172,8 +172,8 @@ public class ProgressSlider extends Region {
                     }
                 };
 
-        private static final CssMetaData<ProgressSlider, Color> DEFAULT_TRACK_COLOR =
-                new CssMetaData<>(CSS_PROPERTY_USED_TRACK_HOVER, StyleConverter.getColorConverter(), Color.WHITE) {
+        private static final CssMetaData<ProgressSlider, Color> USED_TRACK_COLOR =
+                new CssMetaData<>(CSS_PROPERTY_USED_TRACK, StyleConverter.getColorConverter(), Color.WHITE) {
                     @Override
                     public boolean isSettable(ProgressSlider slider) {
                         return !slider.usedTrackColorHover.isBound();
@@ -214,8 +214,8 @@ public class ProgressSlider extends Region {
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
         static {
             final List<CssMetaData<? extends  Styleable, ?>> styleables = new ArrayList<>(Region.getClassCssMetaData());
+            styleables.add(USED_TRACK_COLOR_HOVER);
             styleables.add(USED_TRACK_COLOR);
-            styleables.add(DEFAULT_TRACK_COLOR);
             styleables.add(UNUSED_TRACK_COLOR);
             styleables.add(THUMB_COLOR);
             STYLEABLES = Collections.unmodifiableList(styleables);

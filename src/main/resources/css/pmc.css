@@ -145,8 +145,8 @@
 }
 
 .progress-slider {
-    -used-track-color: -accent-color;
-    -default-track-color: white;
     -unused-track-color: black;
+    -used-track-color: white;
+    -used-track-color-hover: -accent-color;
     -thumb-color: white;
 }
