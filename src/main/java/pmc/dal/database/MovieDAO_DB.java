@@ -145,13 +145,45 @@ public class MovieDAO_DB implements IDAO<Movie> {
 
             return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new DataAccessException("Kunne opdatere Movie entitet: " + updatedData + " i DB.\n Fejlbesked: " + e.getMessage());
+            throw new DataAccessException("Kunne opdatere Movie entitet: " + original + " i DB.\n Fejlbesked: " + e.getMessage());
         }
     }
 
     @Override
     public boolean delete(Movie movie) throws DataAccessException {
-        return false;
+        String sqlDeleteGenreRef = "DELETE FROM dbo.MovieGenre WHERE MovieId = ?";
+        String sqlDeleteCategoryRef = "DELETE FROM dbo.CatMovie WHERE MovieId = ?";
+        String sqlDeleteMovie = "DELETE FROM dbo.Movie WHERE id = ?";
+
+        try (Connection conn = connector.getConnection()) {
+            conn.setAutoCommit(false); // Starter transaction
+
+            try (PreparedStatement stmtDelGenre = conn.prepareStatement(sqlDeleteGenreRef);
+                 PreparedStatement stmtDelCategory = conn.prepareStatement(sqlDeleteCategoryRef);
+                 PreparedStatement stmtDelMovie = conn.prepareStatement(sqlDeleteMovie)) {
+
+                // Slet referencer i MovieGenre table
+                stmtDelGenre.setInt(1, movie.getId());
+                stmtDelGenre.executeUpdate();
+
+                // Slet referencer i CatMovie tabel
+                stmtDelCategory.setInt(1, movie.getId());
+                stmtDelCategory.executeUpdate();
+
+                // Slet Movie
+                stmtDelMovie.setInt(1, movie.getId());
+                int rowsAffected = stmtDelMovie.executeUpdate();
+
+                conn.commit(); // Commit transaction
+
+                return rowsAffected > 0;
+            } catch (SQLException e) {
+                conn.rollback(); // Rollback hvis der sker en exception
+                throw new DataAccessException("Kunne ikke slette Movie entitet: " + movie + ".\n Fejlbesked: " + e.getMessage());
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Der opstod en fejl ved at tilgå databasen for at slette en film.\n Fejlbesked: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) throws DataAccessException {
@@ -165,11 +197,19 @@ public class MovieDAO_DB implements IDAO<Movie> {
             try {
                 dao.update(m, new Movie(11324, "tt1130884", "james bond", 8.2F, 7.4F, "shutter island 4k.mp4", "4GDy0PHYX3VRXUtwK5ysFbg3kEx.jpg", LocalDateTime.now()));
             } catch (DataAccessException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e); // test
             }
         });
 
         movie.ifPresent(System.out::println);
+
+        movie.ifPresent(m -> {
+            try {
+                dao.delete(m);
+            } catch (DataAccessException e) {
+                throw new RuntimeException(e); // test
+            }
+        });
 
         // Add
 /*        Movie m1 = new Movie(99999, "imdbIDVeryLongStringExceedingNormalLength",
