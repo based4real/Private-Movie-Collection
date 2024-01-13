@@ -143,3 +143,10 @@
 .playback-top, .playback-bottom {
     -fx-background-color: rgba(50, 50, 50, 0.5);
 }
+
+.progress-slider {
+    -used-track-color: -accent-color;
+    -default-track-color: white;
+    -unused-track-color: black;
+    -thumb-color: white;
+}

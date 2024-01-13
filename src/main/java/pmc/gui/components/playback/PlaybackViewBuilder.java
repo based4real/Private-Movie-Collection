@@ -4,10 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Builder;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -16,8 +13,7 @@ import org.kordamp.ikonli.material2.Material2MZ;
 import pmc.gui.utils.Animations;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.MediaViewWidget;
-
-import java.io.File;
+import pmc.gui.widgets.controls.ProgressSlider;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
@@ -104,7 +100,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
     private Region createPlaybackSlider() {
         VBox results = new VBox(5);
 
-        Slider playbackSlider = new Slider();
+        ProgressSlider playbackSlider = new ProgressSlider();
 
         results.getChildren().add(playbackSlider);
 
@@ -158,7 +154,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
         FontIcon volume = new FontIcon(Material2MZ.VOLUME_UP);
         volume.setIconSize(24);
 
-        Slider volumeSlider = new Slider();
+        ProgressSlider volumeSlider = new ProgressSlider();
         volumeSlider.setPrefWidth(100);
 
         FontIcon fullScreenIcon = new FontIcon(Material2MZ.OPEN_IN_FULL);
