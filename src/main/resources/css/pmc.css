@@ -149,4 +149,6 @@
     -used-track-color: white;
     -used-track-color-hover: -accent-color;
     -thumb-color: white;
+    -thumb-radius: 6;
+    -track-height: 4;
 }
