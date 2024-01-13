@@ -110,19 +110,14 @@ public class MovieGenreDAO_DB implements IMovieGenreDAO {
 
     @Override
     public void deleteAssociationsForEntity(Object entity) throws DataAccessException {
-        String sql = "";
-        int entityId = 0;
-
-        if (entity instanceof Movie) {
-            sql = "DELETE FROM dbo.MovieGenre WHERE MovieId = ?";
-            entityId = ((Movie) entity).getId();
-        } else if (entity instanceof Genre) {
-            sql = "DELETE FROM dbo.MovieGenre WHERE GenreId = ?";
-            entityId = ((Genre) entity).getTmdbId();
-        } else {
-            throw new IllegalArgumentException("Forkert entitet");
+        switch (entity) {
+            case Movie movie -> executeDelete("DELETE FROM dbo.MovieGenre WHERE MovieId = ?", movie.getId());
+            case Genre genre -> executeDelete("DELETE FROM dbo.MovieGenre WHERE GenreId = ?", genre.getTmdbId());
+            default -> throw new IllegalArgumentException("Ukendt entitet");
         }
+    }
 
+    private void executeDelete(String sql, int entityId) throws DataAccessException {
         try (Connection conn = connector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, entityId);

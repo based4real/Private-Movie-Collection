@@ -89,7 +89,11 @@ public class MovieDAO_DB extends AbstractDAO<Movie> {
     public static void main(String[] args) throws DataAccessException {
         IDAO<Movie> dao = new MovieDAO_DB();
 
-        Optional<Movie> movie = dao.get(4);
+
+        Movie m = new Movie(11, 580175, "tt10288566", "Druk", 7.7F, 10.0F, "Another.Round.mp4", "aDcIt4NHURLKnAEu7gow51Yd00Q.jpg", null);
+        dao.delete(m);
+
+/*        Optional<Movie> movie = dao.get(4);
         movie.ifPresent(System.out::println);
 
 
@@ -101,7 +105,8 @@ public class MovieDAO_DB extends AbstractDAO<Movie> {
             }
         });
 
-        movie.ifPresent(System.out::println);
+        movie.ifPresent(System.out::println);*/
+
 
 /*        movie.ifPresent(m -> {
             try {

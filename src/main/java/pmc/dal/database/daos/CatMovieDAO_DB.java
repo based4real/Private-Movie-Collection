@@ -117,25 +117,20 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
 
     @Override
     public void deleteAssociationsForEntity(Object entity) throws DataAccessException {
-        String sql = "";
-        int entityId = 0;
-
-        if (entity instanceof Category) {
-            sql = "DELETE FROM dbo.CatMovie WHERE CategoryId = ?";
-            entityId = ((Category) entity).getId();
-        } else if (entity instanceof Movie) {
-            sql = "DELETE FROM dbo.CatMovie WHERE MovieId = ?";
-            entityId = ((Movie) entity).getId();
-        } else {
-            throw new IllegalArgumentException("Forkert entitet");
+        switch (entity) {
+            case Category category -> executeDelete("DELETE FROM dbo.CatMovie WHERE CategoryId = ?", category.getId());
+            case Movie movie -> executeDelete("DELETE FROM dbo.CatMovie WHERE MovieId = ?", movie.getId());
+            default -> throw new IllegalArgumentException("Unknown entity type");
         }
+    }
 
+    private void executeDelete(String sql, int entityId) throws DataAccessException {
         try (Connection conn = connector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, entityId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Fejl ved at slette Category-Movie association: " + e.getMessage());
+            throw new DataAccessException("Fejl ved at slette Movie-Genre association: " + e.getMessage());
         }
     }
 
