@@ -16,6 +16,7 @@ public class Movie {
     public Movie(int id, int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
         this.id = id;
         this.tmdbId = tmdbId;
+        this.imdbId = imdbId;
         this.title = title;
         this.imdbRating = imdbRating;
         this.personalRating = personalRating;

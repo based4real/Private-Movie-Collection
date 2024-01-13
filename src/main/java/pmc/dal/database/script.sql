@@ -20,7 +20,7 @@ GO
 CREATE TABLE Movie (
     id INT PRIMARY KEY IDENTITY(1,1),
     tmdbId INT,
-    imdbId VARCHAR(50),
+    imdbId NVARCHAR(50),
     title NVARCHAR(255) NOT NULL,
     imdbRating DECIMAL(3, 1),
     personalRating DECIMAL(3, 1),
