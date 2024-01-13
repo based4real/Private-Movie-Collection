@@ -2,7 +2,6 @@ package pmc.dal.database.common;
 
 import pmc.dal.exception.DataAccessException;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface IJunctionDAO<T, U> {

@@ -2,8 +2,8 @@ package pmc.dal.rest.omdb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import pmc.bll.utils.ConfigSystem;
-import pmc.bll.utils.JsonHelper;
+import pmc.utils.ConfigSystem;
+import pmc.utils.JsonHelper;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 
 import java.io.IOException;

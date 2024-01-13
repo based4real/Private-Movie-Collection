@@ -1,4 +1,4 @@
-package pmc.bll.utils;
+package pmc.utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

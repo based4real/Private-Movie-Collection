@@ -1,11 +1,8 @@
 package pmc.gui.widgets;
 
 import javafx.scene.layout.Region;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-
-import java.io.File;
 
 public class MediaViewWidget extends Region {
     private MediaPlayer mediaPlayer;

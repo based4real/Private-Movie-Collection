@@ -9,7 +9,6 @@ import pmc.dal.rest.tmdb.movie.TMDBExternalIDs;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.dal.rest.tmdb.movie.TMDBVideo;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

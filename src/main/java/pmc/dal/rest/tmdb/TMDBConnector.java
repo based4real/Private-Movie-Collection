@@ -2,18 +2,9 @@ package pmc.dal.rest.tmdb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import pmc.be.rest.omdb.OMDBMovieEntity;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
-import pmc.be.rest.tmdb.TMDBVideoEntity;
-import pmc.bll.utils.ConfigSystem;
-import pmc.bll.utils.JsonHelper;
-import pmc.dal.rest.omdb.OMDBConnector;
-import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
-import pmc.dal.rest.omdb.movie.OMDBSearch;
-import pmc.dal.rest.tmdb.extra.TMDBLang;
-import pmc.dal.rest.tmdb.movie.TMDBGenre;
-import pmc.dal.rest.tmdb.movie.TMDBMovie;
+import pmc.utils.ConfigSystem;
+import pmc.utils.JsonHelper;
 import pmc.dal.rest.tmdb.movie.TMDBSearch;
 
 import java.io.IOException;

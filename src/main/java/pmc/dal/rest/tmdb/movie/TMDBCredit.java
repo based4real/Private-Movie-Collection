@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 

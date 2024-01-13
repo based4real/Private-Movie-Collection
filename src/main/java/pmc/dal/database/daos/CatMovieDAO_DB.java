@@ -1,10 +1,8 @@
 package pmc.dal.database.daos;
 
 import pmc.be.Category;
-import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.dal.database.common.DBConnector;
-import pmc.dal.database.common.IJunctionDAO;
 import pmc.dal.exception.DataAccessException;
 
 import java.io.IOException;
@@ -120,7 +118,7 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
         switch (entity) {
             case Category category -> executeDelete("DELETE FROM dbo.CatMovie WHERE CategoryId = ?", category.getId());
             case Movie movie -> executeDelete("DELETE FROM dbo.CatMovie WHERE MovieId = ?", movie.getId());
-            default -> throw new IllegalArgumentException("Unknown entity type");
+            default -> throw new IllegalArgumentException("Ukendt entitet");
         }
     }
 
@@ -130,7 +128,7 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
             stmt.setInt(1, entityId);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Fejl ved at slette Movie-Genre association: " + e.getMessage());
+            throw new DataAccessException("Fejl ved at slette Category-Movie association: " + e.getMessage());
         }
     }
 

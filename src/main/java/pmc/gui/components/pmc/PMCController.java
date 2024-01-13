@@ -2,7 +2,6 @@ package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -13,7 +12,6 @@ import pmc.be.Movie;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.MovieManager;
 import pmc.bll.TMDBMovieManager;
-import pmc.bll.utils.ConfigSystem;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;

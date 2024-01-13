@@ -1,4 +1,4 @@
-package pmc.bll.utils;
+package pmc.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;

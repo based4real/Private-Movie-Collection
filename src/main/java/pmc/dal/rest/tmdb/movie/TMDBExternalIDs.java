@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 
 public class TMDBExternalIDs extends TMDBConnector {
     private int movieID;

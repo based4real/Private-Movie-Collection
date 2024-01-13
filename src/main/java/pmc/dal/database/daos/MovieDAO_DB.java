@@ -7,7 +7,6 @@ import pmc.dal.exception.DataAccessException;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public class MovieDAO_DB extends AbstractDAO<Movie> {
     public MovieDAO_DB() throws DataAccessException {

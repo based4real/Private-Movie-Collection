@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
-import pmc.bll.utils.JsonHelper;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 

@@ -11,7 +11,6 @@ import pmc.dal.rest.tmdb.extra.TMDBLang;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 

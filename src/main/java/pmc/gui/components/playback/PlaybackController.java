@@ -1,14 +1,10 @@
 package pmc.gui.components.playback;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
 import pmc.gui.utils.ErrorHandler;
-
-import java.util.function.Consumer;
 
 public class PlaybackController implements IViewController {
     private final PlaybackModel model;

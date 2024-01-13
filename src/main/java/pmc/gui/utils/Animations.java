@@ -3,7 +3,6 @@ package pmc.gui.utils;
 import javafx.animation.*;
 import javafx.beans.value.WritableValue;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.util.Duration;
 
 public class Animations {

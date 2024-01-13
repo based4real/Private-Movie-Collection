@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
-import pmc.bll.utils.JsonHelper;
+import pmc.utils.JsonHelper;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 

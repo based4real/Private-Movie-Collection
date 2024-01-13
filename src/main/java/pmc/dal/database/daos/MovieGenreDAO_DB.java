@@ -3,7 +3,6 @@ package pmc.dal.database.daos;
 import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.dal.database.common.DBConnector;
-import pmc.dal.database.common.IJunctionDAO;
 import pmc.dal.exception.DataAccessException;
 
 import java.io.IOException;

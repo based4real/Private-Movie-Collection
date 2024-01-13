@@ -9,15 +9,11 @@ import javafx.util.Builder;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
 import org.kordamp.ikonli.material2.Material2OutlinedAL;
-import pmc.gui.common.MovieModel;
-import pmc.gui.components.dialog.DialogBuilder;
-import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.widgets.*;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.NavigationGroup;

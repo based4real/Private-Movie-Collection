@@ -7,10 +7,8 @@ import pmc.dal.rest.omdb.OMDBConnector;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 
 public class OMDBSearch extends OMDBConnector {
     private OMDBMovieEntity movieFound;

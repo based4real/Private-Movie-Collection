@@ -1,7 +1,6 @@
 package pmc.dal.database.daos;
 
 import pmc.be.Category;
-import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.dal.database.common.IJunctionDAO;
 import pmc.dal.exception.DataAccessException;
