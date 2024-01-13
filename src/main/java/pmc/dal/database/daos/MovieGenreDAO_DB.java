@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieGenreDAO_DB implements IJunctionDAO<Movie, Genre> {
+public class MovieGenreDAO_DB implements IMovieGenreDAO {
     DBConnector connector;
 
     public MovieGenreDAO_DB() throws DataAccessException {
@@ -132,20 +132,30 @@ public class MovieGenreDAO_DB implements IJunctionDAO<Movie, Genre> {
         }
     }
 
+    @Override
+    public List<Genre> getGenresForMovie(Movie movie) throws DataAccessException {
+        return getUForT(movie);
+    }
+
+    @Override
+    public List<Movie> getMoviesForGenre(Genre genre) throws DataAccessException {
+        return getTForU(genre);
+    }
+
     public static void main(String[] args) throws DataAccessException {
-        IJunctionDAO<Movie, Genre> dao = new MovieGenreDAO_DB();
+        IMovieGenreDAO dao = new MovieGenreDAO_DB();
         Genre genre = new Genre(36);
         Movie movie = new Movie(9, -1, "", "test", 0.0F, 0.0F, "", "", null);
 
 //        dao.removeRelation(movie, genre);
-/*        List<Movie> movies = dao.getTForU(genre);
+        List<Movie> movies = dao.getMoviesForGenre(genre);
         for (Movie m : movies) {
             System.out.println(m);
         }
 
-        List<Genre> genres = dao.getUForT(movie);
+        List<Genre> genres = dao.getGenresForMovie(movie);
         for (Genre g : genres) {
             System.out.println(g);
-        }*/
+        }
     }
 }

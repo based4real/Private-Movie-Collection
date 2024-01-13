@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CatMovieDAO_DB implements IJunctionDAO<Category, Movie> {
+public class CatMovieDAO_DB implements ICatMovieDAO {
     DBConnector connector;
 
     public CatMovieDAO_DB() throws DataAccessException {
@@ -139,23 +139,33 @@ public class CatMovieDAO_DB implements IJunctionDAO<Category, Movie> {
         }
     }
 
+    @Override
+    public List<Movie> getMoviesForCategory(Category category) throws DataAccessException {
+        return getUForT(category);
+    }
+
+    @Override
+    public List<Category> getCategoriesForMovie(Movie movie) throws DataAccessException {
+        return getTForU(movie);
+    }
+
     public static void main(String[] args) throws DataAccessException {
-        IJunctionDAO<Category, Movie> dao = new CatMovieDAO_DB();
+        ICatMovieDAO dao = new CatMovieDAO_DB();
 
-        Category category = new Category(3, "Engelsk");
-        Movie movie = new Movie(9, -1, "", "test", 0.0F, 0.0F, "", "", null);
-        dao.removeRelation(category, movie);
+        Category category = new Category(1, "Engelsk");
+        Movie movie = new Movie(11, -1, "", "test", 0.0F, 0.0F, "", "", null);
+//        dao.removeRelation(category, movie);
 
 
 
-/*        List<Movie> movies = dao.getUForT(category);
+        List<Movie> movies = dao.getMoviesForCategory(category);
         for (Movie m : movies) {
             System.out.println(m);
         }
 
-        List<Category> categories = dao.getTForU(movie);
+        List<Category> categories = dao.getCategoriesForMovie(movie);
         for (Category c : categories) {
             System.out.println(c);
-        }*/
+        }
     }
 }
