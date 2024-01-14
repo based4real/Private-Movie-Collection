@@ -4,6 +4,7 @@ public class OMDBMovieEntity {
     private String title;
     private String rated;
     private String released;
+    private String runtime;
     private String director;
     private String country;
     private String awards;
@@ -12,12 +13,13 @@ public class OMDBMovieEntity {
     private String imdbID, imdbRating, imdbVotes;
 
     public OMDBMovieEntity(String title, String rated, String released,
-                           String director, String country, String awards,
+                           String runtime, String director, String country, String awards,
                            String boxOffice, String imdbID, String imdbRating,
                            String imdbVotes) {
         this.title = title;
         this.rated = rated;
         this.released = released;
+        this.runtime = runtime;
         this.director = director;
         this.country = country;
         this.awards = awards;
@@ -37,6 +39,10 @@ public class OMDBMovieEntity {
 
     public String getReleased() {
         return released;
+    }
+
+    public String getRuntime() {
+        return runtime;
     }
 
     public String getDirector() {

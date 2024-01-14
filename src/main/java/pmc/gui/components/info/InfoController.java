@@ -25,6 +25,11 @@ public class InfoController implements IViewController {
     }
 
     public void setDetailsModel(MovieDetailsModel detailsModel) {
+        this.model.titleProperty().set(detailsModel.titleProperty().get());
+        this.model.directorProperty().set(detailsModel.directorProperty().get());
+        this.model.releaseProperty().set(detailsModel.releaseProperty().get());
+        this.model.runtimeProperty().set(detailsModel.runtimeProperty().get());
+
         this.model.descriptionProperty().set(detailsModel.descriptionProperty().get());
     }
 }

@@ -120,7 +120,7 @@ public class TMDBConnector {
             System.out.println("tmdb id: " + first.getID());
             System.out.println("imdb id: " + first.getExternalIDs().getImdbID());
             System.out.println("title: " + first.getOriginalTitle());
-            System.out.println("imdb rating: " + first.getOMDBMovie().getImdbRating());
+            System.out.println("imdb rating: " + first.getOMDBMovie().getRuntime());
             System.out.println("posterPath: " + first.getPosterPath());
             System.out.println("genres: " + first.getGenreIds());
             System.out.println("\n");
