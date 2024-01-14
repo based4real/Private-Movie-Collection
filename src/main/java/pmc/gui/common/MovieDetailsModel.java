@@ -2,8 +2,12 @@ package pmc.gui.common;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.dal.rest.tmdb.extra.TMDBLang;
+
+import java.util.List;
 
 public class MovieDetailsModel {
     private final StringProperty title = new SimpleStringProperty();
@@ -11,14 +15,18 @@ public class MovieDetailsModel {
     private final StringProperty release = new SimpleStringProperty();
     private final StringProperty runtime = new SimpleStringProperty();
     private final StringProperty rated = new SimpleStringProperty();
+
+    private final List<TMDBGenreEntity> genres = FXCollections.observableArrayList();
+
     private final StringProperty description = new SimpleStringProperty();
 
-    public MovieDetailsModel(String title, String director, String release, String playTime, String rated, String description) {
+    public MovieDetailsModel(String title, String director, String release, String playTime, String rated, List<TMDBGenreEntity> genres, String description) {
         this.title.set(title);
         this.director.set(director);
         this.release.set(release);
         this.runtime.set(playTime);
         this.rated.set(rated);
+        this.genres.addAll(genres);
         this.description.set(description);
     }
 
@@ -42,7 +50,12 @@ public class MovieDetailsModel {
         return rated;
     }
 
+    public List<TMDBGenreEntity> genresProperty() {
+        return genres;
+    }
+
     public StringProperty descriptionProperty() {
         return description;
     }
+
 }

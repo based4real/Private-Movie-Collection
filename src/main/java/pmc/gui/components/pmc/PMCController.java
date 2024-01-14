@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.util.Builder;
 import pmc.be.Movie;
 import pmc.be.rest.omdb.OMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.MovieManager;
 import pmc.bll.TMDBMovieManager;
@@ -29,6 +30,7 @@ import pmc.gui.utils.ErrorHandler;
 import pmc.utils.MovieException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -111,7 +113,8 @@ public class PMCController implements IViewController {
     private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity movie) {
         model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
         OMDBMovieEntity omdbMovie = movie.getOMDBMovie();
-        return new MovieDetailsModel(movie.getTitle(), omdbMovie.getDirector(), omdbMovie.getReleaseYear(), omdbMovie.getRuntime(), omdbMovie.getRated(), movie.getDescription());
+
+        return new MovieDetailsModel(movie.getTitle(), omdbMovie.getDirector(), omdbMovie.getReleaseYear(), omdbMovie.getRuntime(), omdbMovie.getRated(), movie.getGenres(), movie.getDescription());
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {

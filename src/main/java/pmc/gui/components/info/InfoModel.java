@@ -2,6 +2,9 @@ package pmc.gui.components.info;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 
 public class InfoModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
@@ -11,6 +14,9 @@ public class InfoModel {
     private final StringProperty release = new SimpleStringProperty("");
     private final StringProperty runtime = new SimpleStringProperty("");
     private final StringProperty rated = new SimpleStringProperty("");
+
+    private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();;
+
     private final StringProperty description = new SimpleStringProperty("");
 
     public StringProperty posterPathProperty() {
@@ -36,6 +42,11 @@ public class InfoModel {
     public StringProperty ratedProperty() {
         return rated;
     }
+
+    public ObservableList<TMDBGenreEntity> genresProperty() {
+        return genres;
+    }
+
 
     public StringProperty descriptionProperty() {
         return description;

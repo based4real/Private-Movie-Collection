@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.util.Builder;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2MZ;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.widgets.ImageWidgets;
 import pmc.gui.widgets.LabelWidgets;
 import pmc.gui.widgets.TextWidgets;
