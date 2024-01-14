@@ -153,3 +153,21 @@
     -track-height: 4;
     -slider-radius: 10;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Info Page                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+.info-header {
+    -fx-fill: white; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: white;
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+}
+
+.info-director {
+    -fx-fill: grey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: grey;
+    -fx-font-size: 12;
+}

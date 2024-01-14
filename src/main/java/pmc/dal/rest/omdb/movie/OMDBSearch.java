@@ -39,6 +39,7 @@ public class OMDBSearch extends OMDBConnector {
                 json.getString("Title"),
                 json.getString("Rated"),
                 json.getString("Released"),
+                json.getString("Year"),
                 json.getString("Runtime"),
                 json.getString("Director"),
                 json.getString("Country"),

@@ -4,6 +4,7 @@ public class OMDBMovieEntity {
     private String title;
     private String rated;
     private String released;
+    private String releaseYear;
     private String runtime;
     private String director;
     private String country;
@@ -12,13 +13,14 @@ public class OMDBMovieEntity {
 
     private String imdbID, imdbRating, imdbVotes;
 
-    public OMDBMovieEntity(String title, String rated, String released,
+    public OMDBMovieEntity(String title, String rated, String released, String releaseYear,
                            String runtime, String director, String country, String awards,
                            String boxOffice, String imdbID, String imdbRating,
                            String imdbVotes) {
         this.title = title;
         this.rated = rated;
         this.released = released;
+        this.releaseYear = releaseYear;
         this.runtime = runtime;
         this.director = director;
         this.country = country;
@@ -73,6 +75,10 @@ public class OMDBMovieEntity {
         return imdbVotes;
     }
 
+    public String getReleaseYear() {
+        return releaseYear;
+    }
+
     @Override
     public String toString() {
         return "OMDBMovieEntity{" +
@@ -88,4 +94,5 @@ public class OMDBMovieEntity {
                 ", imdbVotes='" + imdbVotes + '\'' +
                 '}';
     }
+
 }
