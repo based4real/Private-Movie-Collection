@@ -171,3 +171,9 @@
     -fx-text-fill: grey;
     -fx-font-size: 12;
 }
+
+.-info-others {
+    -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: rgb(170, 170, 170);
+    -fx-font-size: 14;
+}

@@ -19,6 +19,7 @@ import java.awt.*;
 
 public class InfoViewBuilder implements Builder<Region> {
     private final InfoModel model;
+    private final static int PADDING = 20;
 
     public InfoViewBuilder(InfoModel model) {
         this.model = model;
@@ -27,7 +28,7 @@ public class InfoViewBuilder implements Builder<Region> {
     @Override
     public Region build() {
         HBox results = new HBox();
-        results.setPadding(new Insets(5, 0, 0, 20));
+        results.setPadding(new Insets(5, 0, 0, PADDING));
 
         ImageView poster = ImageWidgets.boundRoundedImage(model.posterPathProperty(), 220, 340, 10);
 
@@ -38,26 +39,32 @@ public class InfoViewBuilder implements Builder<Region> {
 
     private Region createInfoBox() {
         VBox results = new VBox(0);
-        results.setPadding(new Insets(0, 20, 0, 40));
+        results.setPadding(new Insets(0, PADDING, 0, PADDING * 2));
 
        // FontIcon menuIcon = IconWidgets.styledIcon(Material2MZ.MENU, "icon");
       //  Label pmc = LabelWidgets.styledLabel("PMC", "logo");
 
-        Text title = TextWidgets.styledText("title", "info-header");
-        title.textProperty().bind(model.titleProperty());
+        Text title = TextWidgets.styledText(model.titleProperty(), "info-header");
         title.setWrappingWidth(800);
 
-        Text director = TextWidgets.styledText("director", "info-director");
-        director.textProperty().bind(model.directorProperty());
+        Text director = TextWidgets.styledText(model.directorProperty(), "info-director");
 
-        Text release = TextWidgets.styledText("release", "info-release");
-        release.textProperty().bind(model.releaseProperty());
+        // Lav mellemrum mellem release og director.
+        VBox.setMargin(director, new Insets(0, 0, PADDING, 0));
 
-       // Text description = new Text();
+        HBox other = new HBox(PADDING);
+
+        Text release = TextWidgets.styledText(model.releaseProperty(), "-info-others");
+        Text runtime = TextWidgets.styledText(model.runtimeProperty(), "-info-others");
+        Text rated = TextWidgets.styledText(model.ratedProperty(), "-info-others");
+
+        other.getChildren().addAll(release, runtime, rated);
+
+        // Text description = new Text();
        // description.textProperty().bind(model.descriptionProperty());
        // description.setWrappingWidth(400);
 
-        results.getChildren().addAll(title, director, release);
+        results.getChildren().addAll(title, director, other);
 
         return results;
     }

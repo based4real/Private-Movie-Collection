@@ -10,6 +10,7 @@ public class InfoModel {
     private final StringProperty director = new SimpleStringProperty("");
     private final StringProperty release = new SimpleStringProperty("");
     private final StringProperty runtime = new SimpleStringProperty("");
+    private final StringProperty rated = new SimpleStringProperty("");
     private final StringProperty description = new SimpleStringProperty("");
 
     public StringProperty posterPathProperty() {
@@ -31,6 +32,11 @@ public class InfoModel {
     public StringProperty runtimeProperty() {
         return runtime;
     }
+
+    public StringProperty ratedProperty() {
+        return rated;
+    }
+
     public StringProperty descriptionProperty() {
         return description;
     }

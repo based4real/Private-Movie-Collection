@@ -29,6 +29,7 @@ public class InfoController implements IViewController {
         this.model.directorProperty().set(detailsModel.directorProperty().get());
         this.model.releaseProperty().set(detailsModel.releaseProperty().get());
         this.model.runtimeProperty().set(detailsModel.runtimeProperty().get());
+        this.model.ratedProperty().set(detailsModel.ratedProperty().get());
 
         this.model.descriptionProperty().set(detailsModel.descriptionProperty().get());
     }

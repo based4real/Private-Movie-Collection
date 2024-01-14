@@ -2,19 +2,23 @@ package pmc.gui.common;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 
 public class MovieDetailsModel {
     private final StringProperty title = new SimpleStringProperty();
     private final StringProperty director = new SimpleStringProperty();
     private final StringProperty release = new SimpleStringProperty();
     private final StringProperty runtime = new SimpleStringProperty();
+    private final StringProperty rated = new SimpleStringProperty();
     private final StringProperty description = new SimpleStringProperty();
 
-    public MovieDetailsModel(String title, String director, String release, String playTime, String description) {
+    public MovieDetailsModel(String title, String director, String release, String playTime, String rated, String description) {
         this.title.set(title);
         this.director.set(director);
         this.release.set(release);
         this.runtime.set(playTime);
+        this.rated.set(rated);
         this.description.set(description);
     }
 
@@ -32,6 +36,10 @@ public class MovieDetailsModel {
 
     public StringProperty runtimeProperty() {
         return runtime;
+    }
+
+    public StringProperty ratedProperty() {
+        return rated;
     }
 
     public StringProperty descriptionProperty() {
