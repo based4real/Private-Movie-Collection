@@ -3,6 +3,7 @@ package pmc.dal.rest.tmdb;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
+import pmc.dal.rest.tmdb.movie.TMDBMovie;
 import pmc.utils.ConfigSystem;
 import pmc.utils.JsonHelper;
 import pmc.dal.rest.tmdb.movie.TMDBSearch;
@@ -121,12 +122,12 @@ public class TMDBConnector {
             System.out.println("imdb id: " + first.getExternalIDs().getImdbID());
             System.out.println("title: " + first.getOriginalTitle());
             System.out.println("imdb rating: " + first.getOMDBMovie().getRuntime());
+            System.out.println("runtime: " + first.getRuntime());
             System.out.println("posterPath: " + first.getPosterPath());
             System.out.println("genres: " + first.getGenreIds());
             System.out.println("\n");
         }
-
-
+        
 
 //        System.out.println(new TMDBSearch("a", lang).getResult());
     }

@@ -19,6 +19,7 @@ public class TMDBMovieEntity {
     private String releaseDate;
     private int id;
     private String language;
+    private int runtime;
 
     private TMDBLang lang;
 
@@ -28,6 +29,7 @@ public class TMDBMovieEntity {
     private List<TMDBGenreEntity> genres;
     private List<TMDBVideoEntity> videos;
 
+    //Konstruktør til importering af film
     public TMDBMovieEntity(String overview, String originalTitle, String title,
                            List<Integer> genreIds, String posterPath, String backdropPath, String releaseDate,
                            int id, String language, TMDBLang lang) {
@@ -40,6 +42,22 @@ public class TMDBMovieEntity {
         this.releaseDate = releaseDate;
         this.id = id;
         this.language = language;
+        this.lang = lang;
+    }
+
+    public TMDBMovieEntity(String overview, String originalTitle, String title,
+                           List<Integer> genreIds, String posterPath, String backdropPath, String releaseDate,
+                           int id, String language, int runtime, TMDBLang lang) {
+        this.overview = overview;
+        this.originalTitle = originalTitle;
+        this.title = title;
+        this.genreIds = genreIds;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.releaseDate = releaseDate;
+        this.id = id;
+        this.language = language;
+        this.runtime = runtime;
         this.lang = lang;
     }
 
@@ -146,6 +164,10 @@ public class TMDBMovieEntity {
         return backdropPath;
     }
 
+    public int getRuntime() {
+        return runtime;
+    }
+
     @Override
     public String toString() {
         return "TMDBMovieEntity{\n" +
@@ -165,4 +187,5 @@ public class TMDBMovieEntity {
                 "    videos=" + getVideos() + ",\n" +
                 "}\n";
     }
+
 }

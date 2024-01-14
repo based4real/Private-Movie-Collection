@@ -69,6 +69,7 @@ public class TMDBMovie extends TMDBConnector {
                 json.getString("release_date"),
                 json.getInt("id"),
                 json.getString("original_language"),
+                json.getInt("runtime"),
                 lang
         );
     }
