@@ -29,11 +29,14 @@ public class InfoViewBuilder implements Builder<Region> {
     private Region createInfoBox() {
         VBox results = new VBox(10);
 
+        Text title = new Text();
+        title.textProperty().bind(model.titleProperty());
+
         Text description = new Text();
         description.textProperty().bind(model.descriptionProperty());
         description.setWrappingWidth(400);
 
-        results.getChildren().add(description);
+        results.getChildren().addAll(title, description);
 
         return results;
     }

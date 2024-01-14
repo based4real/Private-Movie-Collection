@@ -127,7 +127,7 @@ public class TMDBConnector {
             System.out.println("genres: " + first.getGenreIds());
             System.out.println("\n");
         }
-        
+
 
 //        System.out.println(new TMDBSearch("a", lang).getResult());
     }
