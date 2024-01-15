@@ -8,6 +8,7 @@ import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MovieDetailsModel {
     private final StringProperty title = new SimpleStringProperty();

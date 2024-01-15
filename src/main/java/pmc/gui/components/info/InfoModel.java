@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
-import pmc.gui.components.playback.PlaybackController;
 
 import java.util.function.Consumer;
 
@@ -22,6 +21,25 @@ public class InfoModel {
     private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
 
     private final StringProperty description = new SimpleStringProperty("");
+
+    private Consumer<MovieModel> playMovieHandler;
+    private MovieModel movieModel;
+
+    public void setMovieModel(MovieModel movieModel) {
+        this.movieModel = movieModel;
+    }
+
+    public void setPlayMovieHandler(Consumer<MovieModel> playMovieHandler) {
+        this.playMovieHandler = playMovieHandler;
+    }
+
+    public MovieModel getMovieModel() {
+        return movieModel;
+    }
+
+    public Consumer<MovieModel> playMovieHandler() {
+        return playMovieHandler;
+    }
 
     public StringProperty posterPathProperty() {
         return posterPath;
@@ -54,4 +72,5 @@ public class InfoModel {
     public StringProperty descriptionProperty() {
         return description;
     }
+
 }

@@ -1,14 +1,10 @@
 package pmc.gui.components.info;
 
-import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
-import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
-import pmc.gui.components.playback.PlaybackController;
 
 import java.util.function.Consumer;
 
@@ -27,7 +23,12 @@ public class InfoController implements IViewController {
     }
 
     public void setModel(MovieModel model) {
+        this.model.setMovieModel(model);
         this.model.posterPathProperty().set(model.posterPathProperty().get());
+    }
+
+    public void setMovieHandler(Consumer<MovieModel> playMovieHandler) {
+        this.model.setPlayMovieHandler(playMovieHandler);
     }
 
     public void setDetailsModel(MovieDetailsModel detailsModel) {

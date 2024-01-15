@@ -3,7 +3,10 @@ package pmc.gui.components.pmc;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pmc.gui.common.GenreModel;
 import pmc.gui.common.MovieModel;
+
+import java.util.Arrays;
 
 public class PMCModel {
     private final ObjectProperty<ViewType> activeView = new SimpleObjectProperty<>(ViewType.HOME);
@@ -11,6 +14,7 @@ public class PMCModel {
     private final BooleanProperty isDialogOpen = new SimpleBooleanProperty(false);
     private final StringProperty backdropPath = new SimpleStringProperty("");
     private final ObservableList<MovieModel> movieModels = FXCollections.observableArrayList();
+    private final ObservableList<GenreModel> genreModels = FXCollections.observableArrayList();
 
     public ObjectProperty<ViewType> activeViewProperty() {
         return activeView;
@@ -30,4 +34,7 @@ public class PMCModel {
         return movieModels;
     }
 
+    public ObservableList<GenreModel> genreModels() {
+        return genreModels;
+    }
 }

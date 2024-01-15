@@ -9,11 +9,14 @@ import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
+import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
+import pmc.bll.GenreManager;
 import pmc.bll.MovieManager;
 import pmc.bll.TMDBMovieManager;
+import pmc.gui.common.GenreModel;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
@@ -52,6 +55,7 @@ public class PMCController implements IViewController {
     private final PlaybackController playbackController;
 
     private MovieManager movieManager;
+    private GenreManager genreManager;
     private TMDBMovieManager tmdbMovieManager;
 
     public PMCController(Stage stage) {
@@ -113,13 +117,14 @@ public class PMCController implements IViewController {
         model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
         OMDBMovieEntity omdbMovie = movie.getOMDBMovie();
 
-
         return new MovieDetailsModel(movie.getTitle(), omdbMovie.getDirector(), omdbMovie.getReleaseYear(), omdbMovie.getRuntime(), omdbMovie.getRated(), movie.getGenres(), movie.getDescription());
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {
         viewHandler.changeView(ViewType.INFO);
+
         infoController.setModel(movieModel);
+        infoController.setMovieHandler(this::handlePlayButtonClick);
 
         performBackgroundTask(
                 () -> tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get()),

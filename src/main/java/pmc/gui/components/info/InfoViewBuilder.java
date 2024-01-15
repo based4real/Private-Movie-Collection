@@ -1,6 +1,7 @@
 package pmc.gui.components.info;
 
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -95,6 +96,11 @@ public class InfoViewBuilder implements Builder<Region> {
 
         Button play = ButtonWidgets.actionButtonStyle("Play", "info-play", e -> buttonPlay());
 
+        play.setOnMouseClicked(e -> {
+            model.playMovieHandler().accept(model.getMovieModel());
+            e.consume();
+        });
+
         options.getChildren().addAll(play);
         return options;
     }
@@ -104,6 +110,6 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private void buttonPlay() {
-
+       // model.playMovieHandler().
     }
 }
