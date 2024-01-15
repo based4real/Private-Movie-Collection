@@ -1,7 +1,6 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -12,9 +11,11 @@ import javafx.util.Builder;
 import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.be.rest.omdb.OMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.GenreManager;
 import pmc.bll.MovieManager;
+import pmc.bll.TMDBGenreManager;
 import pmc.bll.TMDBMovieManager;
 import pmc.gui.common.GenreModel;
 import pmc.gui.common.IViewController;
@@ -33,7 +34,6 @@ import pmc.gui.utils.ErrorHandler;
 import pmc.utils.MovieException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -56,6 +56,7 @@ public class PMCController implements IViewController {
 
     private MovieManager movieManager;
     private GenreManager genreManager;
+    private TMDBGenreManager tmdbGenreManager;
     private TMDBMovieManager tmdbMovieManager;
 
     public PMCController(Stage stage) {
@@ -64,6 +65,8 @@ public class PMCController implements IViewController {
 
         try {
             this.movieManager = new MovieManager();
+            this.genreManager = new GenreManager();
+            this.tmdbGenreManager = new TMDBGenreManager();
         } catch (MovieException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
@@ -71,10 +74,10 @@ public class PMCController implements IViewController {
         this.tmdbMovieManager = new TMDBMovieManager();
 
         this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
-        this.genresController = new GenresController();
+        this.genresController = new GenresController(model.genreModels(), model.movieModels());
         this.categoriesController = new CategoriesController();
         this.playbackController = new PlaybackController(viewHandler::previousView);
-        this.infoController = new InfoController();
+        this.infoController = new InfoController(this::handlePlayButtonClick);
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
                 homeController.getView(),
@@ -84,6 +87,7 @@ public class PMCController implements IViewController {
                 playbackController.getView());
 
         fetchData();
+        fetchDataGenre();
     }
 
     @Override
@@ -113,6 +117,27 @@ public class PMCController implements IViewController {
         return movieModels;
     }
 
+    private void fetchDataGenre() {
+        performBackgroundTask(
+                () -> tmdbGenreManager.getGenreNameFromID(genreManager.getAllGenres()),
+                genres -> model.genreModels().setAll(convertToGenreModels(genres)),
+                error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
+        );
+    }
+
+    private List<GenreModel> convertToGenreModels(List<TMDBGenreEntity> genres) {
+        List<GenreModel> genreModels = new ArrayList<>();
+
+        for (TMDBGenreEntity genre : genres) {
+            genreModels.add(new GenreModel(
+                    genre.getID(),
+                    genre.getName())
+            );
+        }
+
+        return genreModels;
+    }
+
     private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity movie) {
         model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
         OMDBMovieEntity omdbMovie = movie.getOMDBMovie();
@@ -122,9 +147,7 @@ public class PMCController implements IViewController {
 
     private void handleMoviePosterClick(MovieModel movieModel) {
         viewHandler.changeView(ViewType.INFO);
-
         infoController.setModel(movieModel);
-        infoController.setMovieHandler(this::handlePlayButtonClick);
 
         performBackgroundTask(
                 () -> tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get()),

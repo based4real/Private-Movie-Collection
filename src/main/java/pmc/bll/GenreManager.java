@@ -28,6 +28,4 @@ public class GenreManager {
             throw new MovieException("Kunne ikke hente filmene.\n" + e.getMessage());
         }
     }
-
-
 }

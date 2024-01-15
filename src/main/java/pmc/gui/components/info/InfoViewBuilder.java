@@ -29,9 +29,11 @@ import java.util.function.Consumer;
 public class InfoViewBuilder implements Builder<Region> {
     private final InfoModel model;
     private final static int PADDING = 20;
+    private Consumer<MovieModel> playMovieHandler;
 
-    public InfoViewBuilder(InfoModel model) {
+    public InfoViewBuilder(InfoModel model, Consumer<MovieModel> playMovieHandler) {
         this.model = model;
+        this.playMovieHandler = playMovieHandler;
     }
 
     @Override
@@ -97,7 +99,7 @@ public class InfoViewBuilder implements Builder<Region> {
         Button play = ButtonWidgets.actionButtonStyle("Play", "info-play", e -> buttonPlay());
 
         play.setOnMouseClicked(e -> {
-            model.playMovieHandler().accept(model.getMovieModel());
+            playMovieHandler.accept(model.getMovieModel());
             e.consume();
         });
 

@@ -87,6 +87,7 @@ public class PMCViewBuilder implements Builder<Region> {
         overlay.visibleProperty().bind(model.isDialogOpenProperty());
 
         results.getChildren().addAll(main, overlay);
+        StackPane.setAlignment(main, Pos.CENTER_LEFT);
 
         return results;
     }

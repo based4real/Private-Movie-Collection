@@ -12,9 +12,9 @@ public class InfoController implements IViewController {
     private final InfoModel model;
     private final Builder<Region> viewBuilder;
 
-    public InfoController() {
+    public InfoController(Consumer<MovieModel> playMovieHandler) {
         model = new InfoModel();
-        this.viewBuilder = new InfoViewBuilder(model);
+        this.viewBuilder = new InfoViewBuilder(model, playMovieHandler);
     }
 
     @Override
@@ -25,10 +25,6 @@ public class InfoController implements IViewController {
     public void setModel(MovieModel model) {
         this.model.setMovieModel(model);
         this.model.posterPathProperty().set(model.posterPathProperty().get());
-    }
-
-    public void setMovieHandler(Consumer<MovieModel> playMovieHandler) {
-        this.model.setPlayMovieHandler(playMovieHandler);
     }
 
     public void setDetailsModel(MovieDetailsModel detailsModel) {

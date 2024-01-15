@@ -22,23 +22,14 @@ public class InfoModel {
 
     private final StringProperty description = new SimpleStringProperty("");
 
-    private Consumer<MovieModel> playMovieHandler;
     private MovieModel movieModel;
 
     public void setMovieModel(MovieModel movieModel) {
         this.movieModel = movieModel;
     }
 
-    public void setPlayMovieHandler(Consumer<MovieModel> playMovieHandler) {
-        this.playMovieHandler = playMovieHandler;
-    }
-
     public MovieModel getMovieModel() {
         return movieModel;
-    }
-
-    public Consumer<MovieModel> playMovieHandler() {
-        return playMovieHandler;
     }
 
     public StringProperty posterPathProperty() {

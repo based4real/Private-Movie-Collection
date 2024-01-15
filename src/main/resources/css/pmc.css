@@ -199,7 +199,7 @@
 }
 
 .info-play {
-    -fx-background-color: #dca021;
+    -fx-background-color: -accent-color;
     -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-font-size: 16;
@@ -207,7 +207,7 @@
 }
 
 .info-play:hover {
-    -fx-background-color: #f3b125;
+    -fx-background-color: derive(-accent-color, -25%);
     -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-font-size: 16;
@@ -219,5 +219,27 @@
     -fx-border: none;
     -fx-fill: white;
     -fx-font-size: 30;
+    -fx-cursor: hand;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Genre Page                                                                  *
+ *                                                                             *
+ ******************************************************************************/
+.genre-button {
+    -fx-padding: 50, 0, 50, 0;
+    -fx-min-width: 300;
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-border-radius: 4;
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.25); /* Skal tilføjes ellers "hopper" den */
+}
+
+.genre-button:hover {
+    -fx-background-color: -primary-color;
+    -fx-border-color: -accent-color;
     -fx-cursor: hand;
 }

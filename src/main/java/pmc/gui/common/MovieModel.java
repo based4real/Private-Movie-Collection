@@ -1,6 +1,8 @@
 package pmc.gui.common;
 
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 
 public class MovieModel {
     private final IntegerProperty tmdbId = new SimpleIntegerProperty();
