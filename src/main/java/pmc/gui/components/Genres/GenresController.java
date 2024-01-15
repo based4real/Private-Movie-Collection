@@ -7,6 +7,7 @@ import javafx.util.Builder;
 import pmc.be.Genre;
 import pmc.gui.common.GenreModel;
 import pmc.gui.common.IViewController;
+import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
 
 public class GenresController implements IViewController {

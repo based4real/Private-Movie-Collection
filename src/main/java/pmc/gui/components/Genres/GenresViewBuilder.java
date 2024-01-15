@@ -33,7 +33,8 @@ public class GenresViewBuilder implements Builder<Region> {
 
         this.model.addListener((ListChangeListener.Change<? extends GenreModel> change) -> {
             for (GenreModel genreModel : model) {
-                Button btn = ButtonWidgets.actionButtonStyle(genreModel.name(), "genre-button", event -> genreClick(genreModel));
+                Button btn = ButtonWidgets.actionButtonStyle("name", "genre-button", event -> genreClick(genreModel));
+                btn.textProperty().bind(genreModel.nameProperty());
 
                 tilePane.getChildren().add(btn);
             }
