@@ -1,6 +1,7 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Hoved Controller for Private Movie Collection (PMC) applikationen.<br>
@@ -112,7 +114,8 @@ public class PMCController implements IViewController {
             movieModels.add(new MovieModel(
                     movie.getTmdbId(),
                     movie.getPosterPath(),
-                    movie.getFilePath())
+                    movie.getFilePath(),
+                    movie.getGenres())
             );
         }
 
@@ -121,21 +124,34 @@ public class PMCController implements IViewController {
 
     private void fetchDataGenre() {
         performBackgroundTask(
-                () -> tmdbGenreManager.getGenreNameFromID(genreManager.getAllGenres()),
-                genres -> model.genreModels().setAll(convertToGenreModels(genres)),
+                () -> genreManager.getAllGenres(),
+                genres -> {
+                    try {
+                        model.genreModels().setAll(convertToGenreModels(genres));
+                    } catch (MovieException e) {
+                        throw new RuntimeException(e); // Træls
+                    }
+                },
                 error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
         );
     }
 
-    private List<GenreModel> convertToGenreModels(List<TMDBGenreEntity> genres) {
+    private List<GenreModel> convertToGenreModels(List<Genre> genres) throws MovieException {
         List<GenreModel> genreModels = new ArrayList<>();
 
-        for (TMDBGenreEntity genre : genres) {
+        for (Genre genre : genres) {
+            List<Movie> movies = movieManager.getAllMoviesForGenre(genre);
+
+            TMDBGenreEntity tmdbGenre = tmdbGenreManager.getTMDBFromGenre(genre);
+
             genreModels.add(new GenreModel(
-                    genre.getID(),
-                    genre.getName())
-            );
+                    tmdbGenre.getID(),
+                    tmdbGenre.getName(),
+                    model.movieModels()
+            ));
         }
+
+        this.genresController.getMoviesFromGenre();
 
         return genreModels;
     }

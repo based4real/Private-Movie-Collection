@@ -1,6 +1,7 @@
 package pmc.be;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Movie {
     private int id;
@@ -12,6 +13,8 @@ public class Movie {
     private String filePath;
     private String posterPath;
     private LocalDateTime lastSeen;
+
+    private List<Genre> genres;
 
     public Movie(int id, int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
         this.id = id;
@@ -100,6 +103,14 @@ public class Movie {
 
     public void setLastSeen(LocalDateTime lastSeen) {
         this.lastSeen = lastSeen;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
     }
 
     @Override

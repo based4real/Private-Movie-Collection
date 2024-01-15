@@ -36,7 +36,12 @@ public class MovieManager {
 
     public List<Movie> getAllMovies() throws MovieException {
         try {
-            return dao.getAll();
+            List<Movie> movies = dao.getAll();
+            for (Movie movie : movies) {
+                List<Genre> genres = movieGenreDAO.getGenresForMovie(movie);
+                movie.setGenres(genres);
+            }
+            return movies;
         } catch (DataAccessException e) {
             throw new MovieException("Kunne ikke hente filmene.\n" + e.getMessage());
         }
@@ -68,6 +73,14 @@ public class MovieManager {
 
     public List<Genre> getAllGenresForMovie(Movie movie) throws DataAccessException {
         return movieGenreDAO.getGenresForMovie(movie);
+    }
+
+    public List<Movie> getAllMoviesForGenre(Genre genre) throws MovieException {
+        try {
+            return movieGenreDAO.getMoviesForGenre(genre);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke hente film fra genre.\n" + e.getMessage());
+        }
     }
 
     public List<Category> getAllCategoriesForMovie(Movie movie) throws DataAccessException {

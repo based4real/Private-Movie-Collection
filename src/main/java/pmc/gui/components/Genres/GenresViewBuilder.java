@@ -5,10 +5,16 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
+import pmc.be.Genre;
+import pmc.be.Movie;
+import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.GenreModel;
 import javafx.collections.ListChangeListener;
 import pmc.gui.common.MovieModel;
 import pmc.gui.widgets.buttons.ButtonWidgets;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenresViewBuilder implements Builder<Region> {
 
@@ -39,12 +45,17 @@ public class GenresViewBuilder implements Builder<Region> {
                 tilePane.getChildren().add(btn);
             }
         });
-
         return tilePane;
     }
 
     private void genreClick(GenreModel genreModel) {
-        System.out.println(genreModel.idProperty());
+        if (!genreModel.getMovies().isEmpty()) {
+            for (MovieModel matchingMovie : genreModel.getMovies()) {
+                System.out.println(genreModel.nameProperty().get() + " " + matchingMovie.tmdbIdProperty().get());
+            }
+        } else {
+            System.out.println("moviemodels ikke fundet");
+        }
     }
 }
 

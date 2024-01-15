@@ -5,17 +5,34 @@ import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TMDBGenreManager {
-    public List<TMDBGenreEntity> getGenreNameFromID(List<Genre> genres) {
-        TMDBGenre tmdbGenre = new TMDBGenre();
-        List<TMDBGenreEntity> allGenres = tmdbGenre.getResult();
+    private TMDBGenre tmdbGenre;
+    private List<TMDBGenreEntity> cachedGenres;
 
-        List<TMDBGenreEntity> match = allGenres.stream()
+    public TMDBGenreManager() {
+        tmdbGenre = new TMDBGenre();
+    }
+
+    public List<TMDBGenreEntity> getAllGenres() {
+        if (cachedGenres == null)
+            cachedGenres = tmdbGenre.getResult();
+
+        return cachedGenres;
+    }
+
+    public TMDBGenreEntity getTMDBFromGenre(Genre genre) {
+        TMDBGenreEntity matchingObject = getAllGenres().stream()
+                .filter(genres -> genres.getID() == genre.getTmdbId())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Ingen fundne genre"));
+        return matchingObject;
+    }
+    public List<TMDBGenreEntity> getGenreNameFromID(List<Genre> genres) {
+        return getAllGenres().stream()
                 .filter(genre -> genres.stream().anyMatch(idEntity -> idEntity.getTmdbId() == (genre.getID())))
                 .collect(Collectors.toList());
-
-        return match;
     }
 }
