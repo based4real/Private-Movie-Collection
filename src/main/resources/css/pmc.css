@@ -172,8 +172,52 @@
     -fx-font-size: 12;
 }
 
-.-info-others {
+.info-others {
     -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
     -fx-text-fill: rgb(170, 170, 170);
     -fx-font-size: 14;
+}
+
+.info-genre {
+    -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: rgb(170, 170, 170);
+    -fx-font-size: 14;
+}
+
+.info-genre:hover {
+    -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: rgb(170, 170, 170);
+    -fx-font-size: 14;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.info-description {
+    -fx-fill: white; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+}
+
+.info-play {
+    -fx-background-color: #dca021;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-cursor: hand;
+}
+
+.info-play:hover {
+    -fx-background-color: #f3b125;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+}
+
+.info-buttons {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border: none;
+    -fx-fill: white;
+    -fx-font-size: 30;
+    -fx-cursor: hand;
 }

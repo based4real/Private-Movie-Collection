@@ -1,6 +1,7 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -10,7 +11,6 @@ import javafx.stage.Stage;
 import javafx.util.Builder;
 import pmc.be.Movie;
 import pmc.be.rest.omdb.OMDBMovieEntity;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.MovieManager;
 import pmc.bll.TMDBMovieManager;
@@ -58,7 +58,6 @@ public class PMCController implements IViewController {
         this.model = new PMCModel();
         this.viewHandler = new ViewHandler(model);
 
-
         try {
             this.movieManager = new MovieManager();
         } catch (MovieException e) {
@@ -70,8 +69,8 @@ public class PMCController implements IViewController {
         this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
         this.genresController = new GenresController();
         this.categoriesController = new CategoriesController();
-        this.infoController = new InfoController();
         this.playbackController = new PlaybackController(viewHandler::previousView);
+        this.infoController = new InfoController();
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
                 homeController.getView(),
@@ -114,6 +113,7 @@ public class PMCController implements IViewController {
         model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
         OMDBMovieEntity omdbMovie = movie.getOMDBMovie();
 
+
         return new MovieDetailsModel(movie.getTitle(), omdbMovie.getDirector(), omdbMovie.getReleaseYear(), omdbMovie.getRuntime(), omdbMovie.getRated(), movie.getGenres(), movie.getDescription());
     }
 
@@ -132,7 +132,6 @@ public class PMCController implements IViewController {
         playbackController.setModel(movieModel);
         viewHandler.changeView(ViewType.PLAYBACK);
     }
-
 
     private <T> void performBackgroundTask(Callable<T> task, Consumer<T> onSuccess, Consumer<Exception> onError) {
         // Hent data i baggrunden så vi ikke bloker Java FX Application Thread (FXAT), hvis forbindelsen f.eks. er langsom

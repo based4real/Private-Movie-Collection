@@ -16,8 +16,7 @@ public class MovieDetailsModel {
     private final StringProperty runtime = new SimpleStringProperty();
     private final StringProperty rated = new SimpleStringProperty();
 
-    private final List<TMDBGenreEntity> genres = FXCollections.observableArrayList();
-
+    private final ObservableList<TMDBGenreEntity> genres;
     private final StringProperty description = new SimpleStringProperty();
 
     public MovieDetailsModel(String title, String director, String release, String playTime, String rated, List<TMDBGenreEntity> genres, String description) {
@@ -26,7 +25,8 @@ public class MovieDetailsModel {
         this.release.set(release);
         this.runtime.set(playTime);
         this.rated.set(rated);
-        this.genres.addAll(genres);
+        this.genres = FXCollections.observableArrayList(genres);
+
         this.description.set(description);
     }
 
@@ -50,7 +50,7 @@ public class MovieDetailsModel {
         return rated;
     }
 
-    public List<TMDBGenreEntity> genresProperty() {
+    public ObservableList<TMDBGenreEntity> genresProperty() {
         return genres;
     }
 

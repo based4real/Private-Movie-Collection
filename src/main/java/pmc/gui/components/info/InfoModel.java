@@ -5,6 +5,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.gui.common.MovieModel;
+import pmc.gui.components.playback.PlaybackController;
+
+import java.util.function.Consumer;
 
 public class InfoModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
@@ -15,7 +19,7 @@ public class InfoModel {
     private final StringProperty runtime = new SimpleStringProperty("");
     private final StringProperty rated = new SimpleStringProperty("");
 
-    private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();;
+    private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
 
     private final StringProperty description = new SimpleStringProperty("");
 
@@ -46,7 +50,6 @@ public class InfoModel {
     public ObservableList<TMDBGenreEntity> genresProperty() {
         return genres;
     }
-
 
     public StringProperty descriptionProperty() {
         return description;
