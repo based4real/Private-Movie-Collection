@@ -44,6 +44,7 @@ import java.util.function.Consumer;
  * Fungerer som den centrale koordinator hvor den styrer applikationens flow og integrerer forskellige MVC komponenter.
  */
 public class PMCController implements IViewController {
+    private final Stage stage;
     private final PMCModel model;
     private final Builder<Region> viewBuilder;
     private final ViewHandler viewHandler;
@@ -60,6 +61,7 @@ public class PMCController implements IViewController {
     private TMDBMovieManager tmdbMovieManager;
 
     public PMCController(Stage stage) {
+        this.stage = stage;
         this.model = new PMCModel();
         this.viewHandler = new ViewHandler(model);
 
@@ -203,7 +205,17 @@ public class PMCController implements IViewController {
 
         setupDialogButtons(dialog);
         setupDialogStyle(dialog);
-        dialog.getDialogPane().setPrefSize(600, 400);
+
+        double dialogWidth = 600;
+        double dialogHeight = 400;
+
+        dialog.getDialogPane().setPrefSize(dialogWidth, dialogHeight);
+
+        dialog.setOnShown(event -> {
+            dialog.setX(stage.getX() + (stage.getWidth() / 2) - (dialogWidth / 2));
+            dialog.setY(stage.getY() + (stage.getHeight() / 2) - (dialogHeight / 2));
+        });
+
         dialog.showAndWait();
         model.isDialogOpenProperty().set(false);
     }
