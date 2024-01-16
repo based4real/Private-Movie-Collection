@@ -151,24 +151,11 @@ public class PMCController implements IViewController {
         return genreModels;
     }
 
-    private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity movie) {
-        model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
-        OMDBMovieEntity omdbMovie = movie.getOMDBMovie();
+    private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity tmdbMovie) {
+        model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + tmdbMovie.getBackdropPath());
+        OMDBMovieEntity omdbMovie = tmdbMovie.getOMDBMovie();
 
-        return new MovieDetailsModel(
-                omdbMovie.getImdbID(),
-                movie.getTitle(),
-                movie.getOriginalTitle(),
-                String.valueOf(movie.getID()),
-                omdbMovie.getImdbRating(),
-                movie.getPosterPath(),
-                omdbMovie.getDirector(),
-                omdbMovie.getReleaseYear(),
-                omdbMovie.getRuntime(),
-                omdbMovie.getRated(),
-                movie.getDescription(),
-                movie.getGenres(),
-                movie.getCredits());
+        return new MovieDetailsModel(tmdbMovie, omdbMovie);
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {

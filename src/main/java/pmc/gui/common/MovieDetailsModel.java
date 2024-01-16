@@ -4,8 +4,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 
 import java.util.List;
@@ -26,6 +28,27 @@ public class MovieDetailsModel {
 
     private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
     private final ObservableList<TMDBCreditEntity> credits = FXCollections.observableArrayList();
+
+    public MovieDetailsModel() {}
+
+    public MovieDetailsModel(TMDBMovieEntity tmdbMovie, OMDBMovieEntity omdbMovie) {
+        // tmdbMovie
+        this.title.set(tmdbMovie.getTitle());
+        this.originalTitle.set(tmdbMovie.getOriginalTitle());
+        this.tmdbRating.set(String.valueOf(tmdbMovie.getID()));
+        this.posterPath.set(tmdbMovie.getPosterPath());
+        this.description.set(tmdbMovie.getDescription());
+        this.genres.setAll(tmdbMovie.getGenres());
+        this.credits.setAll(tmdbMovie.getCredits());
+
+        // omdbMovie
+        this.imdbId.set(omdbMovie.getImdbID());
+        this.imdbRating.set(omdbMovie.getImdbRating());
+        this.director.set(omdbMovie.getDirector());
+        this.director.set(omdbMovie.getDirector());
+        this.runtime.set(omdbMovie.getRuntime());
+        this.rated.set(omdbMovie.getRated());
+    }
 
     public MovieDetailsModel(String imdbId,
                              String title,
