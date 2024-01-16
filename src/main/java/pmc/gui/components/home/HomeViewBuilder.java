@@ -36,7 +36,7 @@ public class HomeViewBuilder implements Builder<Region> {
 
         createRecentlyAdded(results);
         createGenres(results);
-        
+
         ScrollPane scrollPane = new ScrollPane(results);
         scrollPane.setContent(results);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

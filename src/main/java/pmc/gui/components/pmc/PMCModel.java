@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pmc.gui.common.GenreModel;
 import pmc.gui.common.MovieModel;
+import pmc.gui.components.categories.CategoriesModel;
 
 import java.util.Arrays;
 
@@ -15,6 +16,7 @@ public class PMCModel {
     private final StringProperty backdropPath = new SimpleStringProperty("");
     private final ObservableList<MovieModel> movieModels = FXCollections.observableArrayList();
     private final ObservableList<GenreModel> genreModels = FXCollections.observableArrayList();
+    private final ObservableList<CategoriesModel> categoryModels = FXCollections.observableArrayList();
 
     public ObjectProperty<ViewType> activeViewProperty() {
         return activeView;
@@ -36,5 +38,9 @@ public class PMCModel {
 
     public ObservableList<GenreModel> genreModels() {
         return genreModels;
+    }
+
+    public ObservableList<CategoriesModel> categoryModels() {
+        return categoryModels;
     }
 }

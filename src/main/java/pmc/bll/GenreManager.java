@@ -21,11 +21,43 @@ public class GenreManager {
         }
     }
 
+    public Genre getGenre(int id) throws MovieException {
+        try {
+            return dao.get(id);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke hente genre fra id\n" + e.getMessage());
+        }
+    }
+
     public List<Genre> getAllGenres() throws MovieException {
         try {
             return dao.getAll();
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente filmene.\n" + e.getMessage());
+            throw new MovieException("Kunne ikke hente alle genre.\n" + e.getMessage());
+        }
+    }
+
+    public Genre addGenre(Genre genre) throws MovieException {
+        try {
+            return dao.add(genre);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke oprette genre.\n" + e.getMessage());
+        }
+    }
+
+    public boolean updateGenre(Genre original, Genre updatedData) throws MovieException {
+        try {
+            return dao.update(original, updatedData);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke opdatere genre.\n" + e.getMessage());
+        }
+    }
+
+    public boolean deleteGenre(Genre genre) throws MovieException {
+        try {
+            return dao.delete(genre);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke slette genre.\n" + e.getMessage());
         }
     }
 }
