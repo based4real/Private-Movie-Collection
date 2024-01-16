@@ -4,23 +4,25 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 import pmc.gui.common.GenreModel;
 import javafx.collections.ListChangeListener;
 import pmc.gui.common.MovieModel;
-import pmc.gui.widgets.ImageWidgets;
+import pmc.gui.common.MoviesData;
 import pmc.gui.widgets.buttons.ButtonWidgets;
-import pmc.gui.widgets.icons.ScrollPaneWidgets;
+import pmc.gui.widgets.ScrollPaneWidgets;
+
+import java.util.function.Consumer;
 
 public class GenresViewBuilder implements Builder<Region> {
 
     private ObservableList<GenreModel> model;
+    private Consumer<MoviesData> viewChangehandler;
 
-    public GenresViewBuilder(ObservableList<GenreModel> model) {
+    public GenresViewBuilder(ObservableList<GenreModel> model, Consumer<MoviesData> viewChangeHandler) {
         this.model = model;
+        this.viewChangehandler = viewChangeHandler;
     }
 
     @Override
@@ -36,12 +38,22 @@ public class GenresViewBuilder implements Builder<Region> {
         tilePane.setHgap(15);
         tilePane.setVgap(15);
 
+         /*
+            Lidt dumt tjek.. men vi lytter først om modellen opdaterer sig, hvis ja så loop igennem dem.
+            Derefter tjekker vi om .getMovies() ændrer sig, hvis ja så tjek om den er tom og hvis den ikke
+            er så tilføj til tilepane..
+            Bruges så der ikke vises en tom genre.
+         */
         this.model.addListener((ListChangeListener.Change<? extends GenreModel> change) -> {
             for (GenreModel genreModel : model) {
-                Button btn = ButtonWidgets.actionButtonStyle("name", "genre-category-button", event -> categoryClick(genreModel));
-                btn.textProperty().bind(genreModel.nameProperty());
+                genreModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
+                    if (!genreModel.getMovies().isEmpty()) {
+                        Button btn = ButtonWidgets.actionButtonStyle("name", "genre-category-button", event -> categoryClick(genreModel));
+                        btn.textProperty().bind(genreModel.nameProperty());
 
-                tilePane.getChildren().add(btn);
+                        tilePane.getChildren().add(btn);
+                    }
+                });
             }
         });
         return tilePane;
@@ -49,13 +61,8 @@ public class GenresViewBuilder implements Builder<Region> {
 
 
     private void categoryClick(GenreModel genreModel) {
-        if (!genreModel.getMovies().isEmpty()) {
-            for (MovieModel matchingMovie : genreModel.getMovies()) {
-                System.out.println(genreModel.nameProperty().get() + " " + matchingMovie.tmdbIdProperty().get());
-            }
-        } else {
-            System.out.println("moviemodels ikke fundet");
-        }
+        //if (!genreModel.getMovies().isEmpty())
+        this.viewChangehandler.accept(new MoviesData(genreModel.nameProperty().get(), genreModel.getMovies()));
     }
 }
 

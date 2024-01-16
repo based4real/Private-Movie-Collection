@@ -1,6 +1,8 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -15,10 +17,7 @@ import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.*;
-import pmc.gui.common.GenreModel;
-import pmc.gui.common.IViewController;
-import pmc.gui.common.MovieDetailsModel;
-import pmc.gui.common.MovieModel;
+import pmc.gui.common.*;
 import pmc.gui.components.categories.CategoriesModel;
 import pmc.gui.components.genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
@@ -28,6 +27,7 @@ import pmc.gui.components.dialog.addcategory.AddCategoryController;
 import pmc.gui.components.dialog.addmovie.AddMovieController;
 import pmc.gui.components.home.HomeController;
 import pmc.gui.components.info.InfoController;
+import pmc.gui.components.movies.MoviesController;
 import pmc.gui.components.playback.PlaybackController;
 import pmc.gui.utils.ErrorHandler;
 import pmc.utils.MovieException;
@@ -53,6 +53,7 @@ public class PMCController implements IViewController {
     private final CategoriesController categoriesController;
     private final InfoController infoController;
     private final PlaybackController playbackController;
+    private final MoviesController moviesController;
 
     private MovieManager movieManager;
     private GenreManager genreManager;
@@ -77,17 +78,19 @@ public class PMCController implements IViewController {
         this.tmdbGenreManager = new TMDBGenreManager();
 
         this.homeController = new HomeController(model.movieModels(), model.genreModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
-        this.genresController = new GenresController(model.genreModels());
-        this.categoriesController = new CategoriesController(model.categoryModels());
+        this.genresController = new GenresController(model.genreModels(), this::handleGenreCategoryClick);
+        this.categoriesController = new CategoriesController(model.categoryModels(), this::handleGenreCategoryClick);
         this.playbackController = new PlaybackController(viewHandler::previousView);
         this.infoController = new InfoController(this::handlePlayButtonClick);
+        this.moviesController = new MoviesController(this::handleMoviePosterClick, this::handlePlayButtonClick);
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
                 homeController.getView(),
                 genresController.getView(),
                 categoriesController.getView(),
                 infoController.getView(),
-                playbackController.getView());
+                playbackController.getView(),
+                moviesController.getView());
 
         fetchData();
         fetchDataGenre();
@@ -194,6 +197,11 @@ public class PMCController implements IViewController {
     private void handlePlayButtonClick(MovieModel movieModel) {
         playbackController.setModel(movieModel);
         viewHandler.changeView(ViewType.PLAYBACK);
+    }
+
+    private void handleGenreCategoryClick(MoviesData moviedata) {
+        moviesController.setModel(moviedata);
+        viewHandler.changeView(ViewType.MOVIES);
     }
 
     private <T> void performBackgroundTask(Callable<T> task, Consumer<T> onSuccess, Consumer<Exception> onError) {

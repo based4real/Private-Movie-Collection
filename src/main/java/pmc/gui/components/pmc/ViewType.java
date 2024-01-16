@@ -5,5 +5,6 @@ public enum ViewType {
     GENRES,
     CATEGORIES,
     INFO,
-    PLAYBACK
+    PLAYBACK,
+    MOVIES
 }

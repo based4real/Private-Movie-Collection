@@ -19,6 +19,8 @@ import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.NavigationGroup;
 import pmc.gui.widgets.icons.IconWidgets;
 
+import javax.swing.text.View;
+
 /**
  * Ansvarlig for at bygge brugergrænsefladen for det overordnede View i Private Movie Collection (PMC) applikationen.
  */
@@ -34,6 +36,7 @@ public class PMCViewBuilder implements Builder<Region> {
     private final Region categoriesView;
     private final Region infoView;
     private final Region playbackView;
+    private final Region moviesView;
 
     public PMCViewBuilder(PMCModel model,
                           ViewHandler viewHandler,
@@ -43,7 +46,8 @@ public class PMCViewBuilder implements Builder<Region> {
                           Region genresView,
                           Region categoriesView,
                           Region infoView,
-                          Region playbackView) {
+                          Region playbackView,
+                          Region moviesView) {
         this.model = model;
         this.viewHandler = viewHandler;
         this.addMovieClick = addMovieClick;
@@ -54,6 +58,7 @@ public class PMCViewBuilder implements Builder<Region> {
         this.categoriesView = categoriesView;
         this.infoView = infoView;
         this.playbackView = playbackView;
+        this.moviesView = moviesView;
     }
 
     @Override
@@ -116,10 +121,11 @@ public class PMCViewBuilder implements Builder<Region> {
         categoriesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.CATEGORIES));
         infoView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
         playbackView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.PLAYBACK));
+        moviesView.visibleProperty().bind(model.activeViewProperty().isEqualTo(ViewType.MOVIES));
 
         infoView.managedProperty().bind(model.activeViewProperty().isEqualTo(ViewType.INFO));
 
-        return new StackPane(homeView, genresView, categoriesView, infoView, playbackView);
+        return new StackPane(homeView, genresView, categoriesView, infoView, playbackView, moviesView);
     }
 
     private Region createTopbar() {

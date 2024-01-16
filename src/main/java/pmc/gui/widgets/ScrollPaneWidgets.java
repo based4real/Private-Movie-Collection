@@ -1,4 +1,4 @@
-package pmc.gui.widgets.icons;
+package pmc.gui.widgets;
 
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;

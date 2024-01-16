@@ -4,12 +4,16 @@ import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
+import pmc.gui.common.MovieModel;
+import pmc.gui.common.MoviesData;
+
+import java.util.function.Consumer;
 
 public class CategoriesController implements IViewController {
     private final Builder<Region> viewBuilder;
 
-    public CategoriesController(ObservableList<CategoriesModel> model) {
-        this.viewBuilder = new CategoriesViewBuilder(model);
+    public CategoriesController(ObservableList<CategoriesModel> model, Consumer<MoviesData> viewChangeHandler) {
+        this.viewBuilder = new CategoriesViewBuilder(model, viewChangeHandler);
     }
 
     @Override

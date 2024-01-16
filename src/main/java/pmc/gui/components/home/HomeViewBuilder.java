@@ -5,14 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
-import javafx.scene.control.ScrollPane;
 import pmc.gui.common.GenreModel;
 import pmc.gui.common.MovieModel;
 import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.MoviePoster;
-import pmc.gui.widgets.icons.ScrollPaneWidgets;
+import pmc.gui.widgets.ScrollPaneWidgets;
 
-import java.awt.*;
 import java.util.function.Consumer;
 
 public class HomeViewBuilder implements Builder<Region> {

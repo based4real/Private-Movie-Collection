@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.util.Builder;
+import org.kordamp.ikonli.javafx.FontIcon;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
@@ -17,6 +18,7 @@ import pmc.gui.widgets.ImageWidgets;
 import pmc.gui.widgets.TextWidgets;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.HorizontalPaginator;
+import pmc.gui.widgets.icons.IconWidgets;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
