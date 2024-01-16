@@ -141,7 +141,13 @@ public class PMCViewBuilder implements Builder<Region> {
         Button addCategoryIcon = ButtonWidgets.actionIconButton(Material2AL.LIBRARY_ADD, "icon", e -> addCategoryClick.run());
         Button addMovieIcon = ButtonWidgets.actionIconButton(Material2AL.ADD_BOX, "icon", e -> addMovieClick.run());
 
-        results.getChildren().addAll(menuIcon, pmc, space, addCategoryIcon, addMovieIcon);
+        addMovieIcon.disableProperty().bind(model.copyingFileProperty());
+
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.progressProperty().bind(model.fileProgressProperty());
+        progressBar.visibleProperty().bind(model.copyingFileProperty());
+
+        results.getChildren().addAll(menuIcon, pmc, space, progressBar, addCategoryIcon, addMovieIcon);
         results.setAlignment(Pos.CENTER_LEFT);
 
         return results;

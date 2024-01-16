@@ -3,11 +3,9 @@ package pmc.gui.components.pmc;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import pmc.gui.common.GenreModel;
+import pmc.gui.components.genres.GenresModel;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.categories.CategoriesModel;
-
-import java.util.Arrays;
 
 public class PMCModel {
     private final ObjectProperty<ViewType> activeView = new SimpleObjectProperty<>(ViewType.HOME);
@@ -15,8 +13,10 @@ public class PMCModel {
     private final BooleanProperty isDialogOpen = new SimpleBooleanProperty(false);
     private final StringProperty backdropPath = new SimpleStringProperty("");
     private final ObservableList<MovieModel> movieModels = FXCollections.observableArrayList();
-    private final ObservableList<GenreModel> genreModels = FXCollections.observableArrayList();
+    private final ObservableList<GenresModel> genreModels = FXCollections.observableArrayList();
     private final ObservableList<CategoriesModel> categoryModels = FXCollections.observableArrayList();
+    private final BooleanProperty copyingFile = new SimpleBooleanProperty(false);
+    private final DoubleProperty fileProgress = new SimpleDoubleProperty(0);
 
     public ObjectProperty<ViewType> activeViewProperty() {
         return activeView;
@@ -36,11 +36,17 @@ public class PMCModel {
         return movieModels;
     }
 
-    public ObservableList<GenreModel> genreModels() {
+    public ObservableList<GenresModel> genreModels() {
         return genreModels;
     }
 
     public ObservableList<CategoriesModel> categoryModels() {
         return categoryModels;
     }
+
+    public BooleanProperty copyingFileProperty() {
+        return copyingFile;
+    }
+
+    public DoubleProperty fileProgressProperty() { return fileProgress; }
 }

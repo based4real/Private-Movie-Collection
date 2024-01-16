@@ -1,6 +1,7 @@
 package pmc.gui.widgets;
 
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -31,6 +32,16 @@ public class ImageWidgets {
         ImageView results = scaledRoundedImage("file:" + urlProperty.get(), fitWidth, fitHeight, rounding);
 
         urlProperty.addListener((obs, ov, nv) -> results.setImage(new Image("file:" + nv, true)));
+
+        return results;
+    }
+
+    public static ImageView observableBoundRoundedImage(ObservableStringValue urlProperty, double fitWidth, double fitHeight, double rounding) {
+        ImageView results = scaledRoundedImage("file:" + urlProperty.get(), fitWidth, fitHeight, rounding);
+
+        urlProperty.addListener((obs, ov, nv) -> {
+            if (!nv.isEmpty() && nv != null) results.setImage(new Image(nv, true));
+        });
 
         return results;
     }

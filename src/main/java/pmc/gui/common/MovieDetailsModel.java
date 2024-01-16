@@ -33,6 +33,9 @@ public class MovieDetailsModel {
 
     public MovieDetailsModel(TMDBMovieEntity tmdbMovie, OMDBMovieEntity omdbMovie) {
         // tmdbMovie
+        if (tmdbMovie == null) return;
+        if (omdbMovie == null) return;
+
         this.title.set(tmdbMovie.getTitle());
         this.originalTitle.set(tmdbMovie.getOriginalTitle());
         this.tmdbRating.set(String.valueOf(tmdbMovie.getID()));

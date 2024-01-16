@@ -19,6 +19,11 @@ public class GenreDAO_DB extends AbstractDAO<Genre> {
     }
 
     @Override
+    protected String getPrimaryKeyName() {
+        return "tmdbId";
+    }
+
+    @Override
     protected String insertSql() {
         return "INSERT INTO dbo.Genre (tmdbId) VALUES (?);";
     }

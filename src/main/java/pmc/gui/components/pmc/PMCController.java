@@ -1,8 +1,6 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -19,6 +17,8 @@ import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.*;
 import pmc.gui.common.*;
 import pmc.gui.components.categories.CategoriesModel;
+import pmc.gui.components.dialog.addmovie.AddMovieData;
+import pmc.gui.components.genres.GenresModel;
 import pmc.gui.components.genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.dialog.DialogBuilder;
@@ -30,8 +30,11 @@ import pmc.gui.components.info.InfoController;
 import pmc.gui.components.movies.MoviesController;
 import pmc.gui.components.playback.PlaybackController;
 import pmc.gui.utils.ErrorHandler;
+import pmc.gui.utils.FileManagementService;
 import pmc.utils.MovieException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,6 +57,8 @@ public class PMCController implements IViewController {
     private final InfoController infoController;
     private final PlaybackController playbackController;
     private final MoviesController moviesController;
+
+    private AddMovieController addMovieController;
 
     private MovieManager movieManager;
     private GenreManager genreManager;
@@ -134,13 +139,13 @@ public class PMCController implements IViewController {
         );
     }
 
-    private List<GenreModel> convertToGenreModels(List<Genre> genres) throws MovieException {
-        List<GenreModel> genreModels = new ArrayList<>();
+    private List<GenresModel> convertToGenreModels(List<Genre> genres) throws MovieException {
+        List<GenresModel> genreModels = new ArrayList<>();
 
         for (Genre genre : genres) {
             TMDBGenreEntity tmdbGenre = tmdbGenreManager.getTMDBFromGenre(genre);
 
-            genreModels.add(new GenreModel(
+            genreModels.add(new GenresModel(
                     tmdbGenre,
                     model.movieModels()
             ));
@@ -178,8 +183,10 @@ public class PMCController implements IViewController {
 
     private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity tmdbMovie) {
         model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + tmdbMovie.getBackdropPath());
-        OMDBMovieEntity omdbMovie = tmdbMovie.getOMDBMovie();
+        OMDBMovieEntity omdbMovie = tmdbMovie.getOMDBMovie(); // todo: kører ikke på baggrundstråd kan blokere GUI
 
+        System.out.println("TMDBMovie: " + tmdbMovie);
+        System.out.println("OMDBMovie: " + omdbMovie);
         return new MovieDetailsModel(tmdbMovie, omdbMovie);
     }
 
@@ -230,14 +237,60 @@ public class PMCController implements IViewController {
     }
 
     private void showAddMovieDialog() {
-        showDialog(new AddMovieController(), "Tilføj film");
+        addMovieController = new AddMovieController(this::tmdbSearch);
+        Dialog<AddMovieData> dialog = showDialog(addMovieController, "Tilføj film");
+        dialog.showAndWait().ifPresent(this::addMovie);
+        model.isDialogOpenProperty().set(false);
+    }
+
+    private void tmdbSearch(String title) {
+        performBackgroundTask(
+                () -> {
+                    TMDBMovieEntity tmdbMovie = tmdbMovieManager.searchForMovie(title);
+                    OMDBMovieEntity omdbMovie = tmdbMovie.getOMDBMovie();
+                    return new MovieDetailsModel(tmdbMovie, omdbMovie);
+                },
+                movieDetails -> addMovieController.setTMDBMovie(movieDetails),
+                error -> ErrorHandler.showErrorDialog("Fejl", "Filmen kunne ikke findes. Prøv igen eller en anden.")
+        );
+    }
+
+    private void addMovie(AddMovieData addMovieData) {
+        performBackgroundTask(
+                () -> movieManager.addMovieWithGenres(addMovieData),
+                movie -> downloadAndCopyFiles(addMovieData, movie),
+                error -> ErrorHandler.showErrorDialog("Fejl", "Database fejl: " + error.getMessage())
+        );
+    }
+
+    private void downloadAndCopyFiles(AddMovieData addMovieData, Movie movie) {
+        performBackgroundTask(
+                () -> {
+                    Platform.runLater(() -> {
+                        model.copyingFileProperty().set(true);
+                        model.fileProgressProperty().set(0);
+                    });
+                    FileManagementService.downloadImageToDir(addMovieData.posterUrl(), "data/posters", addMovieData.posterPath());
+                    FileManagementService.copyFileToDir(new File(addMovieData.filePath()), "data/movies", this::updateTaskProgress);
+                    Platform.runLater(() -> {
+                        model.fileProgressProperty().set(0);
+                        model.copyingFileProperty().set(false);
+                    });
+                    return true;
+                },
+                results -> model.movieModels().add(new MovieModel(movie)),
+                error -> ErrorHandler.showErrorDialog("Fejl", "fil fejl: " + error.getMessage()));
+    }
+
+    private void updateTaskProgress(double progress) {
+        Platform.runLater(() -> model.fileProgressProperty().set(progress));
     }
 
     private void showAddCategoryDialog() {
         showDialog(new AddCategoryController(), "Tilføj kategori");
     }
 
-    private <T> void showDialog(IDialogController<T> controller, String title) {
+    private <T> Dialog<T> showDialog(IDialogController<T> controller, String title) {
         model.isDialogOpenProperty().set(true);
         Dialog<T> dialog = new DialogBuilder<>(controller)
                 .withTitle(title)
@@ -257,8 +310,7 @@ public class PMCController implements IViewController {
             dialog.setY(stage.getY() + (stage.getHeight() / 2) - (dialogHeight / 2));
         });
 
-        dialog.showAndWait();
-        model.isDialogOpenProperty().set(false);
+        return dialog;
     }
 
     private void setupDialogButtons(Dialog<?> dialog) {

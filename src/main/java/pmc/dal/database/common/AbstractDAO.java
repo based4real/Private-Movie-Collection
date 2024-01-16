@@ -21,7 +21,7 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
     }
 
     public Optional<T> get(int id) throws DataAccessException {
-        String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
+        String sql = "SELECT * FROM " + getTableName() + " WHERE " + getPrimaryKeyName() + " = ?";
 
         try (Connection conn = connector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -130,6 +130,8 @@ public abstract class AbstractDAO<T> implements IDAO<T> {
      * @return Navnet på den tabel som er associeret ved DAO'en
      */
     protected abstract String getTableName();
+
+    protected abstract String getPrimaryKeyName();
 
     /*
      * SQL udtryk skabeloner

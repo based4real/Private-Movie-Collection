@@ -3,7 +3,6 @@ package pmc.gui.components.home;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
-import pmc.gui.common.GenreModel;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.categories.CategoriesModel;

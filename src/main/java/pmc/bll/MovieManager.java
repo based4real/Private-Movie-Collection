@@ -6,18 +6,22 @@ import pmc.be.Movie;
 import pmc.dal.database.common.IDAO;
 import pmc.dal.database.daos.*;
 import pmc.dal.exception.DataAccessException;
+import pmc.gui.components.dialog.addmovie.AddMovieData;
 import pmc.utils.MovieException;
 
 import java.util.List;
 import java.util.Optional;
 
 public class MovieManager {
+    private final GenreManager genreManager;
+
     private final IDAO<Movie> dao;
     private final IMovieGenreDAO movieGenreDAO;
     private final ICatMovieDAO catMovieDAO;
 
     public MovieManager() throws MovieException {
         try {
+            this.genreManager = new GenreManager();
             this.dao = new MovieDAO_DB();
             this.movieGenreDAO = new MovieGenreDAO_DB();
             this.catMovieDAO = new CatMovieDAO_DB();
@@ -52,6 +56,31 @@ public class MovieManager {
     public Movie addMovie(Movie movie) throws MovieException {
         try {
             return dao.add(movie);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke tilføje filmen.\n" + e.getMessage());
+        }
+    }
+
+    public Movie addMovieWithGenres(AddMovieData data) throws MovieException {
+        try {
+            // todo: skal nok ikke have AddMovieData her, men konverter den til BE oppe i PMCController i stedet
+            Movie movie = new Movie(
+                    data.tmdbId(),
+                    data.imdbId(),
+                    data.title(),
+                    data.imdbRating(),
+                    data.personalRating(),
+                    data.fileName(),
+                    data.posterPath(),
+                    data.lastSeen());
+            Movie addedMovie = dao.add(movie);
+
+            List<Genre> genres = genreManager.addGenresById(data.genreIds());
+            movie.setGenres(genres);
+
+            for (Genre genre : genres) movieGenreDAO.addRelation(addedMovie, genre);
+
+            return addedMovie;
         } catch (DataAccessException e) {
             throw new MovieException("Kunne ikke tilføje filmen.\n" + e.getMessage());
         }

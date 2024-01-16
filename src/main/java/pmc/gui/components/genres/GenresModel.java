@@ -1,4 +1,4 @@
-package pmc.gui.common;
+package pmc.gui.components.genres;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -8,28 +8,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import pmc.be.Movie;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.gui.common.MovieModel;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class GenreModel {
+public class GenresModel {
 
     private final IntegerProperty id = new SimpleIntegerProperty();
     private final StringProperty name = new SimpleStringProperty("");
 
     private ObservableList<MovieModel> matchingMovieModel = FXCollections.observableArrayList();
 
-    public GenreModel() {}
+    public GenresModel() {}
 
-    public GenreModel(int id, String name, ObservableList<MovieModel> movieModels) {
+    public GenresModel(int id, String name, ObservableList<MovieModel> movieModels) {
         this.id.set(id);
         this.name.set(name);
         setMatchFromModels(movieModels);
     }
 
-    public GenreModel(TMDBGenreEntity genre, ObservableList<MovieModel> movieModels) {
+    public GenresModel(TMDBGenreEntity genre, ObservableList<MovieModel> movieModels) {
         this.id.set(genre.getID());
         this.name.set(genre.getName());
         setMatchFromModels(movieModels);

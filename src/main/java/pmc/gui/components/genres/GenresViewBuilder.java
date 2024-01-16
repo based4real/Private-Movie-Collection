@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
-import pmc.gui.common.GenreModel;
 import javafx.collections.ListChangeListener;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviesData;
@@ -17,10 +16,10 @@ import java.util.function.Consumer;
 
 public class GenresViewBuilder implements Builder<Region> {
 
-    private ObservableList<GenreModel> model;
+    private ObservableList<GenresModel> model;
     private Consumer<MoviesData> viewChangehandler;
 
-    public GenresViewBuilder(ObservableList<GenreModel> model, Consumer<MoviesData> viewChangeHandler) {
+    public GenresViewBuilder(ObservableList<GenresModel> model, Consumer<MoviesData> viewChangeHandler) {
         this.model = model;
         this.viewChangehandler = viewChangeHandler;
     }
@@ -44,8 +43,8 @@ public class GenresViewBuilder implements Builder<Region> {
             er så tilføj til tilepane..
             Bruges så der ikke vises en tom genre.
          */
-        this.model.addListener((ListChangeListener.Change<? extends GenreModel> change) -> {
-            for (GenreModel genreModel : model) {
+        this.model.addListener((ListChangeListener.Change<? extends GenresModel> change) -> {
+            for (GenresModel genreModel : model) {
                 genreModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
                     if (!genreModel.getMovies().isEmpty()) {
                         Button btn = ButtonWidgets.actionButtonStyle(genreModel.nameProperty().get(), "genre-category-button", event -> categoryClick(genreModel));
@@ -59,7 +58,7 @@ public class GenresViewBuilder implements Builder<Region> {
     }
 
 
-    private void categoryClick(GenreModel genreModel) {
+    private void categoryClick(GenresModel genreModel) {
         //if (!genreModel.getMovies().isEmpty())
         this.viewChangehandler.accept(new MoviesData(genreModel.nameProperty().get(), genreModel.getMovies()));
     }

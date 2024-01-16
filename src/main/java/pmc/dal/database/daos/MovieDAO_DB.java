@@ -20,6 +20,11 @@ public class MovieDAO_DB extends AbstractDAO<Movie> {
         return "dbo.Movie";
     }
 
+    @Override
+    protected String getPrimaryKeyName() {
+        return "id";
+    }
+
 
     @Override
     protected String insertSql() {

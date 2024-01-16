@@ -21,6 +21,11 @@ public class CategoryDAO_DB extends AbstractDAO<Category> {
     }
 
     @Override
+    protected String getPrimaryKeyName() {
+        return "id";
+    }
+
+    @Override
     protected String insertSql() {
         return "INSERT INTO dbo.Category (name) VALUES (?)";
     }
