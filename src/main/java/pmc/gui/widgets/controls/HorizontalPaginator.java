@@ -17,10 +17,13 @@ import pmc.gui.utils.Animations;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.LabelWidgets;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 // todo: refactor
 public class HorizontalPaginator<T> extends VBox {
+    private final Map<T, Node> itemNodeMap = new HashMap<>();
     private final ObservableList<T> items;
     private final Function<T, Node> itemRenderer;
     private final HBox contentBox;
@@ -82,7 +85,6 @@ public class HorizontalPaginator<T> extends VBox {
     private void setupItemListener() {
         items.addListener((ListChangeListener.Change<? extends T> change) -> {
             while (change.next()) {
-                System.out.println("change");
 
                 if (change.wasAdded()) {
                     change.getAddedSubList().forEach(this::addItemToContentBox);
@@ -97,12 +99,17 @@ public class HorizontalPaginator<T> extends VBox {
 
     private void addItemToContentBox(T item) {
         Node node = itemRenderer.apply(item);
+        itemNodeMap.put(item, node);
         contentBox.getChildren().add(node);
-        itemWidth = node.getBoundsInParent().getWidth(); // todo: kræver bedre løsning
+        itemWidth = node.getBoundsInParent().getWidth();
     }
 
     private void removeItemFromContentBox(T item) {
-        contentBox.getChildren().remove(itemRenderer.apply(item));
+        Node node = itemNodeMap.get(item);
+        if (node != null) {
+            contentBox.getChildren().remove(node);
+            itemNodeMap.remove(item);
+        }
     }
 
     private HBox createNavigationBox(ScrollPane scrollPane) {
