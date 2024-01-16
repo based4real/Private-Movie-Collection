@@ -1,6 +1,7 @@
 package pmc.be;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
@@ -15,6 +16,7 @@ public class Movie {
     private LocalDateTime lastSeen;
 
     private List<Genre> genres;
+    private List<Category> categories;
 
     public Movie(int id, int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
         this.id = id;
@@ -26,6 +28,8 @@ public class Movie {
         this.filePath = filePath;
         this.posterPath = posterPath;
         this.lastSeen = lastSeen;
+        this.genres = new ArrayList<>();
+        this.categories = new ArrayList<>();
     }
 
     public Movie(int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
@@ -112,6 +116,12 @@ public class Movie {
     public List<Genre> getGenres() {
         return genres;
     }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<Category> getCategories() { return categories; }
 
     @Override
     public String toString() {

@@ -39,7 +39,9 @@ public class MovieManager {
             List<Movie> movies = dao.getAll();
             for (Movie movie : movies) {
                 List<Genre> genres = movieGenreDAO.getGenresForMovie(movie);
+                List<Category> categories = catMovieDAO.getCategoriesForMovie(movie);
                 movie.setGenres(genres);
+                movie.setCategories(categories);
             }
             return movies;
         } catch (DataAccessException e) {

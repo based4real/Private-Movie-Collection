@@ -111,12 +111,7 @@ public class PMCController implements IViewController {
         List<MovieModel> movieModels = new ArrayList<>();
 
         for (Movie movie : movies) {
-            movieModels.add(new MovieModel(
-                    movie.getTmdbId(),
-                    movie.getPosterPath(),
-                    movie.getFilePath(),
-                    movie.getGenres())
-            );
+            movieModels.add(new MovieModel(movie));
         }
 
         return movieModels;
