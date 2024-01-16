@@ -7,6 +7,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import pmc.be.Category;
 import pmc.gui.common.MovieModel;
 
 import java.util.List;
@@ -27,14 +29,19 @@ public class CategoriesModel {
         setMatchFromModels(movieModels);
     }
 
+    public CategoriesModel(Category category, ObservableList<MovieModel> movieModels) {
+        this.id.set(category.getId());
+        this.name.set(category.getName());
+        setMatchFromModels(movieModels);
+    }
+
     private void setMatchFromModels(ObservableList<MovieModel> movieModels) {
         movieModels.addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
-            List<MovieModel> matchingMovies = movieModels.stream()
-                    .filter(model -> model.genreObservableList().stream()
-                            .anyMatch(genre -> genre.getTmdbId() == this.idProperty().get()))
-                    .collect(Collectors.toList());
-
-            matchingMovieModel.addAll(matchingMovies);
+            FilteredList<MovieModel> filteredModels = new FilteredList<>(movieModels, movieModel ->
+                    movieModel.categoryObservableList().stream().anyMatch(category -> category.getId() == this.idProperty().get())
+            );
+            
+            matchingMovieModel.addAll(filteredModels);
         });
     }
 

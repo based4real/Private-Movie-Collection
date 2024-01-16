@@ -98,7 +98,6 @@
     -fx-font-weight: bold;
 }
 
-
 /*******************************************************************************
  *                                                                             *
  * Dialog                                                                      *
@@ -230,10 +229,10 @@
 
 /*******************************************************************************
  *                                                                             *
- * Genre Page                                                                  *
+ * Genre page & Category page                                                  *
  *                                                                             *
  ******************************************************************************/
-.genre-button {
+.genre-category-button {
     -fx-padding: 50, 0, 50, 0;
     -fx-min-width: 300;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
@@ -245,7 +244,7 @@
     -fx-border-color: rgba(255, 255, 255, 0.25); /* Skal tilføjes ellers "hopper" den */
 }
 
-.genre-button:hover {
+.genre-category-button:hover {
     -fx-background-color: -primary-color;
     -fx-border-color: -accent-color;
     -fx-cursor: hand;

@@ -8,19 +8,18 @@ import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Builder;
+import pmc.be.Category;
 import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
-import pmc.bll.GenreManager;
-import pmc.bll.MovieManager;
-import pmc.bll.TMDBGenreManager;
-import pmc.bll.TMDBMovieManager;
+import pmc.bll.*;
 import pmc.gui.common.GenreModel;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
+import pmc.gui.components.categories.CategoriesModel;
 import pmc.gui.components.genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.dialog.DialogBuilder;
@@ -57,6 +56,7 @@ public class PMCController implements IViewController {
 
     private MovieManager movieManager;
     private GenreManager genreManager;
+    private CategoryManager categoryManager;
     private TMDBGenreManager tmdbGenreManager;
     private TMDBMovieManager tmdbMovieManager;
 
@@ -68,15 +68,16 @@ public class PMCController implements IViewController {
         try {
             this.movieManager = new MovieManager();
             this.genreManager = new GenreManager();
-            this.tmdbGenreManager = new TMDBGenreManager();
+            this.categoryManager = new CategoryManager();
         } catch (MovieException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
 
         this.tmdbMovieManager = new TMDBMovieManager();
+        this.tmdbGenreManager = new TMDBGenreManager();
 
         this.homeController = new HomeController(model.movieModels(), model.genreModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
-        this.genresController = new GenresController(model.genreModels(), model.movieModels());
+        this.genresController = new GenresController(model.genreModels());
         this.categoriesController = new CategoriesController(model.categoryModels());
         this.playbackController = new PlaybackController(viewHandler::previousView);
         this.infoController = new InfoController(this::handlePlayButtonClick);
@@ -90,6 +91,7 @@ public class PMCController implements IViewController {
 
         fetchData();
         fetchDataGenre();
+        fetchDataCategory();
     }
 
     @Override
@@ -133,20 +135,42 @@ public class PMCController implements IViewController {
         List<GenreModel> genreModels = new ArrayList<>();
 
         for (Genre genre : genres) {
-            List<Movie> movies = movieManager.getAllMoviesForGenre(genre);
-
             TMDBGenreEntity tmdbGenre = tmdbGenreManager.getTMDBFromGenre(genre);
 
             genreModels.add(new GenreModel(
-                    tmdbGenre.getID(),
-                    tmdbGenre.getName(),
+                    tmdbGenre,
                     model.movieModels()
             ));
         }
 
-        this.genresController.getMoviesFromGenre();
-
         return genreModels;
+    }
+
+    private void fetchDataCategory() {
+        performBackgroundTask(
+                () -> categoryManager.getAllCategories(),
+                categories -> {
+                    try {
+                        model.categoryModels().setAll(convertToCategoryModels(categories));
+                    } catch (MovieException e) {
+                        throw new RuntimeException(e); // Træls
+                    }
+                },
+                error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
+        );
+    }
+
+    private List<CategoriesModel> convertToCategoryModels(List<Category> categories) throws MovieException {
+        List<CategoriesModel> categoriesModels = new ArrayList<>();
+
+        for (Category category : categories) {
+            categoriesModels.add(new CategoriesModel(
+                    category,
+                    model.movieModels()
+            ));
+        }
+
+        return categoriesModels;
     }
 
     private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity tmdbMovie) {

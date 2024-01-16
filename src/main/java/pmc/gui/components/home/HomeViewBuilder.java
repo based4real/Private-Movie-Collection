@@ -4,12 +4,13 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.ScrollPane;
 import javafx.util.Builder;
+import javafx.scene.control.ScrollPane;
 import pmc.gui.common.GenreModel;
 import pmc.gui.common.MovieModel;
 import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.MoviePoster;
+import pmc.gui.widgets.icons.ScrollPaneWidgets;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -37,16 +38,9 @@ public class HomeViewBuilder implements Builder<Region> {
         createRecentlyAdded(results);
         createGenres(results);
 
-        ScrollPane scrollPane = new ScrollPane(results);
-        scrollPane.setContent(results);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: transparent");
-
         results.setStyle("-fx-background-color: #323232");
 
-        return scrollPane;
+        return ScrollPaneWidgets.defaultPageScrollPane(results);
     }
 
     private void createRecentlyAdded(VBox vBox) {

@@ -85,7 +85,19 @@ public class MovieManager {
         }
     }
 
-    public List<Category> getAllCategoriesForMovie(Movie movie) throws DataAccessException {
-        return catMovieDAO.getCategoriesForMovie(movie);
+    public List<Category> getAllCategoriesForMovie(Movie movie) throws MovieException {
+        try {
+            return catMovieDAO.getCategoriesForMovie(movie);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke hente alle kategorier fra film\n" + e.getMessage());
+        }
+    }
+
+    public List<Movie> getMoviesForCategory(Category category) throws MovieException {
+        try {
+            return catMovieDAO.getMoviesForCategory(category);
+        } catch (DataAccessException e) {
+            throw new MovieException("Kunne ikke hente alle kategorier fra film\n" + e.getMessage());
+        }
     }
 }

@@ -3,26 +3,31 @@ package pmc.gui.components.genres;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 import pmc.gui.common.GenreModel;
 import javafx.collections.ListChangeListener;
 import pmc.gui.common.MovieModel;
+import pmc.gui.widgets.ImageWidgets;
 import pmc.gui.widgets.buttons.ButtonWidgets;
+import pmc.gui.widgets.icons.ScrollPaneWidgets;
 
 public class GenresViewBuilder implements Builder<Region> {
 
     private ObservableList<GenreModel> model;
-    private ObservableList<MovieModel> movieModels;
 
-    public GenresViewBuilder(ObservableList<GenreModel> model, ObservableList<MovieModel> movieModel) {
+    public GenresViewBuilder(ObservableList<GenreModel> model) {
         this.model = model;
-        this.movieModels = movieModel;
     }
 
     @Override
     public Region build() {
-        return addGenres();
+        ScrollPane scrollPane = ScrollPaneWidgets.defaultPageScrollPane(addGenres());
+        scrollPane.setFitToHeight(true);
+        return scrollPane;
     }
 
     private TilePane addGenres() {
@@ -33,7 +38,7 @@ public class GenresViewBuilder implements Builder<Region> {
 
         this.model.addListener((ListChangeListener.Change<? extends GenreModel> change) -> {
             for (GenreModel genreModel : model) {
-                Button btn = ButtonWidgets.actionButtonStyle("name", "genre-button", event -> genreClick(genreModel));
+                Button btn = ButtonWidgets.actionButtonStyle("name", "genre-category-button", event -> categoryClick(genreModel));
                 btn.textProperty().bind(genreModel.nameProperty());
 
                 tilePane.getChildren().add(btn);
@@ -42,7 +47,8 @@ public class GenresViewBuilder implements Builder<Region> {
         return tilePane;
     }
 
-    private void genreClick(GenreModel genreModel) {
+
+    private void categoryClick(GenreModel genreModel) {
         if (!genreModel.getMovies().isEmpty()) {
             for (MovieModel matchingMovie : genreModel.getMovies()) {
                 System.out.println(genreModel.nameProperty().get() + " " + matchingMovie.tmdbIdProperty().get());

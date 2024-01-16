@@ -9,7 +9,7 @@ public class CategoriesController implements IViewController {
     private final Builder<Region> viewBuilder;
 
     public CategoriesController(ObservableList<CategoriesModel> model) {
-        this.viewBuilder = new CategoriesViewBuilder();
+        this.viewBuilder = new CategoriesViewBuilder(model);
     }
 
     @Override

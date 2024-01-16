@@ -11,15 +11,8 @@ import pmc.gui.common.MovieModel;
 public class GenresController implements IViewController {
     private final Builder<Region> viewBuilder;
 
-    private ObservableList<MovieModel> movieModel = FXCollections.observableArrayList();
-
-    public GenresController(ObservableList<GenreModel> model, ObservableList<MovieModel> movieModel) {
-        this.viewBuilder = new GenresViewBuilder(model, movieModel);
-    }
-
-    public void getMoviesFromGenre() {
-        for (MovieModel movieModel : movieModel)
-            System.out.println(movieModel.tmdbIdProperty().get());
+    public GenresController(ObservableList<GenreModel> model) {
+        this.viewBuilder = new GenresViewBuilder(model);
     }
 
     @Override
