@@ -1,8 +1,8 @@
 package pmc.gui.components.info;
 
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -10,20 +10,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.util.Builder;
-import org.kordamp.ikonli.material2.Material2AL;
-import org.kordamp.ikonli.material2.Material2MZ;
-import org.kordamp.ikonli.material2.Material2OutlinedAL;
+import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
-import pmc.gui.components.playback.PlaybackHandler;
-import pmc.gui.components.playback.PlaybackModel;
-import pmc.gui.components.pmc.ViewType;
 import pmc.gui.widgets.ImageWidgets;
 import pmc.gui.widgets.TextWidgets;
 import pmc.gui.widgets.buttons.ButtonWidgets;
+import pmc.gui.widgets.controls.HorizontalPaginator;
 
-
-import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class InfoViewBuilder implements Builder<Region> {
@@ -38,13 +33,23 @@ public class InfoViewBuilder implements Builder<Region> {
 
     @Override
     public Region build() {
+        VBox results = new VBox();
+
+        VBox credit = createCreditPaginator();
+
+        credit.setPadding(new Insets(10, 0, 0, 10));
+
+        results.getChildren().addAll(infoHbox(), createCreditPaginator());
+        return results;
+    }
+
+    private HBox infoHbox() {
         HBox results = new HBox();
         results.setPadding(new Insets(5, 0, 0, PADDING));
 
         ImageView poster = ImageWidgets.boundRoundedImage(model.posterPathProperty(), 220, 340, 10);
 
         results.getChildren().addAll(poster, createInfoBox());
-
         return results;
     }
 
@@ -96,22 +101,38 @@ public class InfoViewBuilder implements Builder<Region> {
     private HBox createMenuButtons() {
         HBox options = new HBox(PADDING);
 
-        Button play = ButtonWidgets.actionButtonStyle("Play", "info-play", e -> buttonPlay());
-
-        play.setOnMouseClicked(e -> {
-            playMovieHandler.accept(model.getMovieModel());
-            e.consume();
-        });
+        Button play = ButtonWidgets.actionButtonStyle("Play", "info-play", e -> playVideo());
 
         options.getChildren().addAll(play);
         return options;
+    }
+
+    private void playVideo() {
+        playMovieHandler.accept(model.getMovieModel());
+    }
+
+    private HorizontalPaginator<TMDBCreditEntity> createCreditPaginator() {
+        return new HorizontalPaginator<>(
+                model.creditsProperty(),
+                credit -> {
+                    VBox vBox = new VBox();
+
+                    String img = credit.getImage() == null ? "https://image.tmdb.org/t/p/original/vgjhFQ3cixrl0VbChoB8V29ozlc.jpg" : credit.getImage();
+                    ImageView imageView = ImageWidgets.scaledRoundedImage(img, 125, 125, 125);
+
+                    Text characterName = TextWidgets.styledText(credit.getCharacterName(), "info-cast-name");
+                    Text name = TextWidgets.styledText(credit.getName(), "info-cast-name");
+
+                    vBox.alignmentProperty().set(Pos.BASELINE_CENTER);
+                    vBox.getChildren().addAll(imageView, characterName, name);
+                    return vBox;
+                },
+                "Cast & Crew"
+        );
     }
 
     private void buttonGenre(TMDBGenreEntity genre) {
         System.out.println(genre.getName());
     }
 
-    private void buttonPlay() {
-       // model.playMovieHandler().
-    }
 }

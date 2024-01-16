@@ -36,5 +36,6 @@ public class InfoController implements IViewController {
         this.model.genresProperty().setAll(detailsModel.genresProperty());
 
         this.model.descriptionProperty().set(detailsModel.descriptionProperty().get());
+        this.model.creditsProperty().setAll(detailsModel.creditProperty());
     }
 }

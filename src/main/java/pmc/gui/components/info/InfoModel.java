@@ -1,9 +1,11 @@
 package pmc.gui.components.info;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 
@@ -19,6 +21,7 @@ public class InfoModel {
     private final StringProperty rated = new SimpleStringProperty("");
 
     private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
+    private final ObservableList<TMDBCreditEntity> credits = FXCollections.observableArrayList();
 
     private final StringProperty description = new SimpleStringProperty("");
 
@@ -62,6 +65,10 @@ public class InfoModel {
 
     public StringProperty descriptionProperty() {
         return description;
+    }
+
+    public ObservableList<TMDBCreditEntity> creditsProperty() {
+        return credits;
     }
 
 }

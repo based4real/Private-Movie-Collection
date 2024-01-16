@@ -160,7 +160,7 @@ public class PMCController implements IViewController {
         model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
         OMDBMovieEntity omdbMovie = movie.getOMDBMovie();
 
-        return new MovieDetailsModel(movie.getTitle(), omdbMovie.getDirector(), omdbMovie.getReleaseYear(), omdbMovie.getRuntime(), omdbMovie.getRated(), movie.getGenres(), movie.getDescription());
+        return new MovieDetailsModel(movie.getTitle(), omdbMovie.getDirector(), omdbMovie.getReleaseYear(), omdbMovie.getRuntime(), omdbMovie.getRated(), movie.getGenres(), movie.getDescription(), movie.getCredits());
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {
