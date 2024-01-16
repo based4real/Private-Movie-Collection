@@ -77,7 +77,7 @@ public class PMCController implements IViewController {
 
         this.tmdbMovieManager = new TMDBMovieManager();
 
-        this.homeController = new HomeController(model.movieModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
+        this.homeController = new HomeController(model.movieModels(), model.genreModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
         this.genresController = new GenresController(model.genreModels(), model.movieModels());
         this.categoriesController = new CategoriesController();
         this.playbackController = new PlaybackController(viewHandler::previousView);

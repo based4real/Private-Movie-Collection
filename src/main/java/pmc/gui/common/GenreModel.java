@@ -39,7 +39,7 @@ public class GenreModel {
        });
     }
 
-    public List<MovieModel> getMovies() {
+    public ObservableList<MovieModel> getMovies() {
         return matchingMovieModel;
     }
 
