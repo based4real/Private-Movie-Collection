@@ -35,10 +35,6 @@ public class InfoViewBuilder implements Builder<Region> {
     public Region build() {
         VBox results = new VBox();
 
-        VBox credit = createCreditPaginator();
-
-        credit.setPadding(new Insets(10, 0, 0, 10));
-
         results.getChildren().addAll(infoHbox(), createCreditPaginator());
         return results;
     }
@@ -112,7 +108,7 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private HorizontalPaginator<TMDBCreditEntity> createCreditPaginator() {
-        return new HorizontalPaginator<>(
+        HorizontalPaginator credits = new HorizontalPaginator<>(
                 model.creditsProperty(),
                 credit -> {
                     VBox vBox = new VBox();
@@ -129,6 +125,9 @@ public class InfoViewBuilder implements Builder<Region> {
                 },
                 "Cast & Crew"
         );
+
+        credits.setPadding(new Insets(10, 0, 0, 10));
+        return credits;
     }
 
     private void buttonGenre(TMDBGenreEntity genre) {

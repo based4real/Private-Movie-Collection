@@ -82,6 +82,8 @@ public class HorizontalPaginator<T> extends VBox {
     private void setupItemListener() {
         items.addListener((ListChangeListener.Change<? extends T> change) -> {
             while (change.next()) {
+                System.out.println("change");
+
                 if (change.wasAdded()) {
                     change.getAddedSubList().forEach(this::addItemToContentBox);
                 }
