@@ -1,20 +1,14 @@
-package pmc.gui.components.Genres;
+package pmc.gui.components.genres;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
-import pmc.be.Genre;
-import pmc.be.Movie;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.GenreModel;
 import javafx.collections.ListChangeListener;
 import pmc.gui.common.MovieModel;
 import pmc.gui.widgets.buttons.ButtonWidgets;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GenresViewBuilder implements Builder<Region> {
 

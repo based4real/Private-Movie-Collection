@@ -1,7 +1,6 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -22,7 +21,7 @@ import pmc.gui.common.GenreModel;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
-import pmc.gui.components.Genres.GenresController;
+import pmc.gui.components.genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
 import pmc.gui.components.dialog.DialogBuilder;
 import pmc.gui.components.dialog.IDialogController;
@@ -39,7 +38,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Hoved Controller for Private Movie Collection (PMC) applikationen.<br>

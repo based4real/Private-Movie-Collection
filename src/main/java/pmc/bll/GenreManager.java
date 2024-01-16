@@ -1,14 +1,13 @@
 package pmc.bll;
 
 import pmc.be.Genre;
-import pmc.be.Movie;
 import pmc.dal.database.common.IDAO;
 import pmc.dal.database.daos.GenreDAO_DB;
-import pmc.dal.database.daos.MovieDAO_DB;
 import pmc.dal.exception.DataAccessException;
 import pmc.utils.MovieException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class GenreManager {
     private final IDAO<Genre> dao;
@@ -21,7 +20,7 @@ public class GenreManager {
         }
     }
 
-    public Genre getGenre(int id) throws MovieException {
+    public Optional<Genre> getGenre(int id) throws MovieException {
         try {
             return dao.get(id);
         } catch (DataAccessException e) {
