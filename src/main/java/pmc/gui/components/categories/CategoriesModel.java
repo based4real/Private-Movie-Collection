@@ -40,7 +40,7 @@ public class CategoriesModel {
             FilteredList<MovieModel> filteredModels = new FilteredList<>(movieModels, movieModel ->
                     movieModel.categoryObservableList().stream().anyMatch(category -> category.getId() == this.idProperty().get())
             );
-            
+
             matchingMovieModel.addAll(filteredModels);
         });
     }
