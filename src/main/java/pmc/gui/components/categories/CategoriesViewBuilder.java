@@ -48,8 +48,7 @@ public class CategoriesViewBuilder implements Builder<Region> {
             for (CategoriesModel categoryModel : model) {
                 categoryModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
                     if (!categoryModel.getMovies().isEmpty()) {
-                        Button btn = ButtonWidgets.actionButtonStyle("name", "genre-category-button", event -> categoryClick(categoryModel));
-                        btn.textProperty().bind(categoryModel.nameProperty());
+                        Button btn = ButtonWidgets.actionButtonStyle(categoryModel.nameProperty().get(), "genre-category-button", event -> categoryClick(categoryModel));
 
                         tilePane.getChildren().add(btn);
                     }
