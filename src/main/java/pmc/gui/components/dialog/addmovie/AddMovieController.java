@@ -38,15 +38,22 @@ public class AddMovieController implements IDialogController<AddMovieData> {
 
         dialog.setResultConverter(dialogBtn -> {
             if (dialogBtn == ButtonType.OK) {
+                // todo: håndter at sige OK når der ikke er noget data.
                 List<Integer> genreIds = model.getGenres().stream()
                         .map(TMDBGenreEntity::getID)
                         .toList();
+
+                // todo: opbevar imdb rating som string i DB? for at undgå N/A
+                float imdbRating = 0.0F;
+                if (!model.imdbRatingProperty().get().equals("N/A")) {
+                    imdbRating = Float.parseFloat(model.imdbRatingProperty().get());
+                }
 
                 return new AddMovieData(
                         Integer.parseInt(model.tmdbRatingProperty().get()),
                         model.imdbIdProperty().get(),
                         model.originalTitleProperty().get(),
-                        Float.valueOf(model.imdbRatingProperty().get()),
+                        imdbRating, // håndter N/A
                         0.0F,
                         model.filePathProperty().get(),
                         model.posterPathProperty().get(),
