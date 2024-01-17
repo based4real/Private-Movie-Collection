@@ -36,9 +36,21 @@ public class CategoryManager {
         }
     }
 
+    public boolean isValidName(String name) {
+        if (name == null || name.trim().isEmpty() || name.trim().matches(" "))
+            return false;
+
+        return true;
+    }
+
+    private Category trimName(Category category) {
+        category.setName(category.getName().trim());
+        return category;
+    }
+
     public Category addCategory(Category category) throws MovieException {
         try {
-            return dao.add(category);
+            return dao.add(trimName(category));
         } catch (DataAccessException e) {
             throw new MovieException("Kunne ikke oprette ny kategori\n" + e.getMessage());
         }
@@ -46,7 +58,7 @@ public class CategoryManager {
 
     public boolean updateCategory(Category orginal, Category updatedData) throws MovieException {
         try {
-            return dao.update(orginal, updatedData);
+            return dao.update(orginal, trimName(updatedData));
         } catch (DataAccessException e) {
             throw new MovieException("Kunne ikke opdatere kategori\n" + e.getMessage());
         }

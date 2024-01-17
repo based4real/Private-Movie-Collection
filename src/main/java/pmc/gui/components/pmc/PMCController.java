@@ -327,7 +327,6 @@ public class PMCController implements IViewController {
         try {
             ObservableList<Category> categories = FXCollections.observableArrayList(categoryManager.getAllCategories());
 
-
             CategoryActions actions = new CategoryActions(
                     categoryName -> addCategory(categoryName, categories),
                     category -> deleteCategory(category, categories),
@@ -346,6 +345,11 @@ public class PMCController implements IViewController {
 
     private void addCategory(String categoryName, ObservableList<Category> categories) {
         try { // todo: skal køre på baggrundstråd
+            if (!categoryManager.isValidName(categoryName)) {
+                ErrorHandler.showErrorDialog("Fejl", "Kategori navn ikke gyldig");
+                return;
+            }
+            
             Category category = categoryManager.addCategory(new Category(categoryName));
             categories.add(category);
             model.categoryModels().add(new CategoriesModel(category));
@@ -374,6 +378,11 @@ public class PMCController implements IViewController {
 
     private void updateCategory(Category category, String newTitle, ObservableList<Category> categories) {
         try { // todo: skal køre på baggrundstråd
+            if (!categoryManager.isValidName(newTitle)) {
+                ErrorHandler.showErrorDialog("Fejl", "Kategori navn ikke gyldig");
+                return;
+            }
+
             boolean isUpdated = categoryManager.updateCategory(category, new Category(newTitle));
             if (!isUpdated) return;
 

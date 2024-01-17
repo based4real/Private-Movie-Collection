@@ -9,6 +9,7 @@ import javafx.util.Builder;
 import javafx.collections.ListChangeListener;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviesData;
+import pmc.gui.utils.StringHandler;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.ScrollPaneWidgets;
 
@@ -18,6 +19,7 @@ public class GenresViewBuilder implements Builder<Region> {
 
     private ObservableList<GenresModel> model;
     private Consumer<MoviesData> viewChangehandler;
+    private TilePane tilePane;
 
     public GenresViewBuilder(ObservableList<GenresModel> model, Consumer<MoviesData> viewChangeHandler) {
         this.model = model;
@@ -32,29 +34,34 @@ public class GenresViewBuilder implements Builder<Region> {
     }
 
     private TilePane addGenres() {
-        TilePane tilePane = new TilePane();
+        tilePane = new TilePane();
         tilePane.setPadding(new Insets(5, 20, 0, 20));
         tilePane.setHgap(15);
         tilePane.setVgap(15);
 
-         /*
-            Lidt dumt tjek.. men vi lytter først om modellen opdaterer sig, hvis ja så loop igennem dem.
-            Derefter tjekker vi om .getMovies() ændrer sig, hvis ja så tjek om den er tom og hvis den ikke
-            er så tilføj til tilepane..
-            Bruges så der ikke vises en tom genre.
-         */
         this.model.addListener((ListChangeListener.Change<? extends GenresModel> change) -> {
-            for (GenresModel genreModel : model) {
-                genreModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
-                    if (!genreModel.getMovies().isEmpty()) {
-                        Button btn = ButtonWidgets.actionButtonStyle(genreModel.nameProperty().get(), "genre-category-button", event -> categoryClick(genreModel));
-
-                        tilePane.getChildren().add(btn);
-                    }
-                });
-            }
+            updateGenreButtons();
         });
+
         return tilePane;
+    }
+
+    private void updateGenreButtons() {
+        tilePane.getChildren().clear();
+
+        for (GenresModel genreModel : model) {
+            genreModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
+                handleGenreMoviesChange(genreModel);
+            });
+        }
+    }
+
+    private void handleGenreMoviesChange(GenresModel genreModel) {
+        if (!genreModel.getMovies().isEmpty()) {
+            Button btn = ButtonWidgets.actionButtonStyle(StringHandler.trimName(genreModel.nameProperty().get(), 15), "genre-category-button", event -> categoryClick(genreModel));
+
+            tilePane.getChildren().add(btn);
+        }
     }
 
 
