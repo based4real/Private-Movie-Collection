@@ -41,12 +41,24 @@ public class CategoriesModel {
     }
 
     private void setMatchFromModels(ObservableList<MovieModel> movieModels) {
-        movieModels.addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
-            FilteredList<MovieModel> filteredModels = new FilteredList<>(movieModels, movieModel ->
-                    movieModel.categoryObservableList().stream().anyMatch(category -> category.getId() == this.idProperty().get())
-            );
+        // håndter sådan at når man sletter en film fra en kategori
+        // at den ikke tilføjer de ikke slettede film på som en eller anden form for duplikering
 
-            matchingMovieModel.addAll(filteredModels);
+        movieModels.addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    change.getAddedSubList().stream()
+                            .filter(movieModel -> movieModel.categoryObservableList().stream()
+                                    .anyMatch(category -> category.getId() == this.idProperty().get()))
+                            .forEach(matchingMovieModel::add);
+                }
+                if (change.wasRemoved()) {
+                    change.getRemoved().stream()
+                            .filter(movieModel -> movieModel.categoryObservableList().stream()
+                                    .anyMatch(category -> category.getId() == this.idProperty().get()))
+                            .forEach(matchingMovieModel::remove);
+                }
+            }
         });
     }
 

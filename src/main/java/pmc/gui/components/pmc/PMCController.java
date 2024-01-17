@@ -3,7 +3,9 @@ package pmc.gui.components.pmc;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
@@ -86,12 +89,19 @@ public class PMCController implements IViewController {
         this.tmdbMovieManager = new TMDBMovieManager();
         this.tmdbGenreManager = new TMDBGenreManager();
 
-        this.homeController = new HomeController(model.movieModels(), model.categoryModels(), this::handleMoviePosterClick, this::handlePlayButtonClick);
+        MoviePosterActions moviePosterActions = new MoviePosterActions(
+                this::handleMoviePosterClick,
+                this::handlePlayButtonClick,
+                this::deleteMovie,
+                this::handlePlayButtonClick
+        );
+
+        this.homeController = new HomeController(model.movieModels(), model.categoryModels(), moviePosterActions);
         this.genresController = new GenresController(model.genreModels(), this::handleGenreCategoryClick);
         this.categoriesController = new CategoriesController(model.categoryModels(), this::handleGenreCategoryClick);
         this.playbackController = new PlaybackController(viewHandler::previousView);
         this.infoController = new InfoController(this::handlePlayButtonClick);
-        this.moviesController = new MoviesController(this::handleMoviePosterClick, this::handlePlayButtonClick);
+        this.moviesController = new MoviesController(model.movieModels(), moviePosterActions);
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
                 homeController.getView(),
@@ -265,6 +275,25 @@ public class PMCController implements IViewController {
                 movie -> downloadAndCopyFiles(addMovieData, movie),
                 error -> ErrorHandler.showErrorDialog("Fejl", "Database fejl: " + error.getMessage())
         );
+    }
+
+    private void deleteMovie(MovieModel movieModel) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Bekræft sletning");
+        alert.setHeaderText("Slet film");
+        alert.setContentText("Er du sikker på du vil slette filmen: " + movieModel.titleProperty().get() + " ?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try { // todo: skal køres på en baggrundstråd
+                movieManager.deleteMovie(movieModel.toEntity());
+                FileManagementService.deleteFile(movieModel.filePathProperty().get());
+                FileManagementService.deleteFile(movieModel.posterPathProperty().get());
+                model.movieModels().remove(movieModel);
+            } catch (MovieException | IOException e) {
+                ErrorHandler.showErrorDialog("Fejl", e.getMessage());
+            }
+        }
     }
 
     private void downloadAndCopyFiles(AddMovieData addMovieData, Movie movie) {

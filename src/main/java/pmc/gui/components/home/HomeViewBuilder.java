@@ -2,10 +2,12 @@ package pmc.gui.components.home;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
 import pmc.gui.common.MovieModel;
+import pmc.gui.common.MoviePosterActions;
 import pmc.gui.components.categories.CategoriesModel;
 import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.MoviePoster;
@@ -18,20 +20,18 @@ import java.util.function.Consumer;
 public class HomeViewBuilder implements Builder<Region> {
     private final ObservableList<MovieModel> model;
     private final ObservableList<CategoriesModel> categoriesModels;
-    private final Consumer<MovieModel> moviePosterClickHandler;
-    private final Consumer<MovieModel> playButtonClickHandler;
+    private final MoviePosterActions moviePosterActions;
+
 
     private Map<CategoriesModel, HorizontalPaginator<MovieModel>> paginatorMap = new HashMap<>();
 
 
     public HomeViewBuilder(ObservableList<MovieModel> model,
                            ObservableList<CategoriesModel> categoriesModels,
-                           Consumer<MovieModel> moviePosterClickHandler,
-                           Consumer<MovieModel> playButtonClickHandler) {
+                           MoviePosterActions moviePosterActions) {
         this.categoriesModels = categoriesModels;
         this.model = model;
-        this.moviePosterClickHandler = moviePosterClickHandler;
-        this.playButtonClickHandler = playButtonClickHandler;
+        this.moviePosterActions = moviePosterActions;
     }
 
     @Override
@@ -88,8 +88,6 @@ public class HomeViewBuilder implements Builder<Region> {
     }
 
     private MoviePoster createMoviePoster(MovieModel model) {
-        return new MoviePoster(model, 150, 224, 10,
-                moviePosterClickHandler,
-                playButtonClickHandler);
+        return new MoviePoster(model, 150, 224, 10, moviePosterActions);
     }
 }

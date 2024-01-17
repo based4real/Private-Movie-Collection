@@ -4,25 +4,26 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
+import pmc.gui.common.MoviePosterActions;
 import pmc.gui.common.MoviesData;
 
 import java.util.function.Consumer;
 
 public class MoviesController implements IViewController {
-    private MoviesModel model;
-    private final Builder<Region> viewBuilder;
+    private final MoviesModel model;
+    private final MoviesViewBuilder viewBuilder;
 
-    private ObservableList<MovieModel> movieModels = FXCollections.observableArrayList();
     private final StringProperty title = new SimpleStringProperty("");
 
-
-    public MoviesController(Consumer<MovieModel> viewChangeHandler, Consumer<MovieModel> playMovieHandler) {
+    public MoviesController(ObservableList<MovieModel> model, MoviePosterActions moviePosterActions) {
         this.model = new MoviesModel();
-        this.viewBuilder = new MoviesViewBuilder(model, viewChangeHandler, playMovieHandler);
+        this.model.setMovies(model);
+        this.viewBuilder = new MoviesViewBuilder(this.model, moviePosterActions);
     }
 
     @Override
@@ -35,9 +36,10 @@ public class MoviesController implements IViewController {
     }
 
     public void setModel(MoviesData movieData) {
-        this.model.moviesProperty().setAll(movieData.movies());
-        this.model.titleProperty().set(movieData.title());
 
+//        this.model.moviesProperty().setAll(movieData.movies());
+        this.model.titleProperty().set(movieData.title());
+        viewBuilder.setMoviesFilter(movieModel -> movieData.movies().contains(movieModel));
     }
 
 }

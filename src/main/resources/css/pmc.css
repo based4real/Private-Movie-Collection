@@ -72,6 +72,21 @@
     -fx-cursor: hand;
 }
 
+.movie-poster-delete-icon,
+.movie-poster-edit-icon {
+    -fx-font-size: 24;
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+}
+
+.movie-poster-delete-icon:hover {
+    -fx-fill: red;
+}
+
+.movie-poster-edit-icon:hover {
+    -fx-fill: -accent-color;
+}
+
 .poster-play-button {
     -fx-font-size: 50;
     -fx-fill: white;

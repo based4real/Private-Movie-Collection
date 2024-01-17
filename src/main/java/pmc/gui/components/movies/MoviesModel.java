@@ -4,8 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
+
+import java.util.function.Predicate;
 
 public class MoviesModel {
 
@@ -20,4 +23,11 @@ public class MoviesModel {
         return movieModels;
     }
 
+    public void setMovies(ObservableList<MovieModel> movieModels) {
+        this.movieModels = movieModels;
+    }
+
+    public FilteredList<MovieModel> getFilteredMovies(Predicate<MovieModel> filter) {
+        return new FilteredList<>(movieModels, filter);
+    }
 }

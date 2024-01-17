@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 public class CategoriesViewBuilder implements Builder<Region> {
     private ObservableList<CategoriesModel> model;
     private Consumer<MoviesData> viewChangehandler;
+    private TilePane tilePane;
 
     public CategoriesViewBuilder(ObservableList<CategoriesModel> model, Consumer<MoviesData> viewChangeHandler) {
         this.model = model;
@@ -33,7 +34,7 @@ public class CategoriesViewBuilder implements Builder<Region> {
     }
 
     private TilePane addCategories() {
-        TilePane tilePane = new TilePane();
+        tilePane = new TilePane();
         tilePane.setPadding(new Insets(5, 20, 0, 20));
         tilePane.setHgap(15);
         tilePane.setVgap(15);
@@ -45,17 +46,43 @@ public class CategoriesViewBuilder implements Builder<Region> {
             Bruges så der ikke vises en tom kategori.
          */
         this.model.addListener((ListChangeListener.Change<? extends CategoriesModel> change) -> {
-            for (CategoriesModel categoryModel : model) {
-                categoryModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
-                    if (!categoryModel.getMovies().isEmpty()) {
-                        Button btn = ButtonWidgets.actionButtonStyle(categoryModel.nameProperty().get(), "genre-category-button", event -> categoryClick(categoryModel));
-
-                        tilePane.getChildren().add(btn);
-                    }
-                });
-            }
+            updateCategoryButtons();
         });
         return tilePane;
+    }
+
+    private void updateCategoryButtons() {
+        tilePane.getChildren().clear();
+
+        for (CategoriesModel categoryModel : model) {
+            categoryModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesChange) -> {
+                handleCategoryMoviesChange(categoryModel);
+            });
+
+            if (!categoryModel.getMovies().isEmpty()) {
+                addButtonForCategory(categoryModel);
+            }
+        }
+    }
+
+    private void handleCategoryMoviesChange(CategoriesModel categoryModel) {
+        boolean hasButton = tilePane.getChildren().stream()
+                .anyMatch(node -> node instanceof Button && ((Button) node).getText().equals(categoryModel.nameProperty().get()));
+
+        if (!categoryModel.getMovies().isEmpty() && !hasButton) {
+            addButtonForCategory(categoryModel);
+        } else if (categoryModel.getMovies().isEmpty() && hasButton) {
+            removeButtonForCategory(categoryModel);
+        }
+    }
+
+    private void addButtonForCategory(CategoriesModel categoryModel) {
+        Button btn = ButtonWidgets.actionButtonStyle(categoryModel.nameProperty().get(), "genre-category-button", event -> categoryClick(categoryModel));
+        tilePane.getChildren().add(btn);
+    }
+
+    private void removeButtonForCategory(CategoriesModel categoryModel) {
+        tilePane.getChildren().removeIf(node -> node instanceof Button && ((Button) node).getText().equals(categoryModel.nameProperty().get()));
     }
 
     private void categoryClick(CategoriesModel categoryModel) {

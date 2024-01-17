@@ -5,6 +5,7 @@ import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
 import pmc.gui.common.MovieModel;
+import pmc.gui.common.MoviePosterActions;
 import pmc.gui.components.categories.CategoriesModel;
 
 import java.util.function.Consumer;
@@ -12,8 +13,10 @@ import java.util.function.Consumer;
 public class HomeController implements IViewController {
     private final Builder<Region> viewBuilder;
 
-    public HomeController(ObservableList<MovieModel> model, ObservableList<CategoriesModel> categoriesModels, Consumer<MovieModel> viewChangeHandler, Consumer<MovieModel> playMovieHandler) {
-        this.viewBuilder = new HomeViewBuilder(model, categoriesModels, viewChangeHandler, playMovieHandler);
+    public HomeController(ObservableList<MovieModel> model,
+                          ObservableList<CategoriesModel> categoriesModels,
+                          MoviePosterActions moviePosterActions) {
+        this.viewBuilder = new HomeViewBuilder(model, categoriesModels, moviePosterActions);
     }
 
     @Override

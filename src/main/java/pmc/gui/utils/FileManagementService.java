@@ -60,6 +60,12 @@ public class FileManagementService {
         return false;
     }
 
+    public static void deleteFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (file.exists() && !file.delete()) {
+            throw new IOException("Kunne ikke slette filen: " + filePath);
+        }
+    }
 
     public static void downloadImageToDir(String imageUrl, String destDir, String imageName, int width, int height) throws IOException {
         try (InputStream imageStream = URI.create(imageUrl).toURL().openStream()) {
