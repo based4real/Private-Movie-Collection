@@ -1,8 +1,11 @@
 package pmc.gui.components.pmc;
 
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 
@@ -14,6 +17,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
 import org.kordamp.ikonli.material2.Material2OutlinedAL;
+import pmc.gui.common.MovieModel;
 import pmc.gui.widgets.*;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.NavigationGroup;
@@ -137,6 +141,19 @@ public class PMCViewBuilder implements Builder<Region> {
         FontIcon menuIcon = IconWidgets.styledIcon(Material2MZ.MENU, "icon");
         Label pmc = LabelWidgets.styledLabel("PMC", "logo");
 
+        TextField searchField = new TextField();
+        searchField.setPromptText("Søg...");
+
+        ContextMenu searchResultsMenu = new ContextMenu();
+        searchField.textProperty().addListener((obs, ov, nv) -> {
+            updateSearchResult(nv, searchResultsMenu, searchField);
+        });
+        searchField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DOWN && !searchResultsMenu.isShowing()) {
+                searchResultsMenu.show(searchField, Side.BOTTOM, 0, 0);
+            }
+        });
+
         Region space = new Region();
         HBox.setHgrow(space, Priority.ALWAYS);
 
@@ -149,10 +166,38 @@ public class PMCViewBuilder implements Builder<Region> {
         progressBar.progressProperty().bind(model.fileProgressProperty());
         progressBar.visibleProperty().bind(model.copyingFileProperty());
 
-        results.getChildren().addAll(menuIcon, pmc, space, progressBar, addCategoryIcon, addMovieIcon);
+        results.getChildren().addAll(menuIcon, pmc, searchField, space, progressBar, addCategoryIcon, addMovieIcon);
         results.setAlignment(Pos.CENTER_LEFT);
 
         return results;
+    }
+
+    private void updateSearchResult(String searchQuery, ContextMenu searchResultsMenu, TextField searchField) {
+        searchResultsMenu.getItems().clear();
+
+        if (searchQuery == null || searchQuery.isEmpty()) {
+            searchResultsMenu.hide();
+            return;
+        }
+
+        FilteredList<MovieModel> filteredList = new FilteredList<>(
+                model.movieModels(),
+                movie -> movie.titleProperty().get().toLowerCase().contains(searchQuery.toLowerCase())
+        );
+
+        for (MovieModel movie : filteredList) {
+            MenuItem item = new MenuItem(movie.titleProperty().get());
+            item.setOnAction(e -> {
+                System.out.println("HEJ DU KLIKKEDE PÅ MIG");
+            });
+            searchResultsMenu.getItems().add(item);
+        }
+
+        if (!searchResultsMenu.getItems().isEmpty()) {
+            searchResultsMenu.show(searchField, Side.BOTTOM, 0, 0);
+        } else {
+            searchResultsMenu.hide();
+        }
     }
 
 
