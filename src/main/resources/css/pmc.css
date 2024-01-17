@@ -17,6 +17,7 @@
     -fx-spacing: 10;
 }
 
+
 .icon {
     -fx-fill: -icon-color;
     -fx-font-size: 20;
@@ -111,6 +112,15 @@
     -fx-font-size: 16;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+}
+
+.hpage-scroll-pane {
+    -fx-background-color: -primary-color;
+    -fx-background: -primary-color;
+}
+
+.hpage-scroll-pane .viewport {
+    -fx-background-color: -primary-color;
 }
 
 /*******************************************************************************
@@ -362,5 +372,38 @@
 .genre-category-button:hover {
     -fx-background-color: -primary-color;
     -fx-border-color: -accent-color;
+    -fx-cursor: hand;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ScrollPane                                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.scroll-pane {
+    -fx-background-color: -primary-color;
+    -fx-background: -primary-color;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: -primary-color;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: derive(-primary-color, +20%);
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
     -fx-cursor: hand;
 }

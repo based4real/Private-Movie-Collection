@@ -3,6 +3,7 @@ package pmc.gui.components.home;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
@@ -59,7 +60,11 @@ public class HomeViewBuilder implements Builder<Region> {
 
     private boolean deletionReminderPredicate(MovieModel movie) {
         LocalDateTime twoYearsAgo = LocalDateTime.now().minusYears(2);
-        return (movie.lastSeenProperty().get().isBefore(twoYearsAgo) || movie.personalRatingProperty().get() < 6.0);
+        LocalDateTime lastSeen = movie.lastSeenProperty().get();
+
+        boolean isLastSeenBeforeTwoYears = (lastSeen != null) && lastSeen.isBefore(twoYearsAgo); // håndter null på ny tilføjet film
+
+        return isLastSeenBeforeTwoYears && movie.personalRatingProperty().get() < 6.0;
     }
 
     private void createRecentlyAdded(VBox vBox) {

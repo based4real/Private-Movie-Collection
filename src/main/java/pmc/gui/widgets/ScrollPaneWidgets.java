@@ -1,5 +1,6 @@
 package pmc.gui.widgets;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
@@ -18,10 +19,8 @@ public class ScrollPaneWidgets {
         scrollPane.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setFitToWidth(true);
         scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE); // Set the max height to USE_COMPUTED_SIZE
-        scrollPane.setStyle("-fx-background-color: transparent");
-
+        scrollPane.getStyleClass().add("scroll-pane");
         value.setStyle("-fx-background-color: #323232");
-
 
         return scrollPane;
     }
