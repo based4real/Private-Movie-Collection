@@ -129,6 +129,28 @@
     -fx-background-color: grey;
 }
 
+.add-repick {
+    -fx-text-fill: -accent-color;
+}
+
+.add-repick:hover {
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.add-imdb-icon {
+    -fx-font-size: 30;
+    -fx-fill: #dba506;
+}
+
+.delete-icon {
+    -fx-cursor: hand;
+}
+
+.delete-icon:hover {
+    -fx-fill: red;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Playback                                                                    *

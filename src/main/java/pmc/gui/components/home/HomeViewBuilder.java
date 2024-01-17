@@ -11,6 +11,8 @@ import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.MoviePoster;
 import pmc.gui.widgets.ScrollPaneWidgets;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class HomeViewBuilder implements Builder<Region> {
@@ -18,6 +20,9 @@ public class HomeViewBuilder implements Builder<Region> {
     private final ObservableList<CategoriesModel> categoriesModels;
     private final Consumer<MovieModel> moviePosterClickHandler;
     private final Consumer<MovieModel> playButtonClickHandler;
+
+    private Map<CategoriesModel, HorizontalPaginator<MovieModel>> paginatorMap = new HashMap<>();
+
 
     public HomeViewBuilder(ObservableList<MovieModel> model,
                            ObservableList<CategoriesModel> categoriesModels,
@@ -51,14 +56,33 @@ public class HomeViewBuilder implements Builder<Region> {
 
     private void createCategories(VBox vBox) {
         categoriesModels.addListener((ListChangeListener.Change<? extends CategoriesModel> change) -> {
-            for (CategoriesModel categoriesModel : categoriesModels) {
-                HorizontalPaginator category = new HorizontalPaginator<>(
-                        categoriesModel.getMovies(),
-                        this::createMoviePoster,
-                        categoriesModel.nameProperty().get()
-                );
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (CategoriesModel addedCategory : change.getAddedSubList()) {
+                        HorizontalPaginator<MovieModel> category = new HorizontalPaginator<>(
+                                addedCategory.getMovies(),
+                                this::createMoviePoster,
+                                addedCategory.nameProperty().get()
+                        );
 
-                vBox.getChildren().add(category);
+                        addedCategory.nameProperty().addListener((obs, ov, nv) -> {
+                            category.setTitle(nv); // bruges til at opdatere titel på
+                        });
+
+                        vBox.getChildren().add(category);
+                        paginatorMap.put(addedCategory, category);
+                    }
+                }
+
+                if (change.wasRemoved()) {
+                    for (CategoriesModel removedCategory : change.getRemoved()) {
+                        HorizontalPaginator<MovieModel> paginatorToRemove = paginatorMap.get(removedCategory);
+                        if (paginatorToRemove != null) {
+                            vBox.getChildren().remove(paginatorToRemove);
+                            paginatorMap.remove(removedCategory);
+                        }
+                    }
+                }
             }
         });
     }

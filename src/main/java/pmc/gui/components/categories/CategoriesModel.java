@@ -23,6 +23,11 @@ public class CategoriesModel {
 
     public CategoriesModel() {}
 
+    public CategoriesModel(Category category) {
+        this.id.set(category.getId());
+        this.name.set(category.getName());
+    }
+
     public CategoriesModel(int id, String name, ObservableList<MovieModel> movieModels) {
         this.id.set(id);
         this.name.set(name);

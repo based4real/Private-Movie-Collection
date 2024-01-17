@@ -1,6 +1,8 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -17,6 +19,8 @@ import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.bll.*;
 import pmc.gui.common.*;
 import pmc.gui.components.categories.CategoriesModel;
+import pmc.gui.components.dialog.addcategory.AddCategoryData;
+import pmc.gui.components.dialog.addcategory.CategoryActions;
 import pmc.gui.components.dialog.addmovie.AddMovieData;
 import pmc.gui.components.genres.GenresModel;
 import pmc.gui.components.genres.GenresController;
@@ -287,7 +291,73 @@ public class PMCController implements IViewController {
     }
 
     private void showAddCategoryDialog() {
-        showDialog(new AddCategoryController(), "Tilføj kategori");
+        try {
+            ObservableList<Category> categories = FXCollections.observableArrayList(categoryManager.getAllCategories());
+
+
+            CategoryActions actions = new CategoryActions(
+                    categoryName -> addCategory(categoryName, categories),
+                    category -> deleteCategory(category, categories),
+                    (category, newTitle) -> updateCategory(category, newTitle, categories)
+            );
+
+            AddCategoryController controller = new AddCategoryController(actions, categories);
+
+            Dialog<AddCategoryData> dialog = showDialog(controller, "Tilføj kategori");
+            dialog.showAndWait();
+            model.isDialogOpenProperty().set(false);
+        }  catch (MovieException e) {
+            ErrorHandler.showErrorDialog("Fejl", e.getMessage());
+        }
+    }
+
+    private void addCategory(String categoryName, ObservableList<Category> categories) {
+        try { // todo: skal køre på baggrundstråd
+            Category category = categoryManager.addCategory(new Category(categoryName));
+            categories.add(category);
+            model.categoryModels().add(new CategoriesModel(category));
+        } catch (MovieException e) {
+            ErrorHandler.showErrorDialog("Fejl", e.getMessage());
+        }
+    }
+
+    private void deleteCategory(Category category, ObservableList<Category> categories) {
+        try { // todo: skal køre på baggrundstråd
+            categoryManager.deleteCategory(category);
+            categories.remove(category);
+            CategoriesModel toRemove = null;
+            for (CategoriesModel categoriesModel : model.categoryModels()) {
+                if (categoriesModel.idProperty().get() == category.getId()) {
+                    toRemove = categoriesModel;
+                    break;
+                }
+            }
+
+            if (toRemove != null) model.categoryModels().remove(toRemove);
+        } catch (MovieException e) {
+            ErrorHandler.showErrorDialog("Fejl", e.getMessage());
+        }
+    }
+
+    private void updateCategory(Category category, String newTitle, ObservableList<Category> categories) {
+        try { // todo: skal køre på baggrundstråd
+            boolean isUpdated = categoryManager.updateCategory(category, new Category(newTitle));
+            if (!isUpdated) return;
+
+            for (Category cat : categories) {
+                if (cat.getId() == category.getId()) {
+                    cat.setName(newTitle);
+                }
+            }
+
+            for (CategoriesModel cat : model.categoryModels()) {
+                if (cat.idProperty().get() == category.getId()) {
+                    cat.nameProperty().set(newTitle);
+                }
+            }
+        } catch (MovieException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private <T> Dialog<T> showDialog(IDialogController<T> controller, String title) {

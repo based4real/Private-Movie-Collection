@@ -30,6 +30,7 @@ public class HorizontalPaginator<T> extends VBox {
     private final double itemSpacing = 20;
 
     private double itemWidth = 0;
+    private Label titleLabel;
 
     public HorizontalPaginator(ObservableList<T> items, Function<T, Node> itemRenderer, String title) {
         this.items = items;
@@ -37,13 +38,19 @@ public class HorizontalPaginator<T> extends VBox {
 
         this.contentBox = createContentBox();
 
+
         ScrollPane scrollPane = createScrollPane(contentBox);
         HBox navigationBox = createNavigationBox(scrollPane);
-        HBox titleAndNavigation = createTitleAndNavigationBox(LabelWidgets.styledLabel(title, "hpage-title"), navigationBox);
+        titleLabel = LabelWidgets.styledLabel(title, "hpage-title");
+        HBox titleAndNavigation = createTitleAndNavigationBox(titleLabel, navigationBox);
 
         this.getChildren().addAll(titleAndNavigation, scrollPane);
 
         setupItemListener();
+    }
+
+    public void setTitle(String title) {
+        titleLabel.setText(title);
     }
 
     private HBox createContentBox() {

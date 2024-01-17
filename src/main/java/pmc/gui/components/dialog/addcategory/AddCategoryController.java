@@ -1,16 +1,23 @@
 package pmc.gui.components.dialog.addcategory;
 
+import javafx.collections.ObservableList;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
+import pmc.be.Category;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.dialog.IDialogController;
 
-public class AddCategoryController implements IDialogController<MovieModel> {
+public class AddCategoryController implements IDialogController<AddCategoryData> {
+    private final AddCategoryModel model;
     private final AddCategoryViewBuilder viewBuilder;
-    private Dialog<MovieModel> dialog;
+    private Dialog<AddCategoryData> dialog;
 
-    public AddCategoryController() {
-        this.viewBuilder = new AddCategoryViewBuilder();
+    public AddCategoryController(CategoryActions actions,
+                                 ObservableList<Category> categories) {
+        this.model = new AddCategoryModel();
+        model.setCategories(categories);
+        this.viewBuilder = new AddCategoryViewBuilder(model, actions);
     }
 
     @Override
@@ -19,9 +26,14 @@ public class AddCategoryController implements IDialogController<MovieModel> {
     }
 
     @Override
-    public void initializeDialog(Dialog<MovieModel> dialog) {
+    public void initializeDialog(Dialog<AddCategoryData> dialog) {
         this.dialog = dialog;
 
-        dialog.setResultConverter(btn -> new MovieModel());
+        dialog.setResultConverter(dialogBtn -> {
+            if (dialogBtn == ButtonType.OK) {
+                return new AddCategoryData(model.nameProperty().get());
+            }
+            return null;
+        });
     }
 }
