@@ -1,8 +1,12 @@
 package pmc.gui.components.info;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableStringValue;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -15,6 +19,7 @@ import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 import pmc.gui.widgets.ImageWidgets;
+import pmc.gui.widgets.LabelWidgets;
 import pmc.gui.widgets.TextWidgets;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.HorizontalPaginator;
@@ -55,8 +60,7 @@ public class InfoViewBuilder implements Builder<Region> {
         VBox results = new VBox(0);
         results.setPadding(new Insets(0, PADDING, 0, PADDING * 2));
 
-        Text title = TextWidgets.styledText(model.titleProperty(), "info-header");
-        title.setWrappingWidth(800);
+        Label title = LabelWidgets.styledLabel(model.titleProperty(), "info-header");
 
         Text director = TextWidgets.styledText(model.directorProperty(), "info-director");
 
@@ -85,8 +89,9 @@ public class InfoViewBuilder implements Builder<Region> {
             }
         });
 
-        Text description = TextWidgets.styledText(model.descriptionProperty(), "info-description");
-        description.setWrappingWidth(450);
+        Label description = LabelWidgets.styledLabel(model.descriptionProperty(), "info-description");
+        description.setWrapText(true);
+        description.setMaxWidth(450);
 
         // Mellemrum mellem knapper og beskrivelse.
         VBox.setMargin(description, new Insets(15, 0, 0, 0));
