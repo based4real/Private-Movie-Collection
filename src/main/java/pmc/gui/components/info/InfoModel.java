@@ -1,14 +1,19 @@
 package pmc.gui.components.info;
 
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.gui.common.MovieModel;
+import pmc.gui.components.genres.GenresModel;
 
 import java.util.function.Consumer;
 import java.util.logging.Filter;
@@ -16,6 +21,7 @@ import java.util.logging.Filter;
 public class InfoModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
 
+    private final IntegerProperty tmdbId = new SimpleIntegerProperty();
     private final StringProperty title = new SimpleStringProperty("");
     private final StringProperty director = new SimpleStringProperty("");
     private final StringProperty release = new SimpleStringProperty("");
@@ -24,10 +30,17 @@ public class InfoModel {
 
     private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
     private final ObservableList<TMDBCreditEntity> credits = FXCollections.observableArrayList();
+    private final ObservableList<TMDBVideoEntity> videos = FXCollections.observableArrayList();
+
+    private ObservableList<GenresModel> genresModels = FXCollections.observableArrayList();
 
     private final StringProperty description = new SimpleStringProperty("");
 
     private MovieModel movieModel;
+
+    public InfoModel(ObservableList<GenresModel> genresModels) {
+        this.genresModels = genresModels;
+    }
 
     public void setMovieModel(MovieModel movieModel) {
         this.movieModel = movieModel;
@@ -35,6 +48,10 @@ public class InfoModel {
 
     public MovieModel getMovieModel() {
         return movieModel;
+    }
+
+    public IntegerProperty tmdbIdProperty() {
+        return tmdbId;
     }
 
     public StringProperty posterPathProperty() {
@@ -73,10 +90,36 @@ public class InfoModel {
         return credits;
     }
 
+    public ObservableList<GenresModel> genresModelsProperty() {
+        return genresModels;
+    }
+
+    public ObservableList<TMDBVideoEntity> videosProperty() {
+        return videos;
+    }
+
+    public FilteredList<GenresModel> getGenreModels() {
+        FilteredList<GenresModel> filteredList = new FilteredList<>(genresModels);
+
+        filteredList.setPredicate(genreModel ->
+                genres.stream().anyMatch(tmdbGenreEntity ->
+                        genreModel.idProperty().get() == tmdbGenreEntity.getID())
+        );
+
+        return filteredList;
+    }
+
+    public FilteredList<TMDBCreditEntity> getDirector() {
+        return new FilteredList<>(
+                credits,
+                credit -> credit.getDepartment().equals("Directing") // <= Ville give en for meget da den starter ved 0
+        );
+    }
+
     public FilteredList<TMDBCreditEntity> creditsPropertyMaxResults(int max) {
         return new FilteredList<>(
                 credits,
-                credit -> credit.getOrderID() < max // <= Ville give en for meget da den starter ved 0
+                credit -> credit.getOrderID() != -1 && credit.getOrderID() < max // <= Ville give en for meget da den starter ved 0
         );
     }
 

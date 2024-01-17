@@ -10,6 +10,8 @@ public class TMDBCreditEntity {
     private String characterName;
     private int orderID;
 
+    public TMDBCreditEntity() {}
+
     public TMDBCreditEntity(int gender, int id, String knownForDepartment,
                             String name, String originalName, String profileImage,
                             String characterName, int orderID) {

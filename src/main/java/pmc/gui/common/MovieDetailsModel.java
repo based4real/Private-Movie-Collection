@@ -1,5 +1,7 @@
 package pmc.gui.common;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -8,12 +10,14 @@ import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public class MovieDetailsModel {
+    private final IntegerProperty tmdbid = new SimpleIntegerProperty();
     private final StringProperty imdbId = new SimpleStringProperty();
     private final StringProperty title = new SimpleStringProperty();
     private final StringProperty originalTitle = new SimpleStringProperty();
@@ -28,6 +32,7 @@ public class MovieDetailsModel {
 
     private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
     private final ObservableList<TMDBCreditEntity> credits = FXCollections.observableArrayList();
+    private final ObservableList<TMDBVideoEntity> videos = FXCollections.observableArrayList();
 
     public MovieDetailsModel() {}
 
@@ -36,6 +41,7 @@ public class MovieDetailsModel {
         if (tmdbMovie == null) return;
         if (omdbMovie == null) return;
 
+        this.tmdbid.set(tmdbMovie.getID());
         this.title.set(tmdbMovie.getTitle());
         this.originalTitle.set(tmdbMovie.getOriginalTitle());
         this.tmdbRating.set(String.valueOf(tmdbMovie.getID()));
@@ -43,6 +49,7 @@ public class MovieDetailsModel {
         this.description.set(tmdbMovie.getDescription());
         this.genres.setAll(tmdbMovie.getGenres());
         this.credits.setAll(tmdbMovie.getCredits());
+        this.videos.setAll(tmdbMovie.getVideos());
 
         // omdbMovie
         this.imdbId.set(omdbMovie.getImdbID());
@@ -81,6 +88,10 @@ public class MovieDetailsModel {
         this.description.set(description);
         this.genres.setAll(genres);
         this.credits.setAll(credits);
+    }
+
+    public IntegerProperty tmdbIdProperty() {
+        return tmdbid;
     }
 
     public StringProperty imdbIdProperty() {
@@ -134,4 +145,9 @@ public class MovieDetailsModel {
     public ObservableList<TMDBCreditEntity> creditProperty() {
         return credits;
     }
+
+    public ObservableList<TMDBVideoEntity> videoProperty() {
+        return videos;
+    }
+
 }

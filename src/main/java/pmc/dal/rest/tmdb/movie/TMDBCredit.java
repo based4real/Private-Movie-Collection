@@ -50,20 +50,33 @@ public class TMDBCredit extends TMDBConnector {
 
             URI uri = new URI(super.getAPI() + "/movie/" + encQuery + "/credits?" + lang.get());
             JSONArray results = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "cast");
+            JSONArray resultsCrew = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "crew");
 
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject creditJson = results.getJSONObject(i);
-                TMDBCreditEntity credit = parseJson(creditJson);
-                credits.add(credit);
-            }
+            addResultsToArray(results);
+
+            addResultsToArray(resultsCrew);
 
         } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
             e.printStackTrace();
         }
     }
 
+    private void addResultsToArray(JSONArray arr) throws JSONException {
+        try {
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject creditJson = arr.getJSONObject(i);
+                TMDBCreditEntity credit = parseJson(creditJson);
+                credits.add(credit);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private TMDBCreditEntity parseJson(JSONObject json) throws JSONException, IOException {
         String img = json.getString("profile_path");
+        String character = json.has("character") ? json.getString("character") : "Crew";
+        int order = json.has("order") ? json.getInt("order") : -1;
 
         return new TMDBCreditEntity(
                 json.getInt("gender"),
@@ -72,8 +85,8 @@ public class TMDBCredit extends TMDBConnector {
                 json.getString("name"),
                 json.getString("original_name"),
                 !img.equals("null") ? getImageUrl() + img : null,
-                json.getString("character"),
-                json.getInt("order")
+                character,
+                order
         );
     }
 

@@ -208,24 +208,22 @@
     -fx-font-size: 12;
 }
 
+.info-directored {
+    -fx-fill: grey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: grey;
+    -fx-font-size: 12;
+}
+
 .info-others {
-    -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
-    -fx-text-fill: rgb(170, 170, 170);
+    -fx-fill: lightgrey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: lightgrey;
     -fx-font-size: 14;
 }
 
 .info-genre {
-    -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
-    -fx-text-fill: rgb(170, 170, 170);
+    -fx-fill: lightgrey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-text-fill: lightgrey;
     -fx-font-size: 14;
-}
-
-.info-genre:hover {
-    -fx-fill: rgb(170, 170, 170); /* For Text in JavaFX you have to use -fx-fill... */
-    -fx-text-fill: rgb(170, 170, 170);
-    -fx-font-size: 14;
-    -fx-underline: true;
-    -fx-cursor: hand;
 }
 
 .info-description {
@@ -239,6 +237,7 @@
     -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-font-size: 16;
+    -fx-pref-width: 100;
     -fx-cursor: hand;
 }
 
@@ -261,6 +260,85 @@
 .info-cast-name {
     -fx-fill: rgb(175, 175, 175);
     -fx-font-size: 14;
+}
+
+.info-name {
+    -fx-fill: rgb(225, 225, 225);
+    -fx-font-size: 14;
+}
+
+.info-name:hover, .info-header:hover, .info-director:hover, .info-genre:hover {
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-fill: white;
+}
+
+.info-circle {
+    -fx-fill: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+}
+
+.info-circle-txt {
+    -fx-font-size: 28;
+    -fx-font-weight: bold;
+    -fx-fill: rgba(255, 255, 255, 0.5);
+}
+
+.info-tooltip {
+    -fx-fill: rgb(225, 225, 225);
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+
+.info-youtube-icon {
+    -fx-font-size: 60;
+    -fx-fill: #FF0000;
+}
+
+.info-youtube-title {
+    -fx-font-size: 12;
+    -fx-text-fill: rgb(175, 175, 175);
+    -fx-font-weight: bold;
+}
+
+.info-youtube-type {
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.info-external-links {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 15, 0, 0, 0);
+    -fx-padding: 20, 0, 20, 0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-background-color: -sidebar-color;
+    -fx-border-color: -sidebar-color;
+}
+
+.info-external-links:hover {
+    -fx-padding: 20, 0, 20, 0;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-color: -accent-color;
+    -fx-cursor: hand;
+}
+
+.info-imdb-rating {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.info-rating-star {
+    -fx-font-size: 15;
+    -fx-fill: grey
+}
+
+.info-rating-star-hover {
+    -fx-font-size: 15;
+    -fx-fill: lightgrey;
+    -fx-cursor: hand;
 }
 
 

@@ -7,6 +7,8 @@ import pmc.be.Category;
 import pmc.be.Genre;
 import pmc.be.Movie;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
+import pmc.be.rest.tmdb.TMDBMovieEntity;
+import pmc.be.rest.tmdb.TMDBVideoEntity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class MovieModel {
 
     private final ObservableList<Genre> genres = FXCollections.observableArrayList();
     private final ObservableList<Category> categories = FXCollections.observableArrayList();
+    private final ObservableList<TMDBVideoEntity> videos = FXCollections.observableArrayList();
 
     public MovieModel() {}
 
@@ -119,4 +122,7 @@ public class MovieModel {
         return genres;
     }
     public ObservableList<Category> categoryObservableList() { return categories; }
+
+    public ObservableList<TMDBVideoEntity> tmdbVideosObservableList() { return videos; }
+
 }

@@ -99,7 +99,7 @@ public class PMCController implements IViewController {
         this.genresController = new GenresController(model.genreModels(), this::handleGenreCategoryClick);
         this.categoriesController = new CategoriesController(model.categoryModels(), this::handleGenreCategoryClick);
         this.playbackController = new PlaybackController(viewHandler::previousView);
-        this.infoController = new InfoController(this::handlePlayButtonClick);
+        this.infoController = new InfoController(model.genreModels(), this::handlePlayButtonClick, this::handleGenreCategoryClick);
         this.moviesController = new MoviesController(model.movieModels(), moviePosterActions);
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
@@ -208,11 +208,16 @@ public class PMCController implements IViewController {
         infoController.setModel(movieModel);
 
         performBackgroundTask(
-                () -> tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get()),
-                tmdbMovie -> Platform.runLater(() -> infoController.setDetailsModel(convertToMovieDetailsModel(tmdbMovie))),
+                () -> {
+                    TMDBMovieEntity tmdbMovie = tmdbMovieManager.getTMDBMovie(movieModel.tmdbIdProperty().get());
+                    OMDBMovieEntity omdbMovie = tmdbMovie.getOMDBMovie();
+                    return new MovieDetailsModel(tmdbMovie, omdbMovie);
+                },
+                detailsModel -> Platform.runLater(() -> infoController.setDetailsModel(detailsModel)),
                 error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem med at hente data: " + error.getMessage())
         );
     }
+
 
     private void handlePlayButtonClick(MovieModel movieModel) {
         playbackController.setModel(movieModel);

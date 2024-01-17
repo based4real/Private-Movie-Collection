@@ -39,13 +39,13 @@ public class HorizontalPaginator<T> extends VBox {
 
         this.contentBox = createContentBox();
 
-
         ScrollPane scrollPane = createScrollPane(contentBox);
         HBox navigationBox = createNavigationBox(scrollPane);
         titleLabel = LabelWidgets.styledLabel(title, "hpage-title");
         HBox titleAndNavigation = createTitleAndNavigationBox(titleLabel, navigationBox);
 
         this.visibleProperty().bind(Bindings.isNotEmpty(items));
+        this.managedProperty().bind(Bindings.isNotEmpty(items));
 
         this.getChildren().addAll(titleAndNavigation, scrollPane);
 

@@ -9,7 +9,7 @@ package pmc.utils;
  */
 public class PMCException extends Exception {
     /**
-     * Konsturerer en ny MovieException med den angivne besked.
+     * Konsturerer en ny PMCException med den angivne besked.
      *
      * @param message den besked, der forklarer årsagen til at exceptionen opstod.
      */
