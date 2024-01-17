@@ -2,7 +2,6 @@ package pmc.gui.components.home;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
@@ -15,7 +14,6 @@ import pmc.gui.widgets.ScrollPaneWidgets;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class HomeViewBuilder implements Builder<Region> {
     private final ObservableList<MovieModel> model;
@@ -73,7 +71,6 @@ public class HomeViewBuilder implements Builder<Region> {
                         paginatorMap.put(addedCategory, category);
                     }
                 }
-
                 if (change.wasRemoved()) {
                     for (CategoriesModel removedCategory : change.getRemoved()) {
                         HorizontalPaginator<MovieModel> paginatorToRemove = paginatorMap.get(removedCategory);

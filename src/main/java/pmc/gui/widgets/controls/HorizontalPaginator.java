@@ -1,5 +1,6 @@
 package pmc.gui.widgets.controls;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -43,6 +44,8 @@ public class HorizontalPaginator<T> extends VBox {
         HBox navigationBox = createNavigationBox(scrollPane);
         titleLabel = LabelWidgets.styledLabel(title, "hpage-title");
         HBox titleAndNavigation = createTitleAndNavigationBox(titleLabel, navigationBox);
+
+        this.visibleProperty().bind(Bindings.isNotEmpty(items));
 
         this.getChildren().addAll(titleAndNavigation, scrollPane);
 

@@ -36,9 +36,9 @@ public class MoviesController implements IViewController {
     }
 
     public void setModel(MoviesData movieData) {
-
-//        this.model.moviesProperty().setAll(movieData.movies());
         this.model.titleProperty().set(movieData.title());
+
+        // todo: må faktisk ikke gøres - at kalde viewBuilder herfra, men lige nu er det løsningen
         viewBuilder.setMoviesFilter(movieModel -> movieData.movies().contains(movieModel));
     }
 

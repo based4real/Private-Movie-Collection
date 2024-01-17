@@ -93,7 +93,7 @@ public class PMCController implements IViewController {
                 this::handleMoviePosterClick,
                 this::handlePlayButtonClick,
                 this::deleteMovie,
-                this::handlePlayButtonClick
+                this::updateMovie
         );
 
         this.homeController = new HomeController(model.movieModels(), model.categoryModels(), moviePosterActions);
@@ -294,6 +294,10 @@ public class PMCController implements IViewController {
                 ErrorHandler.showErrorDialog("Fejl", e.getMessage());
             }
         }
+    }
+
+    private void updateMovie(MovieModel movieModel) {
+        System.out.println("ret ret ret! fikser når jeg står op");
     }
 
     private void downloadAndCopyFiles(AddMovieData addMovieData, Movie movie) {
