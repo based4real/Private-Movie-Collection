@@ -92,6 +92,7 @@ public class InfoViewBuilder implements Builder<Region> {
         Label description = LabelWidgets.styledLabel(model.descriptionProperty(), "info-description");
         description.setWrapText(true);
         description.setMaxWidth(450);
+        description.setMaxHeight(115);
 
         // Mellemrum mellem knapper og beskrivelse.
         VBox.setMargin(description, new Insets(15, 0, 0, 0));

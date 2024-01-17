@@ -72,13 +72,15 @@ public class PMCViewBuilder implements Builder<Region> {
         main.getStyleClass().add("main");
         Region top = createTop();
         Region left = createLeft();
+        Region center = createCenter();
 
-        BorderPane.setMargin(top, new Insets(0, 5, 5, 5));
-        BorderPane.setMargin(left, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(top, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(left, new Insets(0, 5, 5, 5));
+        BorderPane.setMargin(center, new Insets(0, 5, 5, 0));
 
         main.setTop(top);
         main.setLeft(left);
-        main.setCenter(createCenter());
+        main.setCenter(center);
 
         // Eksmepl på at få backdrop på baggrund, skal dog laves ordentligt hvis det er
 /*        model.backdropPathProperty().addListener((obs, ov, nv) -> {
