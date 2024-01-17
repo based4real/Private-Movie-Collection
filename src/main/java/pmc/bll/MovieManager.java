@@ -7,7 +7,7 @@ import pmc.dal.database.common.IDAO;
 import pmc.dal.database.daos.*;
 import pmc.dal.exception.DataAccessException;
 import pmc.gui.components.dialog.addmovie.AddMovieData;
-import pmc.utils.MovieException;
+import pmc.utils.PMCException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,26 +19,26 @@ public class MovieManager {
     private final IMovieGenreDAO movieGenreDAO;
     private final ICatMovieDAO catMovieDAO;
 
-    public MovieManager() throws MovieException {
+    public MovieManager() throws PMCException {
         try {
             this.genreManager = new GenreManager();
             this.dao = new MovieDAO_DB();
             this.movieGenreDAO = new MovieGenreDAO_DB();
             this.catMovieDAO = new CatMovieDAO_DB();
         } catch (DataAccessException e) {
-            throw new MovieException(e.getMessage());
+            throw new PMCException(e.getMessage());
         }
     }
 
-    public Optional<Movie> getMovie(int id) throws MovieException {
+    public Optional<Movie> getMovie(int id) throws PMCException {
         try {
             return dao.get(id);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente filmen.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente filmen.\n" + e.getMessage());
         }
     }
 
-    public List<Movie> getAllMovies() throws MovieException {
+    public List<Movie> getAllMovies() throws PMCException {
         try {
             List<Movie> movies = dao.getAll();
             for (Movie movie : movies) {
@@ -49,19 +49,19 @@ public class MovieManager {
             }
             return movies;
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente filmene.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente filmene.\n" + e.getMessage());
         }
     }
 
-    public Movie addMovie(Movie movie) throws MovieException {
+    public Movie addMovie(Movie movie) throws PMCException {
         try {
             return dao.add(movie);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke tilføje filmen.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke tilføje filmen.\n" + e.getMessage());
         }
     }
 
-    public Movie addMovieWithGenres(AddMovieData data) throws MovieException {
+    public Movie addMovieWithGenres(AddMovieData data) throws PMCException {
         try {
             // todo: skal nok ikke have AddMovieData her, men konverter den til BE oppe i PMCController i stedet
             Movie movie = new Movie(
@@ -82,23 +82,23 @@ public class MovieManager {
 
             return addedMovie;
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke tilføje filmen.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke tilføje filmen.\n" + e.getMessage());
         }
     }
 
-    public boolean updateMovie(Movie original, Movie updatedData) throws MovieException {
+    public boolean updateMovie(Movie original, Movie updatedData) throws PMCException {
         try {
             return dao.update(original, updatedData);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke opdatere filmen.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke opdatere filmen.\n" + e.getMessage());
         }
     }
 
-    public boolean deleteMovie(Movie movie) throws MovieException {
+    public boolean deleteMovie(Movie movie) throws PMCException {
         try {
             return dao.delete(movie);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke slette filmen.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke slette filmen.\n" + e.getMessage());
         }
     }
 
@@ -106,27 +106,27 @@ public class MovieManager {
         return movieGenreDAO.getGenresForMovie(movie);
     }
 
-    public List<Movie> getAllMoviesForGenre(Genre genre) throws MovieException {
+    public List<Movie> getAllMoviesForGenre(Genre genre) throws PMCException {
         try {
             return movieGenreDAO.getMoviesForGenre(genre);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente film fra genre.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente film fra genre.\n" + e.getMessage());
         }
     }
 
-    public List<Category> getAllCategoriesForMovie(Movie movie) throws MovieException {
+    public List<Category> getAllCategoriesForMovie(Movie movie) throws PMCException {
         try {
             return catMovieDAO.getCategoriesForMovie(movie);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente alle kategorier fra film\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente alle kategorier fra film\n" + e.getMessage());
         }
     }
 
-    public List<Movie> getMoviesForCategory(Category category) throws MovieException {
+    public List<Movie> getMoviesForCategory(Category category) throws PMCException {
         try {
             return catMovieDAO.getMoviesForCategory(category);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente alle kategorier fra film\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente alle kategorier fra film\n" + e.getMessage());
         }
     }
 }

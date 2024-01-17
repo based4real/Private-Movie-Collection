@@ -5,11 +5,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 
 import java.util.function.Consumer;
+import java.util.logging.Filter;
 
 public class InfoModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
@@ -69,6 +71,13 @@ public class InfoModel {
 
     public ObservableList<TMDBCreditEntity> creditsProperty() {
         return credits;
+    }
+
+    public FilteredList<TMDBCreditEntity> creditsPropertyMaxResults(int max) {
+        return new FilteredList<>(
+                credits,
+                credit -> credit.getOrderID() < max // <= Ville give en for meget da den starter ved 0
+        );
     }
 
 }

@@ -4,7 +4,7 @@ import pmc.be.Genre;
 import pmc.dal.database.common.IDAO;
 import pmc.dal.database.daos.GenreDAO_DB;
 import pmc.dal.exception.DataAccessException;
-import pmc.utils.MovieException;
+import pmc.utils.PMCException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,39 +13,39 @@ import java.util.Optional;
 public class GenreManager {
     private final IDAO<Genre> dao;
 
-    public GenreManager() throws MovieException {
+    public GenreManager() throws PMCException {
         try {
             this.dao = new GenreDAO_DB();
         } catch (DataAccessException e) {
-            throw new MovieException(e.getMessage());
+            throw new PMCException(e.getMessage());
         }
     }
 
-    public Optional<Genre> getGenre(int id) throws MovieException {
+    public Optional<Genre> getGenre(int id) throws PMCException {
         try {
             return dao.get(id);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente genre fra id\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente genre fra id\n" + e.getMessage());
         }
     }
 
-    public List<Genre> getAllGenres() throws MovieException {
+    public List<Genre> getAllGenres() throws PMCException {
         try {
             return dao.getAll();
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke hente alle genre.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke hente alle genre.\n" + e.getMessage());
         }
     }
 
-    public Genre addGenre(Genre genre) throws MovieException {
+    public Genre addGenre(Genre genre) throws PMCException {
         try {
             return dao.add(genre);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke oprette genre.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke oprette genre.\n" + e.getMessage());
         }
     }
 
-    public List<Genre> addGenresById(List<Integer> genreIds) throws MovieException {
+    public List<Genre> addGenresById(List<Integer> genreIds) throws PMCException {
         List<Genre> genres = new ArrayList<>();
         for (Integer id : genreIds) {
             Optional<Genre> genre = getGenre(id);
@@ -60,19 +60,19 @@ public class GenreManager {
         return genres;
     }
 
-    public boolean updateGenre(Genre original, Genre updatedData) throws MovieException {
+    public boolean updateGenre(Genre original, Genre updatedData) throws PMCException {
         try {
             return dao.update(original, updatedData);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke opdatere genre.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke opdatere genre.\n" + e.getMessage());
         }
     }
 
-    public boolean deleteGenre(Genre genre) throws MovieException {
+    public boolean deleteGenre(Genre genre) throws PMCException {
         try {
             return dao.delete(genre);
         } catch (DataAccessException e) {
-            throw new MovieException("Kunne ikke slette genre.\n" + e.getMessage());
+            throw new PMCException("Kunne ikke slette genre.\n" + e.getMessage());
         }
     }
 }

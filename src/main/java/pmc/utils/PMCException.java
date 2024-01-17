@@ -7,13 +7,13 @@ package pmc.utils;
  * Hvis en metode kaster denne exception indikerer det, at metoden kan støde på en situation,
  * hvor der opstås fejl i forbindelse med Movie entiteter.
  */
-public class MovieException extends Exception {
+public class PMCException extends Exception {
     /**
      * Konsturerer en ny MovieException med den angivne besked.
      *
      * @param message den besked, der forklarer årsagen til at exceptionen opstod.
      */
-    public MovieException(String message) {
+    public PMCException(String message) {
         super(message);
     }
 }

@@ -117,19 +117,19 @@ public class InfoViewBuilder implements Builder<Region> {
 
     private HorizontalPaginator<TMDBCreditEntity> createCreditPaginator() {
         HorizontalPaginator credits = new HorizontalPaginator<>(
-                model.creditsProperty(),
+                model.creditsPropertyMaxResults(20),
                 credit -> {
-                    VBox vBox = new VBox();
+                        VBox vBox = new VBox();
 
-                    String img = credit.getImage() == null ? "https://image.tmdb.org/t/p/original/vgjhFQ3cixrl0VbChoB8V29ozlc.jpg" : credit.getImage();
-                    ImageView imageView = ImageWidgets.scaledRoundedImage(img, 125, 125, 125);
+                        String img = credit.getImage() == null ? "https://image.tmdb.org/t/p/original/vgjhFQ3cixrl0VbChoB8V29ozlc.jpg" : credit.getImage();
+                        ImageView imageView = ImageWidgets.scaledRoundedImage(img, 125, 125, 125);
 
-                    Text characterName = TextWidgets.styledText(credit.getCharacterName(), "info-cast-name");
-                    Text name = TextWidgets.styledText(credit.getName(), "info-cast-name");
+                        Text characterName = TextWidgets.styledText(credit.getCharacterName(), "info-cast-name");
+                        Text name = TextWidgets.styledText(credit.getName(), "info-cast-name");
 
-                    vBox.alignmentProperty().set(Pos.BASELINE_CENTER);
-                    vBox.getChildren().addAll(imageView, characterName, name);
-                    return vBox;
+                        vBox.alignmentProperty().set(Pos.BASELINE_CENTER);
+                        vBox.getChildren().addAll(imageView, characterName, name);
+                        return vBox;
                 },
                 "Cast & Crew"
         );
@@ -139,7 +139,7 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private void buttonGenre(TMDBGenreEntity genre) {
-        System.out.println(genre.getName());
+
     }
 
 }

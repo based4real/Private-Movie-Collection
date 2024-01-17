@@ -3,7 +3,6 @@ package pmc.gui.components.pmc;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -37,7 +36,7 @@ import pmc.gui.components.movies.MoviesController;
 import pmc.gui.components.playback.PlaybackController;
 import pmc.gui.utils.ErrorHandler;
 import pmc.gui.utils.FileManagementService;
-import pmc.utils.MovieException;
+import pmc.utils.PMCException;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class PMCController implements IViewController {
             this.movieManager = new MovieManager();
             this.genreManager = new GenreManager();
             this.categoryManager = new CategoryManager();
-        } catch (MovieException e) {
+        } catch (PMCException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
 
@@ -145,7 +144,7 @@ public class PMCController implements IViewController {
                 genres -> {
                     try {
                         model.genreModels().setAll(convertToGenreModels(genres));
-                    } catch (MovieException e) {
+                    } catch (PMCException e) {
                         throw new RuntimeException(e); // Træls
                     }
                 },
@@ -153,7 +152,7 @@ public class PMCController implements IViewController {
         );
     }
 
-    private List<GenresModel> convertToGenreModels(List<Genre> genres) throws MovieException {
+    private List<GenresModel> convertToGenreModels(List<Genre> genres) throws PMCException {
         List<GenresModel> genreModels = new ArrayList<>();
 
         for (Genre genre : genres) {
@@ -174,7 +173,7 @@ public class PMCController implements IViewController {
                 categories -> {
                     try {
                         model.categoryModels().setAll(convertToCategoryModels(categories));
-                    } catch (MovieException e) {
+                    } catch (PMCException e) {
                         throw new RuntimeException(e); // Træls
                     }
                 },
@@ -182,7 +181,7 @@ public class PMCController implements IViewController {
         );
     }
 
-    private List<CategoriesModel> convertToCategoryModels(List<Category> categories) throws MovieException {
+    private List<CategoriesModel> convertToCategoryModels(List<Category> categories) throws PMCException {
         List<CategoriesModel> categoriesModels = new ArrayList<>();
 
         for (Category category : categories) {
@@ -290,7 +289,7 @@ public class PMCController implements IViewController {
                 FileManagementService.deleteFile(movieModel.filePathProperty().get());
                 FileManagementService.deleteFile(movieModel.posterPathProperty().get());
                 model.movieModels().remove(movieModel);
-            } catch (MovieException | IOException e) {
+            } catch (PMCException | IOException e) {
                 ErrorHandler.showErrorDialog("Fejl", e.getMessage());
             }
         }
@@ -338,7 +337,7 @@ public class PMCController implements IViewController {
             Dialog<AddCategoryData> dialog = showDialog(controller, "Tilføj kategori");
             dialog.showAndWait();
             model.isDialogOpenProperty().set(false);
-        }  catch (MovieException e) {
+        }  catch (PMCException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
     }
@@ -349,11 +348,11 @@ public class PMCController implements IViewController {
                 ErrorHandler.showErrorDialog("Fejl", "Kategori navn ikke gyldig");
                 return;
             }
-            
+
             Category category = categoryManager.addCategory(new Category(categoryName));
             categories.add(category);
             model.categoryModels().add(new CategoriesModel(category));
-        } catch (MovieException e) {
+        } catch (PMCException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
     }
@@ -371,7 +370,7 @@ public class PMCController implements IViewController {
             }
 
             if (toRemove != null) model.categoryModels().remove(toRemove);
-        } catch (MovieException e) {
+        } catch (PMCException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
     }
@@ -397,7 +396,7 @@ public class PMCController implements IViewController {
                     cat.nameProperty().set(newTitle);
                 }
             }
-        } catch (MovieException e) {
+        } catch (PMCException e) {
             throw new RuntimeException(e);
         }
     }
