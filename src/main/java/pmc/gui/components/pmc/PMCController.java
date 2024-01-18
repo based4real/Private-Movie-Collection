@@ -339,6 +339,7 @@ public class PMCController implements IViewController {
         }
     }
 
+
     private void deleteMovie(MovieModel movieModel) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Bekræft sletning");
@@ -349,6 +350,7 @@ public class PMCController implements IViewController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try { // todo: skal køres på en baggrundstråd
                 movieManager.deleteMovie(movieModel.toEntity());
+                updateGenresOnMovieDeletion(movieModel);
                 FileManagementService.deleteFile(movieModel.filePathProperty().get());
                 FileManagementService.deleteFile(movieModel.posterPathProperty().get());
                 model.movieModels().remove(movieModel);
@@ -356,6 +358,24 @@ public class PMCController implements IViewController {
                 ErrorHandler.showErrorDialog("Fejl", e.getMessage());
             }
         }
+    }
+
+    private void updateGenresOnMovieDeletion(MovieModel movieModel) {
+        for (Genre genre : movieModel.genreObservableList()) {
+            GenresModel genresModel = findGenresModelById(genre.getTmdbId());
+            if (genresModel != null) {
+                genresModel.getMovies().remove(movieModel);
+            }
+        }
+    }
+
+    private GenresModel findGenresModelById(int genreId) {
+        for (GenresModel genresModel : model.genreModels()) {
+            if (genresModel.idProperty().get() == genreId) {
+                return genresModel;
+            }
+        }
+        return null;
     }
 
     private void updateMovie(MovieModel movieModel) {
