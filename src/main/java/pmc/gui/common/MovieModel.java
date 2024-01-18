@@ -1,5 +1,6 @@
 package pmc.gui.common;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +21,7 @@ public class MovieModel {
     private final StringProperty imdbId = new SimpleStringProperty();
     private final StringProperty title = new SimpleStringProperty();
     private final FloatProperty imdbRating = new SimpleFloatProperty();
-    private final FloatProperty personalRating = new SimpleFloatProperty();
+    private final IntegerProperty personalRating = new SimpleIntegerProperty();
     private final StringProperty filePath = new SimpleStringProperty("");
     private final StringProperty posterPath = new SimpleStringProperty("");
     private final ObjectProperty<LocalDateTime> lastSeen = new SimpleObjectProperty<>();
@@ -36,7 +37,7 @@ public class MovieModel {
                       String imdbId,
                       String title,
                       float imdbRating,
-                      float personalRating,
+                      int personalRating,
                       String filePath,
                       String posterPath,
                       LocalDateTime lastSeen,
@@ -103,7 +104,7 @@ public class MovieModel {
         return imdbRating;
     }
 
-    public FloatProperty personalRatingProperty() {
+    public IntegerProperty personalRatingProperty() {
         return personalRating;
     }
 

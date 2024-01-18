@@ -49,7 +49,7 @@ public class MovieDAO_DB extends AbstractDAO<Movie> {
         String imdbId = rs.getString("imdbId");
         String title = rs.getString("title");
         float imdbRating = rs.getFloat("imdbRating");
-        float personalRating = rs.getFloat("personalRating");
+        int personalRating = rs.getInt("personalRating");
         String filePath = rs.getString("filePath");
         String posterPath = rs.getString("posterPath");
         Timestamp lastSeenTimestamp = rs.getTimestamp("lastSeen");
@@ -94,7 +94,7 @@ public class MovieDAO_DB extends AbstractDAO<Movie> {
         IDAO<Movie> dao = new MovieDAO_DB();
 
 
-        Movie m = new Movie(11, 580175, "tt10288566", "Druk", 7.7F, 10.0F, "Another.Round.mp4", "aDcIt4NHURLKnAEu7gow51Yd00Q.jpg", null);
+        Movie m = new Movie(11, 580175, "tt10288566", "Druk", 7.7F, 3, "Another.Round.mp4", "aDcIt4NHURLKnAEu7gow51Yd00Q.jpg", null);
         dao.delete(m);
 
 /*        Optional<Movie> movie = dao.get(4);

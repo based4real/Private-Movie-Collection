@@ -92,7 +92,7 @@ public class MovieGenreDAO_DB implements IMovieGenreDAO {
                 String imdbId = rs.getString("imdbId");
                 String title = rs.getString("title");
                 float imdbRating = rs.getFloat("imdbRating");
-                float personalRating = rs.getFloat("personalRating");
+                int personalRating = rs.getInt("personalRating");
                 String filePath = rs.getString("filePath");
                 String posterPath = rs.getString("posterPath");
                 Timestamp lastSeenTimestamp = rs.getTimestamp("lastSeen");
@@ -139,7 +139,7 @@ public class MovieGenreDAO_DB implements IMovieGenreDAO {
     public static void main(String[] args) throws DataAccessException {
         IMovieGenreDAO dao = new MovieGenreDAO_DB();
         Genre genre = new Genre(36);
-        Movie movie = new Movie(9, -1, "", "test", 0.0F, 0.0F, "", "", null);
+        Movie movie = new Movie(9, -1, "", "test", 0.0F, 0, "", "", null);
 
 //        dao.removeRelation(movie, genre);
         List<Movie> movies = dao.getMoviesForGenre(genre);

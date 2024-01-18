@@ -10,7 +10,7 @@ public class Movie {
     private String imdbId;
     private String title;
     private float imdbRating;
-    private float personalRating;
+    private int personalRating;
     private String filePath;
     private String posterPath;
     private LocalDateTime lastSeen;
@@ -18,7 +18,7 @@ public class Movie {
     private List<Genre> genres;
     private List<Category> categories;
 
-    public Movie(int id, int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
+    public Movie(int id, int tmdbId, String imdbId, String title, float imdbRating, int personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
         this.id = id;
         this.tmdbId = tmdbId;
         this.imdbId = imdbId;
@@ -32,7 +32,7 @@ public class Movie {
         this.categories = new ArrayList<>();
     }
 
-    public Movie(int tmdbId, String imdbId, String title, float imdbRating, float personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
+    public Movie(int tmdbId, String imdbId, String title, float imdbRating, int personalRating, String filePath, String posterPath, LocalDateTime lastSeen) {
         this(-1, tmdbId, imdbId, title, imdbRating, personalRating, filePath, posterPath, lastSeen);
     }
 
@@ -77,11 +77,11 @@ public class Movie {
         this.imdbRating = imdbRating;
     }
 
-    public float getPersonalRating() {
+    public int getPersonalRating() {
         return personalRating;
     }
 
-    public void setPersonalRating(float personalRating) {
+    public void setPersonalRating(int personalRating) {
         this.personalRating = personalRating;
     }
 

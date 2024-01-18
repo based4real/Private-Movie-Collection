@@ -108,7 +108,7 @@ public class PMCController implements IViewController {
         this.genresController = new GenresController(model.genreModels(), this::handleGenreCategoryClick);
         this.categoriesController = new CategoriesController(model.categoryModels(), this::handleGenreCategoryClick);
         this.playbackController = new PlaybackController(viewHandler::previousView, this::fullscreen, this::openMedia);
-        this.infoController = new InfoController(model.genreModels(), this::handlePlayButtonClick, this::handleGenreCategoryClick);
+        this.infoController = new InfoController(model.genreModels(), this::handlePlayButtonClick, this::handleGenreCategoryClick, this::updateMovie);
         this.moviesController = new MoviesController(model.movieModels(), moviePosterActions);
 
         this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
@@ -328,6 +328,19 @@ public class PMCController implements IViewController {
         );
     }
 
+    private void updateMovie(MovieUpdate movieUpdate) {
+        performBackgroundTask(
+                () -> movieManager.updateMovie(movieUpdate.original().toEntity(), movieUpdate.changed().toEntity()),
+                movie -> {
+                    int index = model.movieModels().indexOf(movieUpdate.original());
+                    if (index != -1) {
+                        model.movieModels().get(index).personalRatingProperty().set(movieUpdate.changed().personalRatingProperty().get());
+                    }
+                },
+                error -> ErrorHandler.showErrorDialog("Fejl", "Database fejl: " + error.getMessage())
+        );
+    }
+
     private void updateGenreModels(List<Genre> genres) {
         try { // todo: skal køres på baggrundstråd
             List<GenresModel> newGenres = convertToGenreModels(genres);
@@ -378,10 +391,6 @@ public class PMCController implements IViewController {
             }
         }
         return null;
-    }
-
-    private void updateMovie(MovieModel movieModel) {
-        System.out.println("ret ret ret! fikser når jeg står op");
     }
 
     private void downloadAndCopyFiles(AddMovieData addMovieData, Movie movie) {

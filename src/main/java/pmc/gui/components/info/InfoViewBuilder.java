@@ -32,6 +32,7 @@ import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.gui.common.MovieModel;
+import pmc.gui.common.MovieUpdate;
 import pmc.gui.common.MoviesData;
 import pmc.gui.components.genres.GenresModel;
 import pmc.gui.utils.ErrorHandler;
@@ -56,11 +57,16 @@ public class InfoViewBuilder implements Builder<Region> {
 
     private Consumer<MovieModel> playMovieHandler;
     private Consumer<MoviesData> viewChangehandler;
+    private Consumer<MovieUpdate> movieUpdate;
 
-    public InfoViewBuilder(InfoModel model, Consumer<MovieModel> playMovieHandler, Consumer<MoviesData> viewChangehandler) {
+    public InfoViewBuilder(InfoModel model,
+                           Consumer<MovieModel> playMovieHandler,
+                           Consumer<MoviesData> viewChangehandler,
+                           Consumer<MovieUpdate> movieUpdate) {
         this.model = model;
         this.playMovieHandler = playMovieHandler;
         this.viewChangehandler = viewChangehandler;
+        this.movieUpdate = movieUpdate;
     }
 
     @Override
@@ -127,10 +133,15 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private HBox createRating() {
-        RatingStars ratingStars = new RatingStars(6);
+        RatingStars ratingStars = new RatingStars(6, movieUpdate);
         HBox rating = ratingStars.createRatingBox();
+        rating.setPadding(new Insets(7, 0, 0, 10));
 
-        rating.setPadding(new Insets(7,0,0, 10));
+        model.movieModelProperty().addListener((observable, oldValue, newValue) -> {
+            ratingStars.setMovieModel(newValue);
+            ratingStars.setStars(model.movieModelProperty().get().personalRatingProperty().get());
+        });
+
         return rating;
     }
 
@@ -180,6 +191,10 @@ public class InfoViewBuilder implements Builder<Region> {
         Label imdbRating = LabelWidgets.styledLabel("5.0", "info-imdb-rating");
         imdbRating.setPadding(new Insets(5,0,0,0));
 
+        model.movieModelProperty().addListener((observable, oldValue, newValue) -> {
+            imdbRating.setText(String.valueOf(newValue.imdbRatingProperty().get()));
+        });
+
         imdb.getChildren().setAll(imdbIcon, imdbRating);
 
         return imdb;
@@ -226,7 +241,7 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private void playVideo() {
-        playMovieHandler.accept(model.getMovieModel());
+        playMovieHandler.accept(model.movieModelProperty().get());
     }
 
     private HorizontalPaginator<TMDBCreditEntity> createCreditPaginator() {
@@ -263,7 +278,10 @@ public class InfoViewBuilder implements Builder<Region> {
 
                     HBox details = new HBox(5);
                     details.getStyleClass().add("info-external-links");
+
+                    //Jaer...
                     details.setMinWidth(300);
+                    details.setMaxWidth(300);
 
                     Label title = LabelWidgets.styledLabel(video.getName(), "info-youtube-title");
 
@@ -280,16 +298,14 @@ public class InfoViewBuilder implements Builder<Region> {
                     results.setAlignment(Pos.CENTER_LEFT);
 
                     details.getChildren().addAll(stackPane, results);
-
                     details.setAlignment(Pos.CENTER_LEFT);
-
                     details.setOnMouseClicked(event -> detailsClick(video));
 
                     createToolTip(details, "Se på youtube");
 
                     return details;
                 },
-                "Cast & Crew"
+                "Eksterne links"
         );
         credits.setPadding(new Insets(10, 0, 0, 15));
         credits.setMinHeight(250); //todo: bedre løsning
@@ -302,7 +318,7 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private void titleClick() {
-        Webbrowser.openTMDBInfo(model.getMovieModel().tmdbIdProperty().get());
+        Webbrowser.openTMDBInfo(model.movieModelProperty().get().tmdbIdProperty().get());
     }
 
 

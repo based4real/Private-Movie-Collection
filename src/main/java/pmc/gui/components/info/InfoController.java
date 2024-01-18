@@ -3,10 +3,7 @@ package pmc.gui.components.info;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
-import pmc.gui.common.IViewController;
-import pmc.gui.common.MovieDetailsModel;
-import pmc.gui.common.MovieModel;
-import pmc.gui.common.MoviesData;
+import pmc.gui.common.*;
 import pmc.gui.components.genres.GenresModel;
 
 import java.util.function.Consumer;
@@ -15,9 +12,12 @@ public class InfoController implements IViewController {
     private final InfoModel model;
     private final Builder<Region> viewBuilder;
 
-    public InfoController(ObservableList<GenresModel> genreModels, Consumer<MovieModel> playMovieHandler, Consumer<MoviesData> viewChangeHandler) {
+    public InfoController(ObservableList<GenresModel> genreModels,
+                          Consumer<MovieModel> playMovieHandler,
+                          Consumer<MoviesData> viewChangeHandler,
+                          Consumer<MovieUpdate> movieUpdate) {
         model = new InfoModel(genreModels);
-        this.viewBuilder = new InfoViewBuilder(model, playMovieHandler, viewChangeHandler);
+        this.viewBuilder = new InfoViewBuilder(model, playMovieHandler, viewChangeHandler, movieUpdate);
     }
 
     @Override

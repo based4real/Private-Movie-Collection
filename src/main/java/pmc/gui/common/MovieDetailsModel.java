@@ -60,7 +60,6 @@ public class MovieDetailsModel {
         this.runtime.set(omdbMovie.getRuntime());
         this.rated.set(omdbMovie.getRated());
         this.release.set(omdbMovie.getReleaseYear()); //getReleased outputter specifik dato f.eks. 16. Jan 2024
-
     }
 
     public MovieDetailsModel(String imdbId,

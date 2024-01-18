@@ -3,8 +3,6 @@ package pmc.gui.components.home;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
@@ -27,7 +25,6 @@ public class HomeViewBuilder implements Builder<Region> {
     private final ObservableList<MovieModel> model;
     private final ObservableList<CategoriesModel> categoriesModels;
     private final MoviePosterActions moviePosterActions;
-
 
     private Map<CategoriesModel, HorizontalPaginator<MovieModel>> paginatorMap = new HashMap<>();
 
@@ -55,14 +52,16 @@ public class HomeViewBuilder implements Builder<Region> {
 
     private void createDeletionReminder(VBox vBox) {
         FilteredList<MovieModel> filteredMovies = new FilteredList<>(model, this::deletionReminderPredicate);
+
         HorizontalPaginator<MovieModel> deletionReminderPaginator = new HorizontalPaginator<>(
                 filteredMovies,
                 movie -> OtherWidgets.moviePosterWithTitleAndSubtitle(movie, 150, 224, 10, moviePosterActions,
-                                                          LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title"),
-                                                          LabelWidgets.styledLabel(String.valueOf(movie.personalRatingProperty().get()), "movie-poster-subtitle"),
-                                                          IconWidgets.styledIcon(FontAwesomeRegular.STAR, "movie-poster-star-icon")),
+                        LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title"),
+                        LabelWidgets.styledLabel(movie.personalRatingProperty(), "movie-poster-subtitle"),
+                        IconWidgets.styledIcon(FontAwesomeRegular.STAR, "movie-poster-star-icon")),
                 "Husk at slette"
         );
+
         vBox.getChildren().add(deletionReminderPaginator);
     }
 
@@ -72,7 +71,7 @@ public class HomeViewBuilder implements Builder<Region> {
 
         boolean isLastSeenBeforeTwoYears = (lastSeen != null) && lastSeen.isBefore(twoYearsAgo); // håndter null på ny tilføjet film
 
-        return isLastSeenBeforeTwoYears && movie.personalRatingProperty().get() < 6.0;
+        return isLastSeenBeforeTwoYears && movie.personalRatingProperty().get() < 3;
     }
 
     private void createRecentlyAdded(VBox vBox) {

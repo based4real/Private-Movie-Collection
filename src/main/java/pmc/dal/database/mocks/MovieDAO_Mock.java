@@ -38,13 +38,13 @@ public class MovieDAO_Mock implements IDAO<Movie> {
                 "olsenbanden_resized.jpg"
         };
 
-        movies.add(new Movie(-1, "", "FIRST", generateRandomRating(), generateRandomRating(), "", POSTER_DIR + "madmax_resized.jpg", generateRandomDateTime()));
+        movies.add(new Movie(-1, "", "FIRST", generateRandomRating(), (int) generateRandomRating(), "", POSTER_DIR + "madmax_resized.jpg", generateRandomDateTime()));
 
         for (int i = 0; i < 50; i++) {
             movies.add(generateRandomMovie());
         }
 
-        movies.add(new Movie(-1, "", "LAST", generateRandomRating(), generateRandomRating(), "", POSTER_DIR + "fightclub_resized.jpg", generateRandomDateTime()));
+        movies.add(new Movie(-1, "", "LAST", generateRandomRating(), (int) generateRandomRating(), "", POSTER_DIR + "fightclub_resized.jpg", generateRandomDateTime()));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class MovieDAO_Mock implements IDAO<Movie> {
     private Movie generateRandomMovie() {
         String name = titleIterator.next();
         float imdbRating = generateRandomRating();
-        float personalRating = generateRandomRating();
+        int personalRating = (int) generateRandomRating();
         String fileLink = "fileLink_" + name.replaceAll("\\s+", "");
         String posterPath = getRandomPosterPath();
         LocalDateTime lastView = generateRandomDateTime();

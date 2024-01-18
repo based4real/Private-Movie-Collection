@@ -1,10 +1,7 @@
 package pmc.gui.components.info;
 
 import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -27,26 +24,24 @@ public class InfoModel {
     private final StringProperty release = new SimpleStringProperty("");
     private final StringProperty runtime = new SimpleStringProperty("");
     private final StringProperty rated = new SimpleStringProperty("");
+    private final StringProperty description = new SimpleStringProperty("");
 
     private final ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
     private final ObservableList<TMDBCreditEntity> credits = FXCollections.observableArrayList();
     private final ObservableList<TMDBVideoEntity> videos = FXCollections.observableArrayList();
-
     private ObservableList<GenresModel> genresModels = FXCollections.observableArrayList();
 
-    private final StringProperty description = new SimpleStringProperty("");
-
-    private MovieModel movieModel;
+    private final ObjectProperty<MovieModel> movieModel = new SimpleObjectProperty<>();
 
     public InfoModel(ObservableList<GenresModel> genresModels) {
         this.genresModels = genresModels;
     }
 
     public void setMovieModel(MovieModel movieModel) {
-        this.movieModel = movieModel;
+        this.movieModel.set(movieModel);
     }
 
-    public MovieModel getMovieModel() {
+    public ObjectProperty<MovieModel> movieModelProperty() {
         return movieModel;
     }
 

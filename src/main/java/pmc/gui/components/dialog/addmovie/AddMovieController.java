@@ -54,7 +54,7 @@ public class AddMovieController implements IDialogController<AddMovieData> {
                         model.imdbIdProperty().get(),
                         model.originalTitleProperty().get(),
                         imdbRating, // håndter N/A
-                        0.0F,
+                        0,
                         model.filePathProperty().get(),
                         model.posterPathProperty().get(),
                         null,

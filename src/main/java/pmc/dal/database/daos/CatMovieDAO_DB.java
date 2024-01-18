@@ -71,7 +71,7 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
                 String imdbId = rs.getString("imdbId");
                 String title = rs.getString("title");
                 float imdbRating = rs.getFloat("imdbRating");
-                float personalRating = rs.getFloat("personalRating");
+                int personalRating = rs.getInt("personalRating");
                 String filePath = rs.getString("filePath");
                 String posterPath = rs.getString("posterPath");
                 Timestamp lastSeenTimestamp = rs.getTimestamp("lastSeen");
@@ -146,7 +146,7 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
         ICatMovieDAO dao = new CatMovieDAO_DB();
 
         Category category = new Category(1, "Engelsk");
-        Movie movie = new Movie(11, -1, "", "test", 0.0F, 0.0F, "", "", null);
+        Movie movie = new Movie(11, -1, "", "test", 0.0F, 1, "", "", null);
 //        dao.removeRelation(category, movie);
 
 

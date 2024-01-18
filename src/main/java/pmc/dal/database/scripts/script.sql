@@ -23,7 +23,7 @@ CREATE TABLE Movie (
     imdbId NVARCHAR(50),
     title NVARCHAR(255) NOT NULL,
     imdbRating DECIMAL(3, 1),
-    personalRating DECIMAL(3, 1),
+    personalRating INT,
     filePath NVARCHAR(255),
     posterPath NVARCHAR(255),
     lastSeen DATETIME
@@ -73,18 +73,18 @@ GO
 
 INSERT INTO Movie (tmdbId, imdbId, title, imdbRating, personalRating, filePath, posterPath, lastSeen)
 VALUES
-(11324, 'tt1130884', 'Shutter Island', 8.2, 7.4, 'Shutter.Island.mp4', '4GDy0PHYX3VRXUtwK5ysFbg3kEx.jpg', '2023-05-02 07:04:00'),
-(3176, 'tt0266308', N'バトル・ロワイアル', 7.5, 2.3, 'Battle.Royale.mp4', 'gFX7NuBUeKysOB9nEzRqVpHNT32.jpg', '2017-05-02 17:04:00'),
-(580175, 'tt10288566', 'Druk', 7.7, 10.0, 'Another.Round.mp4', 'aDcIt4NHURLKnAEu7gow51Yd00Q.jpg', '2019-12-24 18:00:43'),
-(278, 'tt0111161', 'The Shawshank Redemption', 9.3, 0.0, 'The.Shawshank.Redemption.mp4', 'q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg', '2024-01-02 12:03:00'),
-(872585, 'tt15398776', 'Oppenheimer', 8.4, 5.9, 'Oppenheimer.mp4', '8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg', '2020-07-23 23:57:19'),
-(346698, 'tt1517268', 'Barbie', 7.0, 6.0, 'Barbie.mp4', 'iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg', DATEADD(YEAR, -2, GETDATE())),
-(19634, 'tt0045750', 'Far til fire', 6.3, RAND() * 10, 'Father.of.Four.mp4', 'jx7s9x4cob81CaXmFVnU311189n.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
-(688656, 'tt10360916', 'Richard Sorge - Stalins James Bond', 6.6, RAND() * 10, 'Stalins.James.Bond.mp4', 'j523NJfe7KRUfBLSOPsGxrTgoyR.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
-(9615, 'tt0463985', 'The Fast and the Furious: Tokyo Drift', 6.0, RAND() * 10, 'The.Fast.and.the.Furious.Tokyo.Drift.mp4', '46xqGOwHbh2TH2avWSw3SMXph4E.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
-(174958, 'tt0010208', 'Harakiri', 5.6, RAND() * 10, 'Harakiri.mp4', 'xDXMUdERs3uFtgO8P5J5WyWT554.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
-(47916, 'tt0098214', 'Rojo amanecer', 8.0, RAND() * 10, 'Red.Dawn.mp4', 'iM6w5hUnxUAeRkDC4bYaGmD96nl.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
-(875188, 'tt15434074', N'खो गए हम कहाँ', 8.4, RAND() * 10, 'Kho.Gaye.Hum.Kahan.mp4', 'WUptEusy1sMh3s46Ik7QbfoKts.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE()));
+(11324, 'tt1130884', 'Shutter Island', 8.2, 1, 'Shutter.Island.mp4', '4GDy0PHYX3VRXUtwK5ysFbg3kEx.jpg', '2023-05-02 07:04:00'),
+(3176, 'tt0266308', N'バトル・ロワイアル', 7.5, 2, 'Battle.Royale.mp4', 'gFX7NuBUeKysOB9nEzRqVpHNT32.jpg', '2017-05-02 17:04:00'),
+(580175, 'tt10288566', 'Druk', 7.7, 6, 'Another.Round.mp4', 'aDcIt4NHURLKnAEu7gow51Yd00Q.jpg', '2019-12-24 18:00:43'),
+(278, 'tt0111161', 'The Shawshank Redemption', 9.3, 0, 'The.Shawshank.Redemption.mp4', 'q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg', '2024-01-02 12:03:00'),
+(872585, 'tt15398776', 'Oppenheimer', 8.4, 5, 'Oppenheimer.mp4', '8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg', '2020-07-23 23:57:19'),
+(346698, 'tt1517268', 'Barbie', 7.0, 4, 'Barbie.mp4', 'iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg', DATEADD(YEAR, -2, GETDATE())),
+(19634, 'tt0045750', 'Far til fire', 6.3, 3, 'Father.of.Four.mp4', 'jx7s9x4cob81CaXmFVnU311189n.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
+(688656, 'tt10360916', 'Richard Sorge - Stalins James Bond', 6.6, 0, 'Stalins.James.Bond.mp4', 'j523NJfe7KRUfBLSOPsGxrTgoyR.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
+(9615, 'tt0463985', 'The Fast and the Furious: Tokyo Drift', 6.0, 1, 'The.Fast.and.the.Furious.Tokyo.Drift.mp4', '46xqGOwHbh2TH2avWSw3SMXph4E.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
+(174958, 'tt0010208', 'Harakiri', 5.6, RAND() * 2, 'Harakiri.mp4', 'xDXMUdERs3uFtgO8P5J5WyWT554.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
+(47916, 'tt0098214', 'Rojo amanecer', 8.0, RAND() * 5, 'Red.Dawn.mp4', 'iM6w5hUnxUAeRkDC4bYaGmD96nl.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE())),
+(875188, 'tt15434074', N'खो गए हम कहाँ', 8.4, RAND() * 3, 'Kho.Gaye.Hum.Kahan.mp4', 'WUptEusy1sMh3s46Ik7QbfoKts.jpg', DATEADD(DAY, -CAST(RAND()*1000 AS INT), GETDATE()));
 
 INSERT INTO Genre (tmdbId)
 VALUES
