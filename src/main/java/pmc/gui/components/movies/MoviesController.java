@@ -3,6 +3,7 @@ package pmc.gui.components.movies;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.Region;
@@ -13,6 +14,7 @@ import pmc.gui.common.MoviePosterActions;
 import pmc.gui.common.MoviesData;
 
 import java.util.function.Consumer;
+import java.util.logging.Filter;
 
 public class MoviesController implements IViewController {
     private final MoviesModel model;

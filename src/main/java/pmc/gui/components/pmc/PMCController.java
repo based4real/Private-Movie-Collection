@@ -318,9 +318,25 @@ public class PMCController implements IViewController {
     private void addMovie(AddMovieData addMovieData) {
         performBackgroundTask(
                 () -> movieManager.addMovieWithGenres(addMovieData),
-                movie -> downloadAndCopyFiles(addMovieData, movie),
+                movie -> {
+                    downloadAndCopyFiles(addMovieData, movie);
+                    updateGenreModels(movie.getGenres());
+                },
                 error -> ErrorHandler.showErrorDialog("Fejl", "Database fejl: " + error.getMessage())
         );
+    }
+
+    private void updateGenreModels(List<Genre> genres) {
+        try { // todo: skal køres på baggrundstråd
+            List<GenresModel> newGenres = convertToGenreModels(genres);
+            for (GenresModel genreModel : newGenres) {
+                if (model.genreModels().stream().noneMatch(g -> g.idProperty().get() == genreModel.idProperty().get())) {
+                    model.genreModels().add(genreModel);
+                }
+            }
+        } catch (PMCException e) {
+            ErrorHandler.showErrorDialog("Fejl", "Kunne ikke hente genrer fra TMDb: " + e.getMessage());
+        }
     }
 
     private void deleteMovie(MovieModel movieModel) {

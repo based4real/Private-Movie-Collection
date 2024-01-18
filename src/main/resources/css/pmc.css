@@ -407,3 +407,55 @@
     -fx-background-color: transparent;
     -fx-cursor: hand;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Filtering                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+.filter-genre-selected {
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+}
+
+.filter-genre-remove {
+    -fx-font-size: 16;
+    -fx-fill: white;
+    -fx-cursor: hand;
+}
+
+.filter-genre-remove:hover {
+    -fx-fill: -accent-color;
+}
+
+.icon-textfield {
+    -fx-padding: 5 5 5 25;
+    -fx-background-color: -primary-color;
+    -fx-background-radius: 20;
+}
+
+.icon-textfield:focused {
+    -fx-background-color: white;
+}
+
+.icon-textfield-icon {
+    -fx-font-size: 20;
+}
+
+.imdb-icon {
+    -fx-fill: #dba506;
+}
+
+.search-icon {
+    -fx-fill: white;
+}
+
+.icon-textfield-action {
+    -fx-font-size: 20;
+    -fx-fill: black;
+    -fx-cursor: hand;
+}
+
+.icon-textfield-action:hover {
+    -fx-fill: -accent-color;
+}

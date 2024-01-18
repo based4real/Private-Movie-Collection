@@ -1,5 +1,8 @@
 package pmc.gui.components.pmc;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,17 +10,20 @@ import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.Builder;
 
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
 import org.kordamp.ikonli.material2.Material2OutlinedAL;
 import pmc.gui.common.MovieModel;
+import pmc.gui.components.genres.GenresModel;
 import pmc.gui.widgets.*;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.NavigationGroup;
@@ -140,18 +146,129 @@ public class PMCViewBuilder implements Builder<Region> {
 
         FontIcon menuIcon = IconWidgets.styledIcon(Material2MZ.MENU, "icon");
         Label pmc = LabelWidgets.styledLabel("PMC", "logo");
+        pmc.setWrapText(false);
 
+
+        ContextMenu settingsMenu = new ContextMenu();
+        MenuItem toggleImdb = new MenuItem("Filter IMDb rating");
+        MenuItem toggleGenres = new MenuItem("Filter genrer");
+        settingsMenu.getItems().addAll(toggleImdb, toggleGenres);
+
+        // Søgefelt
         TextField searchField = new TextField();
-        searchField.setPromptText("Søg...");
+        FontIcon searchIcon = IconWidgets.styledIcon(Material2MZ.SEARCH, "icon-textfield-icon", "search-icon");
+
+        Button settingsIcon = ButtonWidgets.styledIconButton(Material2MZ.SETTINGS, "icon-textfield-action");
+        settingsIcon.setOnAction(e -> {
+            settingsMenu.show(settingsIcon, Side.BOTTOM, 0, 0);
+        });
+
+        toggleImdb.setOnAction(e -> {
+            System.out.println("Toggle IMDb Rating Field");
+        });
+
+        toggleGenres.setOnAction(e -> {
+            System.out.println("Toggle Genre ComboBox");
+        });
+
+        Platform.runLater(pmc::requestFocus); // bruges til sådan at searchField ikke focused når programmet åbner
+
+        StackPane searchContainer = new StackPane();
+        searchContainer.getChildren().addAll(searchField, searchIcon, settingsIcon);
+        searchField.getStyleClass().add("icon-textfield");
+        StackPane.setAlignment(searchIcon, Pos.CENTER_LEFT);
+        StackPane.setAlignment(settingsIcon, Pos.CENTER_RIGHT);
+
+        StackPane.setMargin(searchIcon, new Insets(5));
+        StackPane.setMargin(settingsIcon, new Insets(5));
+
+        settingsIcon.visibleProperty().bind(searchField.focusedProperty());
+
+        searchField.focusedProperty().addListener((obs, ov, nv) -> {
+            if (nv) {
+                searchIcon.setIconColor(Color.BLACK);
+            } else {
+                searchIcon.setIconColor(Color.WHITE);
+            }
+        });
 
         ContextMenu searchResultsMenu = new ContextMenu();
-        searchField.textProperty().addListener((obs, ov, nv) -> {
-            updateSearchResult(nv, searchResultsMenu, searchField);
+
+        List<GenresModel> selectedGenres = new ArrayList<>();
+        HBox selectedGenresDisplay = new HBox(5);
+        selectedGenresDisplay.setAlignment(Pos.CENTER_LEFT);
+
+        // Genre selector
+        ComboBox<GenresModel> genreComboBox = new ComboBox<>();
+        FilteredList<GenresModel> filteredGenres = new FilteredList<>(model.genreModels(), genre -> true);
+        genreComboBox.setItems(filteredGenres);
+        genreComboBox.setPromptText("Vælg genre...");
+
+        // Imdb rating felt
+        TextField imdbRatingField = new TextField();
+        FontIcon imdbIcon = IconWidgets.styledIcon(FontAwesomeBrands.IMDB, "icon-textfield-icon", "imdb-icon");
+
+        StackPane imdbContainer = new StackPane();
+        imdbContainer.getChildren().addAll(imdbRatingField, imdbIcon);
+        imdbRatingField.getStyleClass().add("icon-textfield");
+        imdbRatingField.setPrefWidth(100);
+        StackPane.setAlignment(imdbIcon, Pos.CENTER_LEFT);
+        StackPane.setMargin(imdbIcon, new Insets(5));
+
+
+        // gør sådan at når vi 'dropdowner' at det udskriver som genre navn
+        genreComboBox.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(GenresModel item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setGraphic(null);
+                    setVisible(true);
+                } else {
+                    setText(item.nameProperty().get());
+                    setVisible(!selectedGenres.contains(item));
+                }
+            }
         });
+
+
+        genreComboBox.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
+            if (nv != null && !selectedGenres.contains(nv)) {
+                selectedGenres.add(nv);
+                // combobx fejl hvis ikke Platform.runLater()
+                Platform.runLater(() -> updateComboBoxItems(genreComboBox, selectedGenres, model.genreModels()));
+                updateSelectedGenresDisplay(selectedGenresDisplay, selectedGenres, searchField, searchResultsMenu, genreComboBox, imdbRatingField);
+            }
+        });
+
+        // gør sådan at når vi vælger en genre at den vises som genre navn
+        genreComboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(GenresModel item, boolean empty) {
+                super.updateItem(item, empty);
+                setText("Vælg genre...");
+            }
+        });
+
+        searchField.textProperty().addListener((obs, ov, nv) -> {
+            updateSearchResult(nv, searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+        });
+
         searchField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DOWN && !searchResultsMenu.isShowing()) {
                 searchResultsMenu.show(searchField, Side.BOTTOM, 0, 0);
             }
+        });
+
+        searchField.focusedProperty().addListener((obs, ov, nv) -> {
+            if (nv && searchField.getText().isEmpty()) {
+                updateSearchResult("", searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            }
+        });
+
+        imdbRatingField.textProperty().addListener((obs, ov, nv) -> {
+            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
         });
 
         Region space = new Region();
@@ -166,32 +283,89 @@ public class PMCViewBuilder implements Builder<Region> {
         progressBar.progressProperty().bind(model.fileProgressProperty());
         progressBar.visibleProperty().bind(model.copyingFileProperty());
 
-        results.getChildren().addAll(menuIcon, pmc, searchField, space, progressBar, addCategoryIcon, addMovieIcon);
+        results.getChildren().addAll(menuIcon, pmc, searchContainer, imdbContainer, genreComboBox, selectedGenresDisplay, space, progressBar, addCategoryIcon, addMovieIcon);
         results.setAlignment(Pos.CENTER_LEFT);
 
         return results;
     }
 
-    private void updateSearchResult(String searchQuery, ContextMenu searchResultsMenu, TextField searchField) {
+    private void updateComboBoxItems(ComboBox<GenresModel> genreComboBox, List<GenresModel> selectedGenres, ObservableList<GenresModel> allGenres) {
+        List<GenresModel> filteredList = allGenres.stream()
+                .filter(genre -> !selectedGenres.contains(genre))
+                .collect(Collectors.toList());
+        genreComboBox.setItems(FXCollections.observableArrayList(filteredList));
+    }
+
+    private void updateSelectedGenresDisplay(HBox selectedGenresDisplay, List<GenresModel> selectedGenres,
+                                             TextField searchField, ContextMenu searchResultsMenu,
+                                             ComboBox<GenresModel> genreComboBox, TextField imdbRatingField) {
+        selectedGenresDisplay.getChildren().clear();
+        for (GenresModel genreModel : selectedGenres) {
+            Label genreLabel = LabelWidgets.styledLabel(genreModel.nameProperty(), "filter-genre-selected");
+
+            Button removeButton = ButtonWidgets.actionIconButton(Material2AL.CLOSE, "filter-genre-remove", e -> {
+                selectedGenres.remove(genreModel);
+                updateComboBoxItems(genreComboBox, selectedGenres, model.genreModels());
+                updateSelectedGenresDisplay(selectedGenresDisplay, selectedGenres, searchField, searchResultsMenu, genreComboBox, imdbRatingField);
+                updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            });
+
+            HBox genreBox = new HBox(genreLabel, removeButton);
+            genreBox.setAlignment(Pos.CENTER_LEFT);
+            selectedGenresDisplay.getChildren().add(genreBox);
+        }
+
+        updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+
+    }
+
+    private void updateSearchResult(String searchQuery, ContextMenu searchResultsMenu,
+                                    TextField searchField, ComboBox<GenresModel> genreComboBox,
+                                    List<GenresModel> selectedGenres, TextField imdbRatingField) {
         searchResultsMenu.getItems().clear();
 
-        if (searchQuery == null || searchQuery.isEmpty()) {
+        if (searchQuery == null && genreComboBox.getSelectionModel().isEmpty() && imdbRatingField.getText().isEmpty()) {
             searchResultsMenu.hide();
             return;
         }
 
-        FilteredList<MovieModel> filteredList = new FilteredList<>(
-                model.movieModels(),
-                movie -> movie.titleProperty().get().toLowerCase().contains(searchQuery.toLowerCase())
-        );
+        Stream<MovieModel> movieStream = model.movieModels().stream();
 
-        for (MovieModel movie : filteredList) {
+        // Filter på titel
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            movieStream = movieStream.filter(movie -> movie.titleProperty().get().toLowerCase().contains(searchQuery));
+        }
+
+        // Filter på genre
+        if (!selectedGenres.isEmpty()) {
+            Set<Integer> selectedGenreIds = selectedGenres.stream()
+                    .map(genreModel -> genreModel.idProperty().get())
+                    .collect(Collectors.toSet());
+
+            movieStream = movieStream.filter(movie -> selectedGenreIds.stream()
+                    .allMatch(id -> movie.genreObservableList().stream()
+                            .anyMatch(genre -> genre.getTmdbId() == id)));
+        }
+
+        // Filter på IMDb rating
+        System.out.println(imdbRatingField.getText());
+        if (!imdbRatingField.getText().isEmpty()) {
+            try {
+                System.out.println(imdbRatingField.getText());
+                float minRating = Float.parseFloat(imdbRatingField.getText());
+                movieStream = movieStream.filter(movie -> movie.imdbRatingProperty().get() >= minRating);
+            } catch (NumberFormatException e) {
+                System.out.println("forkert input");
+            }
+        }
+
+        movieStream.forEach(movie -> {
             MenuItem item = new MenuItem(movie.titleProperty().get());
             item.setOnAction(e -> {
-                System.out.println("HEJ DU KLIKKEDE PÅ MIG");
+                System.out.println("Valgt filmen: " + movie.titleProperty().get());
             });
             searchResultsMenu.getItems().add(item);
-        }
+        });
 
         if (!searchResultsMenu.getItems().isEmpty()) {
             searchResultsMenu.show(searchField, Side.BOTTOM, 0, 0);

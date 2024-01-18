@@ -33,7 +33,7 @@ public class GenresModel {
     }
 
     private void setMatchFromModels(ObservableList<MovieModel> movieModels) {
-        // samme løsning som i CategoriesModel
+        // samme løsning som i GenresModel
 
         movieModels.addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
             while (change.next()) {
