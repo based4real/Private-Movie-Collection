@@ -66,7 +66,7 @@ public class MovieManager {
 
     public Movie addMovieWithGenres(AddMovieData data) throws PMCException {
         try {
-            // todo: skal nok ikke have AddMovieData her, men konverter den til BE før den sendes til BLL fra GUI
+            // todo: skal nok ikke have AddMovieData her, men konverter den til BE oppe i PMCController i stedet
             Movie movie = new Movie(
                     data.tmdbId(),
                     data.imdbId(),
@@ -79,9 +79,10 @@ public class MovieManager {
             Movie addedMovie = dao.add(movie);
 
             List<Genre> genres = genreManager.addGenresById(data.genreIds());
-            movie.setGenres(genres);
+            addedMovie.setGenres(genres);
 
             for (Genre genre : genres) movieGenreDAO.addRelation(addedMovie, genre);
+
 
             return addedMovie;
         } catch (DataAccessException e) {
