@@ -2,6 +2,7 @@ package pmc.gui.components.movies;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ import pmc.gui.widgets.MoviePoster;
 import pmc.gui.widgets.ScrollPaneWidgets;
 import pmc.gui.widgets.TextWidgets;
 
+import java.util.Comparator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -44,10 +46,20 @@ public class MoviesViewBuilder implements Builder<Region> {
         VBox vBox = new VBox(20);
         Label title = LabelWidgets.styledLabel(model.titleProperty(), "hpage-title");
 
+        // tester sortering
+        Button sortButton = new Button("Sorter på IMDb Rating");
+        sortButton.setOnAction(e -> sortByImdbRating());
+
         addPosters();
-        vBox.getChildren().addAll(title, tilePane);
+        vBox.getChildren().addAll(title, sortButton, tilePane);
 
         return createScrollPane(vBox);
+    }
+
+    private void sortByImdbRating() {
+        Comparator<MovieModel> comparator = Comparator.<MovieModel, Double>comparing(m -> (double) m.imdbRatingProperty().get()).reversed();
+        SortedList<MovieModel> sortedList = new SortedList<>(filteredMovies, comparator);
+        updatePosters(sortedList);
     }
 
     public void setMoviesFilter(Predicate<MovieModel> filter) {
@@ -70,12 +82,22 @@ public class MoviesViewBuilder implements Builder<Region> {
         });
     }
 
-    private void updatePosters() {
+    private void updatePosters(SortedList<MovieModel> sortedList) {
         tilePane.getChildren().clear();
+        for (MovieModel movieModel : sortedList) {
+            MoviePoster moviePoster = new MoviePoster(movieModel, 150, 224, 10, moviePosterActions);
+            tilePane.getChildren().add(moviePoster);
+        }
+    }
+
+
+    private void updatePosters() {
+/*        tilePane.getChildren().clear();
 
         for (MovieModel movieModel : filteredMovies) {
             MoviePoster moviePoster = new MoviePoster(movieModel, 150, 224, 10, moviePosterActions);
             tilePane.getChildren().add(moviePoster);
-        }
+        }*/
+        updatePosters(new SortedList<>(filteredMovies));
     }
 }
