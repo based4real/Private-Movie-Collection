@@ -23,6 +23,8 @@ import pmc.gui.components.categories.CategoriesModel;
 import pmc.gui.components.dialog.addcategory.AddCategoryData;
 import pmc.gui.components.dialog.addcategory.CategoryActions;
 import pmc.gui.components.dialog.addmovie.AddMovieData;
+import pmc.gui.components.dialog.editmovie.EditMovieController;
+import pmc.gui.components.dialog.editmovie.EditMovieData;
 import pmc.gui.components.genres.GenresModel;
 import pmc.gui.components.genres.GenresController;
 import pmc.gui.components.categories.CategoriesController;
@@ -46,6 +48,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Hoved Controller for Private Movie Collection (PMC) applikationen.<br>
@@ -92,7 +95,7 @@ public class PMCController implements IViewController {
                 this::handleMoviePosterClick,
                 this::handlePlayButtonClick,
                 this::deleteMovie,
-                this::updateMovie
+                this::showEditMovieDialog
         );
 
         this.homeController = new HomeController(model.movieModels(), model.categoryModels(), moviePosterActions);
@@ -252,6 +255,45 @@ public class PMCController implements IViewController {
 
         // Start ny tråd
         new Thread(backgroundTask).start();
+    }
+
+    private void showEditMovieDialog(MovieModel movieModel) {
+
+        EditMovieController editMovieController = new EditMovieController(
+                movieModel, model.categoryModels(), this::handleCategoryUpdate
+        );
+
+        Dialog<EditMovieData> dialog = showDialog(editMovieController, "Ret film");
+        dialog.showAndWait();
+        model.isDialogOpenProperty().set(false);
+    }
+
+    private void handleCategoryUpdate(EditMovieData data) {
+        try { // todo: skal køre på baggrundstråd
+            Movie movie = data.movieModel().toEntity();
+            List<Category> currentCategories = new ArrayList<>(data.movieModel().categoryObservableList());
+            int categoryId = data.categoryId();
+
+            List<Category> updatedCategories = movieManager.updateMovieCategories(movie, currentCategories, categoryId);
+            data.movieModel().categoryObservableList().setAll(updatedCategories);
+            updateCategoryModels(data.movieModel());
+        } catch (PMCException e) {
+            ErrorHandler.showErrorDialog("Fejl", e.getMessage());
+        }
+    }
+
+    private void updateCategoryModels(MovieModel updatedMovie) {
+        for (CategoriesModel categoriesModel : model.categoryModels()) {
+            boolean isInCategory = updatedMovie.categoryObservableList().stream()
+                    .anyMatch(category -> category.getId() == categoriesModel.idProperty().get());
+            boolean isInMatching = categoriesModel.getMovies().contains(updatedMovie);
+
+            if (isInCategory && !isInMatching) {
+                categoriesModel.getMovies().add(updatedMovie);
+            } else if (!isInCategory && isInMatching) {
+                categoriesModel.getMovies().remove(updatedMovie);
+            }
+        }
     }
 
     private void showAddMovieDialog() {

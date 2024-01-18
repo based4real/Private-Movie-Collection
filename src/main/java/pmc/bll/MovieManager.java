@@ -13,18 +13,20 @@ import java.util.List;
 import java.util.Optional;
 
 public class MovieManager {
-    private final GenreManager genreManager;
-
     private final IDAO<Movie> dao;
     private final IMovieGenreDAO movieGenreDAO;
     private final ICatMovieDAO catMovieDAO;
+    private final GenreManager genreManager;
+    private final CategoryManager categoryManager;
+
 
     public MovieManager() throws PMCException {
         try {
-            this.genreManager = new GenreManager();
             this.dao = new MovieDAO_DB();
             this.movieGenreDAO = new MovieGenreDAO_DB();
             this.catMovieDAO = new CatMovieDAO_DB();
+            this.genreManager = new GenreManager();
+            this.categoryManager = new CategoryManager();
         } catch (DataAccessException e) {
             throw new PMCException(e.getMessage());
         }
@@ -61,9 +63,10 @@ public class MovieManager {
         }
     }
 
+
     public Movie addMovieWithGenres(AddMovieData data) throws PMCException {
         try {
-            // todo: skal nok ikke have AddMovieData her, men konverter den til BE oppe i PMCController i stedet
+            // todo: skal nok ikke have AddMovieData her, men konverter den til BE før den sendes til BLL fra GUI
             Movie movie = new Movie(
                     data.tmdbId(),
                     data.imdbId(),
@@ -92,6 +95,26 @@ public class MovieManager {
         } catch (DataAccessException e) {
             throw new PMCException("Kunne ikke opdatere filmen.\n" + e.getMessage());
         }
+    }
+
+    public List<Category> updateMovieCategories(Movie movie, List<Category> currentCategories, int categoryId) throws PMCException {
+        Optional<Category> categoryOpt = currentCategories.stream()
+                                                          .filter(category -> category.getId() == categoryId)
+                                                          .findFirst();
+        try {
+            if (categoryOpt.isPresent()) {
+                catMovieDAO.removeRelation(categoryOpt.get(), movie);
+                currentCategories.remove(categoryOpt.get());
+            } else {
+                Category category = categoryManager.getCategory(categoryId)
+                                                   .orElseThrow(() -> new PMCException("Kategorien findes ikke."));
+                catMovieDAO.addRelation(category, movie);
+                currentCategories.add(category);
+            }
+        } catch (DataAccessException e) {
+            throw new PMCException("Kunne ikke ændre kategori på filmen.\n" + e.getMessage());
+        }
+        return currentCategories;
     }
 
     public boolean deleteMovie(Movie movie) throws PMCException {
