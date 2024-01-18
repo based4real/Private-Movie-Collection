@@ -1,5 +1,6 @@
 package pmc.gui.widgets.controls;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -16,8 +17,8 @@ public class NavigationGroup {
         this.activeView = activeView;
     }
 
-    public void add(Ikon iconCode, String text, ViewType viewType) {
-        NavigationButton button = new NavigationButton(iconCode, text, activeView, viewType);
+    public void add(Ikon iconCode, String text, ViewType viewType, BooleanProperty showText) {
+        NavigationButton button = new NavigationButton(iconCode, text, activeView, viewType, showText);
         button.setOnAction(e -> activeView.set(viewType));
         container.getChildren().add(button);
     }

@@ -55,10 +55,8 @@ public class HomeViewBuilder implements Builder<Region> {
 
         HorizontalPaginator<MovieModel> deletionReminderPaginator = new HorizontalPaginator<>(
                 filteredMovies,
-                movie -> OtherWidgets.moviePosterWithTitleAndSubtitle(movie, 150, 224, 10, moviePosterActions,
-                        LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title"),
-                        LabelWidgets.styledLabel(movie.personalRatingProperty(), "movie-poster-subtitle"),
-                        IconWidgets.styledIcon(FontAwesomeRegular.STAR, "movie-poster-star-icon")),
+                movie -> OtherWidgets.moviePosterWithText(movie, 150, 224, 10, moviePosterActions,
+                        LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title")),
                 "Husk at slette"
         );
 
@@ -78,8 +76,9 @@ public class HomeViewBuilder implements Builder<Region> {
         vBox.getChildren().add(new HorizontalPaginator<>(
                 model,
                 movie -> OtherWidgets.moviePosterWithText(movie, 150, 224, 10, moviePosterActions,
-                                                          LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title")),
-                "Senest tilføjet"
+                        LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title")),
+                "Senest tilføjet",
+                true
         ));
     }
 

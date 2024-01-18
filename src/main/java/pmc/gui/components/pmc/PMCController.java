@@ -113,7 +113,7 @@ public class PMCController implements IViewController {
         this.infoController = new InfoController(model.genreModels(), this::handlePlayButtonClick, this::handleGenreCategoryClick, this::updateMovie);
         this.moviesController = new MoviesController(model.movieModels(), moviePosterActions);
 
-        this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::showAddMovieDialog, this::showAddCategoryDialog,
+        this.viewBuilder = new PMCViewBuilder(model, viewHandler, this::handleMoviePosterClick, this::showAddMovieDialog, this::showAddCategoryDialog,
                 homeController.getView(),
                 genresController.getView(),
                 categoriesController.getView(),

@@ -17,11 +17,31 @@
     -fx-spacing: 10;
 }
 
-
 .icon {
     -fx-fill: -icon-color;
     -fx-font-size: 20;
 }
+
+.menu-icon {
+    -fx-fill: -icon-color;
+    -fx-font-size: 20;
+    -fx-cursor: hand;
+}
+
+.menu-icon:hover {
+    -fx-fill: white;
+}
+
+.add-icon {
+    -fx-fill: -icon-color;
+    -fx-font-size: 20;
+    -fx-cursor: hand;
+}
+
+.add-icon:hover {
+    -fx-fill: white;
+}
+
 
 .logo {
     -fx-text-fill: -accent-color;
@@ -213,17 +233,20 @@
     -fx-text-fill: white;
     -fx-font-size: 20;
     -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-time {
     -fx-text-fill: white;
     -fx-font-size: 14;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-back-icon {
     -fx-fill: white;
     -fx-font-size: 30;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-back-icon:hover {
@@ -239,6 +262,7 @@
     -track-height: 6;
     -slider-radius: 10;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .volume-slider {
@@ -250,10 +274,12 @@
     -track-height: 4;
     -slider-radius: 10;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-progress-indicator {
     -fx-progress-color: -accent-color;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-volume-icon {
@@ -270,6 +296,7 @@
     -fx-fill: white;
     -fx-cursor: hand;
     -fx-font-size: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-playpause-icon:hover {
@@ -280,6 +307,7 @@
     -fx-fill: white;
     -fx-cursor: hand;
     -fx-font-size: 24;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-local-icon:hover {
@@ -291,6 +319,7 @@
     -fx-fill: white;
     -fx-cursor: hand;
     -fx-font-size: 24;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
 }
 
 .playback-fullscreen-icon:hover {
@@ -449,6 +478,11 @@
     -fx-cursor: hand;
 }
 
+.info-poster {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+}
+
 
 /*******************************************************************************
  *                                                                             *
@@ -532,6 +566,11 @@
     -fx-background-radius: 20;
 }
 
+.imdb-textfield {
+    -fx-background-radius: 5;
+}
+
+
 .icon-textfield:focused {
     -fx-background-color: white;
 }
@@ -542,7 +581,9 @@
 
 .imdb-icon {
     -fx-fill: #dba506;
+    -fx-font-size: 20;
 }
+
 
 .search-icon {
     -fx-fill: white;
@@ -556,4 +597,81 @@
 
 .icon-textfield-action:hover {
     -fx-fill: -accent-color;
+}
+
+.context-menu {
+    -fx-background-color: -primary-color;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+}
+
+.context-menu .menu-item {
+    -fx-background-color: -primary-color;
+    -fx-cursor: hand;
+}
+
+.context-menu .menu-item .label {
+    -fx-text-fill: white;
+}
+
+.context-menu .menu-item:hover {
+    -fx-background-color: derive(-primary-color, -20%);
+}
+
+.menu-item-title {
+    -fx-font-weight: bold;
+}
+
+.menu-poster {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+}
+
+.menu-setting-enabled-icon {
+    -fx-fill: -accent-color;
+    -fx-font-size: 16;
+}
+
+.combo-box {
+    -fx-background-color: -primary-color;
+    -fx-cursor: hand;
+}
+
+.combo-box .list-view {
+    -fx-background-color: -primary-color;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: derive(-primary-color, -20%);
+}
+
+.combo-box .scroll-bar:vertical, .combo-box .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.combo-box .scroll-bar .thumb {
+    -fx-background-color: derive(-primary-color, +20%);
+}
+.combo-box .scroll-bar:vertical .increment-button,
+.combo-box .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+
+.combo-box .arrow-button {
+    -fx-background-color: -primary-color;
+}
+
+.combo-box .arrow {
+    -fx-background-color: derive(-primary-color, +20%);
+}
+
+.combo-box:focused .arrow {
+    -fx-background-color: -accent-color;
 }

@@ -33,6 +33,8 @@ public class HorizontalPaginator<T> extends VBox {
     private double itemWidth = 0;
     private Label titleLabel;
 
+    private boolean addOnLeft = false;
+
     public HorizontalPaginator(ObservableList<T> items, Function<T, Node> itemRenderer, String title) {
         this.items = items;
         this.itemRenderer = itemRenderer;
@@ -50,6 +52,11 @@ public class HorizontalPaginator<T> extends VBox {
         this.getChildren().addAll(titleAndNavigation, scrollPane);
 
         setupItemListener();
+    }
+
+    public HorizontalPaginator(ObservableList<T> items, Function<T, Node> itemRenderer, String title, boolean addOnLeft) {
+        this(items, itemRenderer, title);
+        this.addOnLeft = addOnLeft;
     }
 
     public void setTitle(String title) {
@@ -111,7 +118,11 @@ public class HorizontalPaginator<T> extends VBox {
     private void addItemToContentBox(T item) {
         Node node = itemRenderer.apply(item);
         itemNodeMap.put(item, node);
-        contentBox.getChildren().add(node);
+        if (addOnLeft) {
+            contentBox.getChildren().add(0, node);
+        } else {
+            contentBox.getChildren().add(node);
+        }
         itemWidth = node.getBoundsInParent().getWidth();
     }
 

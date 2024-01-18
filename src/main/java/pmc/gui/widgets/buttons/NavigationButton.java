@@ -1,5 +1,6 @@
 package pmc.gui.widgets.buttons;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -27,7 +28,7 @@ public class NavigationButton extends Button {
     private final ViewType viewType;
     private final Region indicator;
 
-    public NavigationButton(Ikon iconCode, String text, ObjectProperty<ViewType> activeView, ViewType viewType) {
+    public NavigationButton(Ikon iconCode, String text, ObjectProperty<ViewType> activeView, ViewType viewType, BooleanProperty showText) {
         super();
 
         this.activeView = activeView;
@@ -38,6 +39,9 @@ public class NavigationButton extends Button {
 
         FontIcon icon = IconWidgets.styledIcon(iconCode, CSS_CLASS_NAV_BUTTON, CSS_CLASS_ICON);
         Label label = LabelWidgets.styledLabel(text, CSS_CLASS_NAV_BUTTON, CSS_CLASS_LABEL);
+
+        label.visibleProperty().bind(showText.not());
+        label.managedProperty().bind(showText.not());
 
         this.indicator = createIndicator(icon);
         Region content = createContent(indicator, icon, label);

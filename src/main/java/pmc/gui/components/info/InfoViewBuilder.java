@@ -42,6 +42,7 @@ import pmc.gui.widgets.*;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.icons.IconWidgets;
+import pmc.gui.widgets.icons.ToggleableIcon;
 
 import java.awt.*;
 import java.io.IOException;
@@ -83,10 +84,42 @@ public class InfoViewBuilder implements Builder<Region> {
     private HBox infoHbox() {
         HBox results = new HBox();
         results.setPadding(new Insets(5, 0, 0, PADDING));
+        
+        results.getChildren().addAll(createPoster(), createInfoBox());
+        return results;
+    }
+
+    private StackPane createPoster() {
+        StackPane results = new StackPane();
+        results.getStyleClass().add("info-poster");
 
         ImageView poster = ImageWidgets.boundRoundedImage(model.posterPathProperty(), 220, 340, 10);
 
-        results.getChildren().addAll(poster, createInfoBox());
+        Rectangle border = new Rectangle(220, 340);
+        border.setArcWidth(10);
+        border.setArcHeight(10);
+        border.setFill(new Color(0, 0, 0, 0.5));
+        border.setStroke(new Color(0.85, 0.57, 0.05, 1.0));
+        border.setStrokeWidth(1);
+
+        ToggleableIcon playButton = IconWidgets.posterPlayButton(50);
+
+        border.setVisible(false);
+        playButton.setVisible(false);
+
+        results.setOnMouseEntered(e -> {
+            border.visibleProperty().set(true);
+            playButton.visibleProperty().set(true);
+        });
+
+        results.setOnMouseExited(e -> {
+            border.visibleProperty().set(false);
+            playButton.visibleProperty().set(false);
+        });
+
+        results.setOnMouseClicked(e -> playMovieHandler.accept(model.movieModelProperty().get()));
+
+        results.getChildren().addAll(poster, border, playButton);
         return results;
     }
 

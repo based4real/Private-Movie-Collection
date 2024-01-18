@@ -18,6 +18,7 @@ public class PMCModel {
     private final BooleanProperty copyingFile = new SimpleBooleanProperty(false);
     private final DoubleProperty fileProgress = new SimpleDoubleProperty(0);
     private final BooleanProperty isFullscreen = new SimpleBooleanProperty(false);
+    private final BooleanProperty isCollapsed = new SimpleBooleanProperty(false);
 
     public ObjectProperty<ViewType> activeViewProperty() {
         return activeView;
@@ -53,5 +54,9 @@ public class PMCModel {
 
     public BooleanProperty isFullscreenProperty() {
         return isFullscreen;
+    }
+
+    public BooleanProperty isCollapsedProperty() {
+        return isCollapsed;
     }
 }

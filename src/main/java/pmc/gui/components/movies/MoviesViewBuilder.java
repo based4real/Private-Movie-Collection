@@ -18,6 +18,7 @@ import pmc.be.Category;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
+import pmc.gui.utils.SortState;
 import pmc.gui.widgets.*;
 import pmc.gui.widgets.icons.IconWidgets;
 
@@ -30,6 +31,8 @@ public class MoviesViewBuilder implements Builder<Region> {
     private final MoviePosterActions moviePosterActions;
     private FilteredList<MovieModel> filteredMovies;
     private TilePane tilePane;
+
+    private SortState currentSortState = SortState.NONE;
 
     public MoviesViewBuilder(MoviesModel model, MoviePosterActions moviePosterActions) {
         this.model = model;
@@ -56,9 +59,28 @@ public class MoviesViewBuilder implements Builder<Region> {
     }
 
     private void sortByImdbRating() {
-        Comparator<MovieModel> comparator = Comparator.<MovieModel, Double>comparing(m -> (double) m.imdbRatingProperty().get()).reversed();
-        SortedList<MovieModel> sortedList = new SortedList<>(filteredMovies, comparator);
-        updatePosters(sortedList);
+
+        Comparator<MovieModel> comparator = switch (currentSortState) {
+            case NONE -> {
+                currentSortState = SortState.ASCENDING;
+                yield Comparator.comparing(m -> (double) m.imdbRatingProperty().get());
+            }
+            case ASCENDING -> {
+                currentSortState = SortState.DESCENDING;
+                yield Comparator.<MovieModel, Double>comparing(m -> (double) m.imdbRatingProperty().get()).reversed();
+            }
+            case DESCENDING -> {
+                currentSortState = SortState.NONE;
+                yield null;
+            }
+        };
+
+        if (comparator != null) {
+            SortedList<MovieModel> sortedList = new SortedList<>(filteredMovies, comparator);
+            updatePosters(sortedList);
+        } else {
+            updatePosters(new SortedList<>(filteredMovies));
+        }
     }
 
     public void setMoviesFilter(Predicate<MovieModel> filter) {
