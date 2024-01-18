@@ -62,7 +62,7 @@ public class PMCViewBuilder implements Builder<Region> {
         this.viewHandler = viewHandler;
         this.addMovieClick = addMovieClick;
         this.addCategoryClick = addCategoryClick;
-        this.labelsBundle = ResourceBundle.getBundle("bundles.labels", Locale.getDefault());
+        this.labelsBundle = ResourceBundle.getBundle("bundles.labels", new Locale("da", "DK"));
         this.homeView = homeView;
         this.genresView = genresView;
         this.categoriesView = categoriesView;
@@ -86,7 +86,13 @@ public class PMCViewBuilder implements Builder<Region> {
 
         BorderPane.setMargin(top, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(left, new Insets(0, 5, 5, 5));
-        BorderPane.setMargin(center, new Insets(0, 5, 5, 0));
+        model.activeViewProperty().addListener((obs, ov, nv) -> {
+            if (nv.equals(ViewType.PLAYBACK)) {
+                BorderPane.setMargin(center, new Insets(0));
+            } else {
+                BorderPane.setMargin(center, new Insets(0, 5, 5, 0));
+            }
+        });
 
         main.setTop(top);
         main.setLeft(left);

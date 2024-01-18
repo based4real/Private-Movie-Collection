@@ -20,14 +20,16 @@ public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
     private final Runnable onPlay;
     private final Runnable onBackClicked;
+    private final Runnable onMute;
 
     private double topHeight = 0;
     private double bottomHeight = 0;
 
-    public PlaybackViewBuilder(PlaybackModel model, Runnable onPlay, Runnable onBackClicked) {
+    public PlaybackViewBuilder(PlaybackModel model, Runnable onPlay, Runnable onBackClicked, Runnable onMute) {
         this.model = model;
         this.onPlay = onPlay;
         this.onBackClicked = onBackClicked;
+        this.onMute = onMute;
     }
 
     @Override
@@ -39,25 +41,26 @@ public class PlaybackViewBuilder implements Builder<Region> {
         Region top = createTop();
         Region bottom = createBottom();
 
+        top.setOpacity(0.0);
+        bottom.setOpacity(0.0);
+
         topAndBottom.setTop(top);
         topAndBottom.setBottom(bottom);
 
         ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.getStyleClass().add("playback-progress-indicator");
         progressIndicator.visibleProperty().bind(model.isLoadingProperty());
 
         results.getChildren().addAll(createCenter(), topAndBottom, progressIndicator);
 
-        top.boundsInParentProperty().addListener((obs, ov, nv) -> topHeight = nv.getHeight());
-        bottom.boundsInParentProperty().addListener((obs, ov, nv) -> bottomHeight = nv.getHeight());
-
         results.setOnMouseEntered(e -> {
-            Animations.slideIn(top, Duration.millis(100), -topHeight, 0);
-            Animations.slideIn(bottom, Duration.millis(100), bottomHeight, 0);
+            Animations.fadeIn(top, Duration.millis(100), 0, 1);
+            Animations.fadeIn(bottom, Duration.millis(100), 0, 1);
         });
 
         results.setOnMouseExited(e -> {
-            Animations.slideOut(top, Duration.millis(100), 0, -topHeight);
-            Animations.slideOut(bottom, Duration.millis(100), 0, bottomHeight);
+            Animations.fadeOut(top, Duration.millis(100), 1, 0);
+            Animations.fadeOut(bottom, Duration.millis(100), 1, 0);
         });
 
         return results;
@@ -157,9 +160,12 @@ public class PlaybackViewBuilder implements Builder<Region> {
 
         FontIcon volume = new FontIcon(Material2MZ.VOLUME_UP);
         volume.setIconSize(24);
+        volume.setOnMouseClicked(e -> onMute.run());
 
         ProgressSlider volumeSlider = new ProgressSlider();
         volumeSlider.setPrefWidth(100);
+
+        volumeSlider.valueProperty().bindBidirectional(model.volumeProperty());
 
         FontIcon fullScreenIcon = new FontIcon(Material2MZ.OPEN_IN_FULL);
         fullScreenIcon.setIconSize(24);

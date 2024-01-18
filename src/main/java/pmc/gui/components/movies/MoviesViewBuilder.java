@@ -13,14 +13,13 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Builder;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
 import pmc.be.Category;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
-import pmc.gui.widgets.LabelWidgets;
-import pmc.gui.widgets.MoviePoster;
-import pmc.gui.widgets.ScrollPaneWidgets;
-import pmc.gui.widgets.TextWidgets;
+import pmc.gui.widgets.*;
+import pmc.gui.widgets.icons.IconWidgets;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
@@ -85,19 +84,16 @@ public class MoviesViewBuilder implements Builder<Region> {
     private void updatePosters(SortedList<MovieModel> sortedList) {
         tilePane.getChildren().clear();
         for (MovieModel movieModel : sortedList) {
-            MoviePoster moviePoster = new MoviePoster(movieModel, 150, 224, 10, moviePosterActions);
+            VBox moviePoster = OtherWidgets.moviePosterWithTitleAndSubtitle(movieModel, 150, 224, 10, moviePosterActions,
+                    LabelWidgets.styledLabel(movieModel.titleProperty(), "movie-poster-title"),
+                    LabelWidgets.styledLabel(String.valueOf(movieModel.imdbRatingProperty().get()), "movie-poster-subtitle"),
+                    IconWidgets.styledIcon(FontAwesomeBrands.IMDB, "movie-poster-imdb-icon"));
             tilePane.getChildren().add(moviePoster);
         }
     }
 
 
     private void updatePosters() {
-/*        tilePane.getChildren().clear();
-
-        for (MovieModel movieModel : filteredMovies) {
-            MoviePoster moviePoster = new MoviePoster(movieModel, 150, 224, 10, moviePosterActions);
-            tilePane.getChildren().add(moviePoster);
-        }*/
         updatePosters(new SortedList<>(filteredMovies));
     }
 }

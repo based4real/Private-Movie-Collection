@@ -14,7 +14,7 @@ public class PlaybackController implements IViewController {
     public PlaybackController(Runnable goBackHandler) {
         this.model = new PlaybackModel();
         this.playbackHandler = new PlaybackHandler(model);
-        this.viewBuilder = new PlaybackViewBuilder(model, this::handlePlay, goBackHandler);
+        this.viewBuilder = new PlaybackViewBuilder(model, this::handlePlay, goBackHandler, this::handleMute);
     }
 
     @Override
@@ -38,5 +38,13 @@ public class PlaybackController implements IViewController {
     public void handlePlay() {
         if (model.isPlayingProperty().get()) playbackHandler.pause();
         else playbackHandler.play();
+    }
+
+    public void handleMute() {
+        if (model.isMutedProperty().get()) {
+            playbackHandler.unmute();
+        } else {
+            playbackHandler.mute();
+        }
     }
 }

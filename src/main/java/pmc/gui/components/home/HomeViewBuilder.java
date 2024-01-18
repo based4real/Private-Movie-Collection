@@ -3,16 +3,21 @@ package pmc.gui.components.home;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
 import pmc.gui.components.categories.CategoriesModel;
+import pmc.gui.widgets.LabelWidgets;
+import pmc.gui.widgets.OtherWidgets;
 import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.MoviePoster;
 import pmc.gui.widgets.ScrollPaneWidgets;
+import pmc.gui.widgets.icons.IconWidgets;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -52,8 +57,11 @@ public class HomeViewBuilder implements Builder<Region> {
         FilteredList<MovieModel> filteredMovies = new FilteredList<>(model, this::deletionReminderPredicate);
         HorizontalPaginator<MovieModel> deletionReminderPaginator = new HorizontalPaginator<>(
                 filteredMovies,
-                this::createMoviePoster,
-                "Deletion Reminder"
+                movie -> OtherWidgets.moviePosterWithTitleAndSubtitle(movie, 150, 224, 10, moviePosterActions,
+                                                          LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title"),
+                                                          LabelWidgets.styledLabel(String.valueOf(movie.personalRatingProperty().get()), "movie-poster-subtitle"),
+                                                          IconWidgets.styledIcon(FontAwesomeRegular.STAR, "movie-poster-star-icon")),
+                "Husk at slette"
         );
         vBox.getChildren().add(deletionReminderPaginator);
     }
@@ -70,8 +78,9 @@ public class HomeViewBuilder implements Builder<Region> {
     private void createRecentlyAdded(VBox vBox) {
         vBox.getChildren().add(new HorizontalPaginator<>(
                 model,
-                this::createMoviePoster,
-                "Recently Added"
+                movie -> OtherWidgets.moviePosterWithText(movie, 150, 224, 10, moviePosterActions,
+                                                          LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title")),
+                "Senest tilføjet"
         ));
     }
 

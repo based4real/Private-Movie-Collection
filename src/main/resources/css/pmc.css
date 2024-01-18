@@ -88,6 +88,25 @@
     -fx-fill: -accent-color;
 }
 
+.movie-poster-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.movie-poster-subtitle {
+    -fx-text-fill: derive(white, -40%);
+    -fx-font-weight: bold;
+}
+
+.movie-poster-title:hover {
+    -fx-text-fill: -accent-color;
+}
+
+.movie-poster-imdb-icon {
+    -fx-fill: #dba506;
+    -fx-font-size: 20;
+}
+
 .poster-play-button {
     -fx-font-size: 50;
     -fx-fill: white;
@@ -187,11 +206,11 @@
 }
 
 .playback-top, .playback-bottom {
-    -fx-background-color: rgba(50, 50, 50, 0.5);
+    -fx-background-color: transparent;
 }
 
 .progress-slider {
-    -unused-track-color: black;
+    -unused-track-color: -primary-color;
     -used-track-color: white;
     -used-track-color-hover: -accent-color;
     -thumb-color: white;
@@ -199,6 +218,11 @@
     -track-height: 4;
     -slider-radius: 10;
 }
+
+.playback-progress-indicator {
+    -fx-progress-color: -accent-color;
+}
+
 
 /*******************************************************************************
  *                                                                             *
