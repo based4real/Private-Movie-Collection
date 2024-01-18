@@ -18,6 +18,7 @@ public class PlaybackHandler {
     public void initializeMediaPlayerAsync(String filePath, Consumer<Exception> onError) {
         new Thread(() -> {
             try {
+                model.isLoadingProperty().set(true);
                 Media media = new Media(new File(filePath).toURI().toString());
                 MediaPlayer newMediaPlayer = new MediaPlayer(media);
 
@@ -26,9 +27,11 @@ public class PlaybackHandler {
 
                     mediaPlayer = newMediaPlayer;
                     model.mediaPlayerProperty().set(mediaPlayer);
+                    model.isLoadingProperty().set(false);
                 });
             } catch (Exception e) {
                 Platform.runLater(() -> onError.accept(e));
+                model.isLoadingProperty().set(false);
             }
         }).start();
     }

@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 import javafx.util.Duration;
@@ -41,7 +42,10 @@ public class PlaybackViewBuilder implements Builder<Region> {
         topAndBottom.setTop(top);
         topAndBottom.setBottom(bottom);
 
-        results.getChildren().addAll(createCenter(), topAndBottom);
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.visibleProperty().bind(model.isLoadingProperty());
+
+        results.getChildren().addAll(createCenter(), topAndBottom, progressIndicator);
 
         top.boundsInParentProperty().addListener((obs, ov, nv) -> topHeight = nv.getHeight());
         bottom.boundsInParentProperty().addListener((obs, ov, nv) -> bottomHeight = nv.getHeight());
