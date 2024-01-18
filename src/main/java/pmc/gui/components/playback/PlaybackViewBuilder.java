@@ -1,10 +1,12 @@
 package pmc.gui.components.playback;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 import javafx.util.Duration;
@@ -12,24 +14,44 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
 import pmc.gui.utils.Animations;
+import pmc.gui.utils.TimeStringConverter;
+import pmc.gui.widgets.LabelWidgets;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.MediaViewWidget;
 import pmc.gui.widgets.controls.ProgressSlider;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class PlaybackViewBuilder implements Builder<Region> {
     private final PlaybackModel model;
     private final Runnable onPlay;
     private final Runnable onBackClicked;
     private final Runnable onMute;
+    private final Consumer<Double> changeVolume;
+    private final Consumer<Double> onSeek;
+    private final Runnable onFulScreen;
+    private final Consumer<String> openInSystem;
 
-    private double topHeight = 0;
-    private double bottomHeight = 0;
+    private Label curTimeLbl;
+    private Label totalDurLbl;
 
-    public PlaybackViewBuilder(PlaybackModel model, Runnable onPlay, Runnable onBackClicked, Runnable onMute) {
+    public PlaybackViewBuilder(PlaybackModel model,
+                               Runnable onPlay,
+                               Runnable onBackClicked,
+                               Runnable onMute,
+                               Consumer<Double> changeVolume,
+                               Consumer<Double> onSeek,
+                               Runnable onFullscreen,
+                               Consumer<String> openInSystem) {
         this.model = model;
         this.onPlay = onPlay;
         this.onBackClicked = onBackClicked;
         this.onMute = onMute;
+        this.changeVolume = changeVolume;
+        this.onSeek = onSeek;
+        this.onFulScreen = onFullscreen;
+        this.openInSystem = openInSystem;
     }
 
     @Override
@@ -40,6 +62,8 @@ public class PlaybackViewBuilder implements Builder<Region> {
         BorderPane topAndBottom = new BorderPane();
         Region top = createTop();
         Region bottom = createBottom();
+        top.setPadding(new Insets(20));
+        bottom.setPadding(new Insets(20));
 
         top.setOpacity(0.0);
         bottom.setOpacity(0.0);
@@ -70,7 +94,7 @@ public class PlaybackViewBuilder implements Builder<Region> {
         HBox results = new HBox();
         results.getStyleClass().add("playback-top");
 
-        Button backIcon = ButtonWidgets.actionIconButton(Material2AL.BACKSPACE, "icon", e -> {
+        Button backIcon = ButtonWidgets.actionIconButton(Material2AL.ARROW_BACK, "playback-back-icon", e -> {
             model.reset();
             onBackClicked.run();
         });
@@ -108,20 +132,64 @@ public class PlaybackViewBuilder implements Builder<Region> {
         VBox results = new VBox(5);
 
         ProgressSlider playbackSlider = new ProgressSlider();
+        playbackSlider.getStyleClass().add("playback-slider");
+
+        AtomicBoolean isDragging = new AtomicBoolean(false);
+        playbackSlider.setOnMousePressed(evt -> isDragging.set(true));
+        playbackSlider.setOnMouseReleased(evt -> {
+            onSeek.accept(playbackSlider.valueProperty().get());
+            isDragging.set(false);
+        });
+
+        playbackSlider.valueProperty().addListener((obs, ov, nv) -> {
+            if (isDragging.get()) {
+                double newPosition = nv.doubleValue();
+                double totalDuration = model.totalDurationProperty().get();
+                double newTime = newPosition / 100.0 * totalDuration;
+                updateCurrentTimeLabel(newTime);
+            } else {
+                model.currentPositionProperty().set(nv.doubleValue());
+            }
+        });
+
+        model.currentPositionProperty().addListener((obs, ov, nv) -> {
+            if (!isDragging.get()) {
+                playbackSlider.valueProperty().set(nv.doubleValue());
+            }
+        });
+
+        model.currenTimeProperty().addListener((obs, ov, nv) -> {
+            if (!isDragging.get()) {
+                updateCurrentTimeLabel(nv.doubleValue());
+            }
+        });
 
         results.getChildren().add(playbackSlider);
 
         return results;
     }
 
+    private void updateCurrentTimeLabel(double currentTimeInSeconds) {
+        curTimeLbl.setText(new TimeStringConverter().toString((int) (currentTimeInSeconds * 1000)));
+    }
+
     private Region createMovieDetails() {
         VBox results = new VBox(5);
 
-        Label title = new Label("Oppenheimer");
-        Label year = new Label("2023");
-        Label duration = new Label("1:54:47 / 3:00:22");
+        Label title = LabelWidgets.styledLabel(model.movieTitleProperty(), "playback-title");
 
-        results.getChildren().addAll(title, year, duration);
+        curTimeLbl = LabelWidgets.styledLabel("00:00", "playback-time");
+        totalDurLbl = LabelWidgets.styledLabel("", "playback-time");
+
+        HBox time = new HBox();
+        time.getChildren().addAll(curTimeLbl, LabelWidgets.styledLabel("/", "playback-time"), totalDurLbl);
+
+        totalDurLbl.textProperty().bind(Bindings.createStringBinding(() -> {
+            double totalDur = model.totalDurationProperty().get();
+            return new TimeStringConverter().toString((int) (totalDur * 1000));
+        }, model.totalDurationProperty().asObject()));
+
+        results.getChildren().addAll(title, time);
         results.setAlignment(Pos.CENTER_LEFT);
         results.setPadding(new Insets(5));
 
@@ -133,22 +201,21 @@ public class PlaybackViewBuilder implements Builder<Region> {
         results.setAlignment(Pos.CENTER);
 
         HBox playbackControls = new HBox(10);
-        FontIcon rewind = new FontIcon(Material2MZ.SKIP_PREVIOUS);
 
         Button play = ButtonWidgets.toggleableActionIconButton(
                 Material2MZ.PLAY_CIRCLE_OUTLINE,
                 Material2MZ.PAUSE_CIRCLE_OUTLINE,
-                "icon",
+                "playback-playpause-icon",
                 model.isPlayingProperty(),
                 e -> onPlay.run());
 
-        FontIcon forward = new FontIcon(Material2MZ.SKIP_NEXT);
+        Button openInSystemBtn = ButtonWidgets.actionIconButton(Material2AL.LOCAL_PLAY, "playback-local-icon", event -> {
+            openInSystem.accept(model.filePathProperty().get());
+        });
 
-        rewind.setIconSize(24);
-        forward.setIconSize(24);
-
-        playbackControls.getChildren().addAll(rewind, play, forward);
+        playbackControls.getChildren().addAll(play, openInSystemBtn);
         playbackControls.setAlignment(Pos.CENTER);
+
 
         results.getChildren().add(playbackControls);
 
@@ -158,20 +225,33 @@ public class PlaybackViewBuilder implements Builder<Region> {
     private Region createExtraControls() {
         HBox results = new HBox(5);
 
-        FontIcon volume = new FontIcon(Material2MZ.VOLUME_UP);
-        volume.setIconSize(24);
-        volume.setOnMouseClicked(e -> onMute.run());
+        Button volume = ButtonWidgets.toggleableActionIconButton(
+                Material2MZ.VOLUME_UP,
+                Material2MZ.VOLUME_MUTE,
+                "playback-volume-icon",
+                model.isMutedProperty(),
+                e -> onMute.run());
+
+        volume.getStyleClass().add("playback-volume-icon");
 
         ProgressSlider volumeSlider = new ProgressSlider();
+        volumeSlider.getStyleClass().add("volume-slider");
         volumeSlider.setPrefWidth(100);
 
         volumeSlider.valueProperty().bindBidirectional(model.volumeProperty());
 
-        FontIcon fullScreenIcon = new FontIcon(Material2MZ.OPEN_IN_FULL);
-        fullScreenIcon.setIconSize(24);
-        Button fullScreenBtn = new Button("", fullScreenIcon);
+        volumeSlider.valueProperty().addListener((obs, ov, nv) -> changeVolume.accept(nv.doubleValue()));
 
-        results.getChildren().addAll(volume, volumeSlider, fullScreenBtn);
+        Button fullScreenIcon = ButtonWidgets.toggleableActionIconButton(
+                Material2MZ.OPEN_IN_FULL,
+                Material2AL.CLOSE_FULLSCREEN,
+                "playback-fullscreen-icon",
+                model.isFullscreenProperty(),
+                e -> onFulScreen.run()
+        );
+
+
+        results.getChildren().addAll(volume, volumeSlider, fullScreenIcon);
         results.setAlignment(Pos.CENTER_RIGHT);
         results.setPadding(new Insets(5));
 

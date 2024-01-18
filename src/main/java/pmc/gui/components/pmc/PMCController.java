@@ -40,6 +40,7 @@ import pmc.gui.utils.ErrorHandler;
 import pmc.gui.utils.FileManagementService;
 import pmc.utils.PMCException;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +79,11 @@ public class PMCController implements IViewController {
     public PMCController(Stage stage) {
         this.stage = stage;
         this.model = new PMCModel();
+
+        model.isFullscreenProperty().addListener((obs, ov, nv) -> {
+            stage.setFullScreen(nv);
+        });
+
         this.viewHandler = new ViewHandler(model);
 
         try {
@@ -101,7 +107,7 @@ public class PMCController implements IViewController {
         this.homeController = new HomeController(model.movieModels(), model.categoryModels(), moviePosterActions);
         this.genresController = new GenresController(model.genreModels(), this::handleGenreCategoryClick);
         this.categoriesController = new CategoriesController(model.categoryModels(), this::handleGenreCategoryClick);
-        this.playbackController = new PlaybackController(viewHandler::previousView);
+        this.playbackController = new PlaybackController(viewHandler::previousView, this::fullscreen, this::openMedia);
         this.infoController = new InfoController(model.genreModels(), this::handlePlayButtonClick, this::handleGenreCategoryClick);
         this.moviesController = new MoviesController(model.movieModels(), moviePosterActions);
 
@@ -116,6 +122,11 @@ public class PMCController implements IViewController {
         fetchData();
         fetchDataGenre();
         fetchDataCategory();
+    }
+
+    public void fullscreen() {
+        boolean isFullscreen = model.isFullscreenProperty().get();
+        model.isFullscreenProperty().set(!isFullscreen);
     }
 
     @Override
@@ -513,5 +524,18 @@ public class PMCController implements IViewController {
         dialog.getDialogPane().getScene().getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource("/css/pmc.css")).toExternalForm()
         );
+    }
+
+    public void openMedia(String filePath) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File mediaFile = new File(filePath);
+                Desktop.getDesktop().open(mediaFile);
+            } catch (IOException e) {
+                ErrorHandler.showErrorDialog("Fejl", "Kunne ikke afspille filmen i systemets afspiller");
+            }
+        } else {
+            ErrorHandler.showErrorDialog("Fejl", "Kunne ikke afspille filmen i systemets afspiller");
+        }
     }
 }

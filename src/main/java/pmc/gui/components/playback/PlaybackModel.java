@@ -5,14 +5,16 @@ import javafx.scene.media.MediaPlayer;
 
 public class PlaybackModel {
     private final ObjectProperty<MediaPlayer> mediaPlayer = new SimpleObjectProperty<>();
+    private final StringProperty movieTitle = new SimpleStringProperty("");
     private final StringProperty filePath = new SimpleStringProperty("");
     private final BooleanProperty isPlaying = new SimpleBooleanProperty(false);
     private final BooleanProperty isLoading = new SimpleBooleanProperty(false);
-    private SimpleDoubleProperty currenTime = new SimpleDoubleProperty(0.0);
-    private SimpleDoubleProperty totalDuration = new SimpleDoubleProperty(0.0);
-    private SimpleDoubleProperty currentPosition = new SimpleDoubleProperty(0.0);
-    private SimpleDoubleProperty volume = new SimpleDoubleProperty(0.0);
-    private SimpleBooleanProperty isMuted = new SimpleBooleanProperty(false);
+    private final BooleanProperty isFullscreen = new SimpleBooleanProperty(false);
+    private final DoubleProperty currenTime = new SimpleDoubleProperty(0.0);
+    private final DoubleProperty totalDuration = new SimpleDoubleProperty(0.0);
+    private final DoubleProperty currentPosition = new SimpleDoubleProperty(0.0);
+    private final DoubleProperty volume = new SimpleDoubleProperty(0.0);
+    private final BooleanProperty isMuted = new SimpleBooleanProperty(false);
 
     public void reset() {
         if (mediaPlayer.get() != null) {
@@ -29,6 +31,11 @@ public class PlaybackModel {
     }
 
     public ObjectProperty<MediaPlayer> mediaPlayerProperty() { return mediaPlayer; }
+
+    public StringProperty movieTitleProperty() {
+        return movieTitle;
+    }
+
     public StringProperty filePathProperty() { return filePath; }
     public BooleanProperty isPlayingProperty() {
         return isPlaying;
@@ -38,23 +45,27 @@ public class PlaybackModel {
         return isLoading;
     }
 
-    public SimpleDoubleProperty currenTimeProperty() {
+    public BooleanProperty isFullscreenProperty() {
+        return isFullscreen;
+    }
+
+    public DoubleProperty currenTimeProperty() {
         return currenTime;
     }
 
-    public SimpleDoubleProperty totalDurationProperty() {
+    public DoubleProperty totalDurationProperty() {
         return totalDuration;
     }
 
-    public SimpleDoubleProperty currentPositionProperty() {
+    public DoubleProperty currentPositionProperty() {
         return currentPosition;
     }
 
-    public SimpleDoubleProperty volumeProperty() {
+    public DoubleProperty volumeProperty() {
         return volume;
     }
 
-    public SimpleBooleanProperty isMutedProperty() {
+    public BooleanProperty isMutedProperty() {
         return isMuted;
     }
 }

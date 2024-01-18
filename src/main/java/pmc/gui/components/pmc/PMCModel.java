@@ -17,6 +17,7 @@ public class PMCModel {
     private final ObservableList<CategoriesModel> categoryModels = FXCollections.observableArrayList();
     private final BooleanProperty copyingFile = new SimpleBooleanProperty(false);
     private final DoubleProperty fileProgress = new SimpleDoubleProperty(0);
+    private final BooleanProperty isFullscreen = new SimpleBooleanProperty(false);
 
     public ObjectProperty<ViewType> activeViewProperty() {
         return activeView;
@@ -49,4 +50,8 @@ public class PMCModel {
     }
 
     public DoubleProperty fileProgressProperty() { return fileProgress; }
+
+    public BooleanProperty isFullscreenProperty() {
+        return isFullscreen;
+    }
 }

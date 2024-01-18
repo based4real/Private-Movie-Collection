@@ -9,12 +9,15 @@ import java.io.File;
 import java.util.function.Consumer;
 
 public class PlaybackHandler {
+    private static final double START_VOLUME = 50.0;
+
     private final PlaybackModel model;
     private MediaPlayer mediaPlayer;
     private double previousVolume = 0.0;
 
     public PlaybackHandler(PlaybackModel model) {
         this.model = model;
+        model.volumeProperty().set(START_VOLUME);
     }
 
     public void initializeMediaPlayerAsync(String filePath, Consumer<Exception> onError) {
@@ -48,7 +51,7 @@ public class PlaybackHandler {
             double currentTime = nv.toSeconds();
             double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
             model.currenTimeProperty().set(currentTime);
-            model.currentPositionProperty().set(currentTime / totalDuration);
+            model.currentPositionProperty().set((currentTime / totalDuration) * 100);
         });
 
         model.volumeProperty().addListener((obs, ov, nv) -> mediaPlayer.setVolume(nv.doubleValue() / 100.0));
@@ -75,7 +78,9 @@ public class PlaybackHandler {
         }
 
         if (mediaPlayer != null) {
-            mediaPlayer.seek(Duration.seconds(position * mediaPlayer.getTotalDuration().toSeconds()));
+            double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+            double seekPosition = (position / 100.0) * totalDuration;
+            mediaPlayer.seek(Duration.seconds(seekPosition));
         }
     }
 
@@ -98,14 +103,14 @@ public class PlaybackHandler {
         if (!model.isMutedProperty().get()) {
             previousVolume = model.volumeProperty().get();
             model.volumeProperty().set(0);
-            mediaPlayer.setMute(true);
+            model.isMutedProperty().set(true);
         }
     }
 
     public void unmute() {
         if (model.isMutedProperty().get()) {
             model.volumeProperty().set(previousVolume);
-            mediaPlayer.setMute(false);
+            model.isMutedProperty().set(false);
         }
     }
 

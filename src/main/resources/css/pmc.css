@@ -209,7 +209,39 @@
     -fx-background-color: transparent;
 }
 
-.progress-slider {
+.playback-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.playback-time {
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+}
+
+.playback-back-icon {
+    -fx-fill: white;
+    -fx-font-size: 30;
+    -fx-cursor: hand;
+}
+
+.playback-back-icon:hover {
+    -fx-fill: -accent-color;
+}
+
+.playback-slider {
+    -unused-track-color: -primary-color;
+    -used-track-color: white;
+    -used-track-color-hover: -accent-color;
+    -thumb-color: white;
+    -thumb-radius: 8;
+    -track-height: 6;
+    -slider-radius: 10;
+    -fx-cursor: hand;
+}
+
+.volume-slider {
     -unused-track-color: -primary-color;
     -used-track-color: white;
     -used-track-color-hover: -accent-color;
@@ -217,18 +249,60 @@
     -thumb-radius: 6;
     -track-height: 4;
     -slider-radius: 10;
+    -fx-cursor: hand;
 }
 
 .playback-progress-indicator {
     -fx-progress-color: -accent-color;
 }
 
+.playback-volume-icon {
+    -fx-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 24;
+}
 
-/*******************************************************************************
- *                                                                             *
- * Info Page                                                                   *
- *                                                                             *
- ******************************************************************************/
+.playback-volume-icon:hover {
+    -fx-fill: -accent-color;
+}
+
+.playback-playpause-icon {
+    -fx-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 30;
+}
+
+.playback-playpause-icon:hover {
+    -fx-fill: -accent-color;
+}
+
+.playback-local-icon {
+    -fx-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 24;
+}
+
+.playback-local-icon:hover {
+    -fx-fill: -accent-color;
+}
+
+
+.playback-fullscreen-icon {
+    -fx-fill: white;
+    -fx-cursor: hand;
+    -fx-font-size: 24;
+}
+
+.playback-fullscreen-icon:hover {
+    -fx-fill: -accent-color;
+}
+
+
+    /*******************************************************************************
+     *                                                                             *
+     * Info Page                                                                   *
+     *                                                                             *
+     ******************************************************************************/
 .info-header {
     -fx-fill: white; /* For Text in JavaFX you have to use -fx-fill... */
     -fx-text-fill: white;

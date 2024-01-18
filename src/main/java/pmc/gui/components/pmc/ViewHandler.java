@@ -13,6 +13,7 @@ public class ViewHandler {
     }
 
     public void previousView() {
+        if (model.isFullscreenProperty().get()) model.isFullscreenProperty().set(false);
         model.activeViewProperty().set(model.previousViewProperty().get());
     }
 }
