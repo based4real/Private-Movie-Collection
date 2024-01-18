@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import pmc.utils.ConfigSystem;
 import pmc.utils.JsonHelper;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,19 +21,23 @@ public class OMDBConnector {
         this.configSystem = ConfigSystem.getInstance();
     }
 
-    protected HttpRequest getRequest(URI uri) throws IOException {
+    protected HttpRequest getRequest(URI uri) {
         return HttpRequest.newBuilder()
                 .uri(uri)
                 .build();
     }
 
-    protected HttpResponse<String> getResponse(String uri) throws IOException, InterruptedException, URISyntaxException {
-        HttpClient httpClient = HttpClient.newHttpClient();
-        URI baseUri = new URI(getAPI() + configSystem.getOMDBToken() + uri);
-        return httpClient.send(getRequest(baseUri), HttpResponse.BodyHandlers.ofString());
+    protected HttpResponse<String> getResponse(String uri) throws PMCException {
+        try {
+            HttpClient httpClient = HttpClient.newHttpClient();
+            URI baseUri = new URI(getAPI() + configSystem.getOMDBToken() + uri);
+            return httpClient.send(getRequest(baseUri), HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException | URISyntaxException | PMCException e) {
+            throw new PMCException("API: HTTP response fejl\n" + e.getMessage());
+        }
     }
 
-    public boolean isValidToken() throws IOException, URISyntaxException, JSONException, InterruptedException {
+    public boolean isValidToken() throws JSONException, PMCException {
         // Dum måde at tjekke på.. de har ingen "auth" tjeks ifølge dokumentation
         JSONObject responseJson = getJsonHelper().httpResponseToObject(getResponse(OMDBSearchMethod.TITLE.get()));
 
@@ -45,7 +50,7 @@ public class OMDBConnector {
         return JsonHelper.getInstance();
     }
 
-    public String getAPI() throws IOException {
+    public String getAPI() throws PMCException {
         return configSystem.getOMDBAPIUrl();
     }
 

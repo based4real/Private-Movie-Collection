@@ -3,6 +3,7 @@ package pmc.bll;
 import pmc.be.Genre;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
+import pmc.utils.PMCException;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +13,12 @@ public class TMDBGenreManager {
     private TMDBGenre tmdbGenre;
     private List<TMDBGenreEntity> cachedGenres;
 
-    public TMDBGenreManager() {
-        tmdbGenre = new TMDBGenre();
+    public TMDBGenreManager() throws PMCException {
+        try {
+            tmdbGenre = new TMDBGenre();
+        } catch (PMCException e) {
+            throw new PMCException("Kunne ikke få TMDBGenre");
+        }
     }
 
     public List<TMDBGenreEntity> getAllGenres() {

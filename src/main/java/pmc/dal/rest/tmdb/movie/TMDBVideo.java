@@ -7,6 +7,7 @@ import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,23 +19,23 @@ public class TMDBVideo extends TMDBConnector {
     private List<TMDBVideoEntity> videos = new ArrayList<>();
     private TMDBLang lang = TMDBLang.ENGLISH;
 
-    public TMDBVideo(int id) {
+    public TMDBVideo(int id) throws PMCException {
         searchQuery(id, this.lang);
     }
-    public TMDBVideo(int id, TMDBLang lang) {
+    public TMDBVideo(int id, TMDBLang lang) throws PMCException {
         searchQuery(id, this.lang);
         this.lang = lang;
     }
 
-    public TMDBVideo(TMDBMovieEntity tmdbMovie) {
+    public TMDBVideo(TMDBMovieEntity tmdbMovie) throws PMCException {
         searchQuery(tmdbMovie.getID(), tmdbMovie.getLang());
     }
 
-    public TMDBVideo(TMDBMovieEntity tmdbMovie, TMDBLang lang) {
+    public TMDBVideo(TMDBMovieEntity tmdbMovie, TMDBLang lang) throws PMCException {
         searchQuery(tmdbMovie.getID(), lang);
     }
 
-    public void searchQuery(int movieID, TMDBLang lang) {
+    public void searchQuery(int movieID, TMDBLang lang) throws PMCException {
         videos.clear();
         try {
             URI uri = new URI(super.getAPI() + "/movie/" + movieID + "/videos?" + lang.get());
@@ -45,8 +46,8 @@ public class TMDBVideo extends TMDBConnector {
                 TMDBVideoEntity video = parseJson(creditJson);
                 videos.add(video);
             }
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | JSONException e) {
+            throw new PMCException("API: Kunne ikke søge efter videoer\n" + e.getMessage());
         }
     }
 

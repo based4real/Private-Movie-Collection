@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,18 +20,18 @@ public class TMDBMovie extends TMDBConnector {
     private TMDBMovieEntity movieFound;
     private TMDBLang lang = TMDBLang.ENGLISH;
 
-    public TMDBMovie(int id) {
+    public TMDBMovie(int id) throws PMCException {
         this.id= id;
         searchQuery(id, lang);
     }
 
-    public TMDBMovie(int id, TMDBLang lang) {
+    public TMDBMovie(int id, TMDBLang lang) throws PMCException {
         this.id = id;
         this.lang = lang;
         searchQuery(id, lang);
     }
 
-    public void searchQuery(int id, TMDBLang lang) {
+    public void searchQuery(int id, TMDBLang lang) throws PMCException {
         try {
             String idToString = Integer.toString(id);
             String encQuery = URLEncoder.encode(idToString, "UTF-8");
@@ -43,8 +44,8 @@ public class TMDBMovie extends TMDBConnector {
             if (results.length() > 0)
                 movieFound = parseJson(results, lang);
 
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | URISyntaxException | JSONException e) {
+            throw new PMCException("API: Kunne ikke lave præcis film søgning\n" + e.getMessage());
         }
     }
 

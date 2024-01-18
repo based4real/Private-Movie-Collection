@@ -7,6 +7,7 @@ import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.utils.JsonHelper;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,18 +21,18 @@ public class TMDBSearch extends TMDBConnector {
     private List<TMDBMovieEntity> moviesFound = new ArrayList<>();
     private TMDBLang lang = TMDBLang.ENGLISH;
 
-    public TMDBSearch(String title) {
+    public TMDBSearch(String title) throws PMCException {
         this.title = title;
         searchQuery(title, lang);
     }
 
-    public TMDBSearch(String title, TMDBLang lang) {
+    public TMDBSearch(String title, TMDBLang lang) throws PMCException {
         this.title = title;
         this.lang = lang;
         searchQuery(title, lang);
     }
 
-    public void searchQuery(String query, TMDBLang lang) {
+    public void searchQuery(String query, TMDBLang lang) throws PMCException {
         moviesFound.clear();
         try {
             String encQuery = URLEncoder.encode(query, "UTF-8");
@@ -44,12 +45,12 @@ public class TMDBSearch extends TMDBConnector {
                 TMDBMovieEntity movie = parseJson(movieJson, lang);
                 moviesFound.add(movie);
             }
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | URISyntaxException | JSONException e) {
+            throw new PMCException("API: Kunne ikke søge efter film\n" + e.getMessage());
         }
     }
 
-    private TMDBMovieEntity parseJson(JSONObject json, TMDBLang lang) throws JSONException {
+    private TMDBMovieEntity parseJson(JSONObject json, TMDBLang lang) throws PMCException, JSONException {
         return new TMDBMovieEntity(
                 json.getString("overview"),
                 json.getString("original_title"),

@@ -7,6 +7,7 @@ import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,29 +22,30 @@ public class TMDBCredit extends TMDBConnector {
 
     List<TMDBCreditEntity> credits = new ArrayList<>();
 
-    public TMDBCredit(TMDBMovieEntity movie) {
+    public TMDBCredit(TMDBMovieEntity movie) throws PMCException {
         this.moveId = movie.getID();
+
         searchQuery(moveId, movie.getLang());
     }
 
-    public TMDBCredit(TMDBMovieEntity movie, TMDBLang lang) {
+    public TMDBCredit(TMDBMovieEntity movie, TMDBLang lang) throws PMCException {
         this.moveId = movie.getID();
         this.lang = lang;
         searchQuery(moveId, lang);
     }
 
-    public TMDBCredit(int moveId, TMDBLang lang) {
+    public TMDBCredit(int moveId, TMDBLang lang) throws PMCException {
         this.moveId = moveId;
         this.lang = lang;
         searchQuery(moveId, lang);
     }
 
-    public TMDBCredit(int moveId) {
+    public TMDBCredit(int moveId) throws PMCException {
         this.moveId = moveId;
         searchQuery(moveId, lang);
     }
 
-    public void searchQuery(int moveId, TMDBLang lang) {
+    public void searchQuery(int moveId, TMDBLang lang) throws PMCException {
         try {
             String idToString = Integer.toString(moveId);
             String encQuery = URLEncoder.encode(idToString, "UTF-8");
@@ -53,27 +55,22 @@ public class TMDBCredit extends TMDBConnector {
             JSONArray resultsCrew = super.getJsonHelper().httpResponseToArray(super.getResponse(uri), "crew");
 
             addResultsToArray(results);
-
             addResultsToArray(resultsCrew);
 
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | PMCException | URISyntaxException | JSONException e) {
+            throw new PMCException("API: Kunne ikke søge efter credits\n" + e.getMessage());
         }
     }
 
-    private void addResultsToArray(JSONArray arr) throws JSONException {
-        try {
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject creditJson = arr.getJSONObject(i);
-                TMDBCreditEntity credit = parseJson(creditJson);
-                credits.add(credit);
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
+    private void addResultsToArray(JSONArray arr) throws JSONException, IOException, PMCException {
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject creditJson = arr.getJSONObject(i);
+            TMDBCreditEntity credit = parseJson(creditJson);
+            credits.add(credit);
         }
     }
 
-    private TMDBCreditEntity parseJson(JSONObject json) throws JSONException, IOException {
+    private TMDBCreditEntity parseJson(JSONObject json) throws JSONException, PMCException {
         String img = json.getString("profile_path");
         String character = json.has("character") ? json.getString("character") : "Crew";
         int order = json.has("order") ? json.getInt("order") : -1;

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import pmc.be.rest.omdb.OMDBMovieEntity;
 import pmc.dal.rest.omdb.OMDBConnector;
 import pmc.dal.rest.omdb.extra.OMDBSearchMethod;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,12 +15,12 @@ public class OMDBSearch extends OMDBConnector {
     private OMDBMovieEntity movieFound;
     private String title;
 
-    public OMDBSearch(String title, OMDBSearchMethod method) {
+    public OMDBSearch(String title, OMDBSearchMethod method) throws PMCException {
         this.title = title;
         searchQuery(title, method);
     }
 
-    public void searchQuery(String query, OMDBSearchMethod method) {
+    public void searchQuery(String query, OMDBSearchMethod method) throws PMCException {
         try {
             String encQuery = URLEncoder.encode(query, "UTF-8");
             JSONObject responseJson = super.getJsonHelper().httpResponseToObject(super.getResponse(method.get() + encQuery));
@@ -29,8 +30,8 @@ public class OMDBSearch extends OMDBConnector {
 
             movieFound = parseJson(responseJson);
 
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | PMCException | JSONException e) {
+            throw new PMCException("API: Kunne ikke søge efter OMDB film\n" + e.getMessage());
         }
     }
 

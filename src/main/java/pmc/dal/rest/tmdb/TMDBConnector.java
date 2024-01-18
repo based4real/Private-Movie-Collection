@@ -7,6 +7,7 @@ import pmc.dal.rest.tmdb.movie.TMDBMovie;
 import pmc.utils.ConfigSystem;
 import pmc.utils.JsonHelper;
 import pmc.dal.rest.tmdb.movie.TMDBSearch;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,19 +24,23 @@ public class TMDBConnector {
         this.configSystem = ConfigSystem.getInstance();
     }
 
-    protected HttpRequest getRequest(URI uri) throws IOException {
+    protected HttpRequest getRequest(URI uri) throws PMCException {
         return HttpRequest.newBuilder()
                 .uri(uri)
                 .header("Authorization", "Bearer " + configSystem.getTMDBToken())
                 .build();
     }
 
-    protected HttpResponse<String> getResponse(URI uri) throws IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newHttpClient();
-        return httpClient.send(getRequest(uri), HttpResponse.BodyHandlers.ofString());
+    protected HttpResponse<String> getResponse(URI uri) throws PMCException {
+        try {
+            HttpClient httpClient = HttpClient.newHttpClient();
+            return httpClient.send(getRequest(uri), HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new PMCException("API: HTTP response fejl\n" + e.getMessage());
+        }
     }
 
-    private boolean isValidToken() throws IOException, URISyntaxException, JSONException, InterruptedException {
+    private boolean isValidToken() throws IOException, URISyntaxException, JSONException, InterruptedException, PMCException {
         URI uri = new URI(getAPI() + "/authentication");
         JSONObject responseJson = getJsonHelper().httpResponseToObject(getResponse(uri));
 
@@ -44,11 +49,11 @@ public class TMDBConnector {
         return responseJson.getBoolean("success");
     }
 
-    public String getAPI() throws IOException {
+    public String getAPI() throws PMCException {
         return configSystem.getTMDBAPIUrl();
     }
 
-    public String getImageUrl() throws IOException {
+    public String getImageUrl() throws PMCException {
         return configSystem.getTMDBImageUrl();
     }
 
@@ -56,7 +61,7 @@ public class TMDBConnector {
         return JsonHelper.getInstance();
     }
 
-    public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException {
+    public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException, PMCException {
 /*        TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
 
         TMDBConnector tmdbConnector = new TMDBConnector();

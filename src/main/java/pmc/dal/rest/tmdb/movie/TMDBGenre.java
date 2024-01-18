@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.dal.rest.tmdb.TMDBConnector;
 import pmc.dal.rest.tmdb.extra.TMDBLang;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,15 +18,15 @@ public class TMDBGenre extends TMDBConnector {
     private List<TMDBGenreEntity> genres = new ArrayList<>();
     private TMDBLang lang = TMDBLang.ENGLISH;
 
-    public TMDBGenre() {
+    public TMDBGenre() throws PMCException {
         searchQuery(this.lang);
     }
 
-    public TMDBGenre(TMDBLang lang) {
+    public TMDBGenre(TMDBLang lang) throws PMCException {
         searchQuery(lang);
     }
 
-    public void searchQuery(TMDBLang lang) {
+    public void searchQuery(TMDBLang lang) throws PMCException {
         genres.clear();
 
         try {
@@ -37,8 +38,8 @@ public class TMDBGenre extends TMDBConnector {
                 TMDBGenreEntity genre = parseJson(creditJson);
                 genres.add(genre);
             }
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | JSONException e) {
+            throw new PMCException("API: Kunne ikke søge efter genre\n" + e.getMessage());
         }
     }
 

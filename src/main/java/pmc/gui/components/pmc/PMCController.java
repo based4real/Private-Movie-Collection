@@ -84,12 +84,12 @@ public class PMCController implements IViewController {
             this.movieManager = new MovieManager();
             this.genreManager = new GenreManager();
             this.categoryManager = new CategoryManager();
+            this.tmdbGenreManager = new TMDBGenreManager();
         } catch (PMCException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
 
         this.tmdbMovieManager = new TMDBMovieManager();
-        this.tmdbGenreManager = new TMDBGenreManager();
 
         MoviePosterActions moviePosterActions = new MoviePosterActions(
                 this::handleMoviePosterClick,
@@ -195,15 +195,6 @@ public class PMCController implements IViewController {
         }
 
         return categoriesModels;
-    }
-
-    private MovieDetailsModel convertToMovieDetailsModel(TMDBMovieEntity tmdbMovie) {
-        model.backdropPathProperty().set("https://image.tmdb.org/t/p/original" + tmdbMovie.getBackdropPath());
-        OMDBMovieEntity omdbMovie = tmdbMovie.getOMDBMovie(); // todo: kører ikke på baggrundstråd kan blokere GUI
-
-        System.out.println("TMDBMovie: " + tmdbMovie);
-        System.out.println("OMDBMovie: " + omdbMovie);
-        return new MovieDetailsModel(tmdbMovie, omdbMovie);
     }
 
     private void handleMoviePosterClick(MovieModel movieModel) {

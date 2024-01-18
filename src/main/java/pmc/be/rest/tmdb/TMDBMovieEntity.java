@@ -8,6 +8,7 @@ import pmc.dal.rest.tmdb.movie.TMDBCredit;
 import pmc.dal.rest.tmdb.movie.TMDBExternalIDs;
 import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.dal.rest.tmdb.movie.TMDBVideo;
+import pmc.utils.PMCException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,35 +63,55 @@ public class TMDBMovieEntity {
         this.lang = lang;
     }
 
-    private TMDBExternalIDEntity searchExternalIDs() {
-        TMDBExternalIDs tmdbExternalIDs = new TMDBExternalIDs(this);
-        return tmdbExternalIDs.getResult();
+    private TMDBExternalIDEntity searchExternalIDs() throws PMCException {
+        try {
+            TMDBExternalIDs tmdbExternalIDs = new TMDBExternalIDs(this);
+            return tmdbExternalIDs.getResult();
+        } catch (PMCException e) {
+            throw new PMCException("BE: Externalids søgning fejl\n" + e.getMessage());
+        }
     }
 
-    private List<TMDBCreditEntity> searchCredits() {
-        TMDBCredit tmdbGetCredit = new TMDBCredit(this);
-        return tmdbGetCredit.getResult();
+    private List<TMDBCreditEntity> searchCredits() throws PMCException {
+        try {
+            TMDBCredit tmdbGetCredit = new TMDBCredit(this);
+            return tmdbGetCredit.getResult();
+        } catch (PMCException e) {
+            throw new PMCException("BE: Credits søgning fejl\n" + e.getMessage());
+        }
     }
 
-    private OMDBMovieEntity searchOmdb() {
-        OMDBSearch omdbSearch = new OMDBSearch(getExternalIDs().getImdbID(), OMDBSearchMethod.IMDB);
-        return omdbSearch.getResult();
+    private OMDBMovieEntity searchOmdb() throws PMCException {
+         try {
+             OMDBSearch omdbSearch = new OMDBSearch(getExternalIDs().getImdbID(), OMDBSearchMethod.IMDB);
+             return omdbSearch.getResult();
+         } catch (PMCException e) {
+             throw new PMCException("BE: OMDB søgning fejl\n" + e.getMessage());
+         }
     }
 
-    public List<TMDBGenreEntity> searchGenre() {
-        TMDBGenre tmdbGenre = new TMDBGenre(lang);
-        List<TMDBGenreEntity> allGenres = tmdbGenre.getResult();
+    public List<TMDBGenreEntity> searchGenre() throws PMCException {
+        try {
+            TMDBGenre tmdbGenre = new TMDBGenre(lang);
+            List<TMDBGenreEntity> allGenres = tmdbGenre.getResult();
 
-        List<TMDBGenreEntity> match = allGenres.stream()
-                .filter(genre -> genreIds.contains(genre.getID()))
-                .collect(Collectors.toList());
+            List<TMDBGenreEntity> match = allGenres.stream()
+                    .filter(genre -> genreIds.contains(genre.getID()))
+                    .collect(Collectors.toList());
 
-        return match;
+            return match;
+        } catch (PMCException e) {
+            throw new PMCException("BE: Genre søgning fejl\n" + e.getMessage());
+        }
     }
 
-    private List<TMDBVideoEntity> searchVideos() {
-        TMDBVideo tmdbVideo = new TMDBVideo(this, TMDBLang.ENGLISH);
-        return tmdbVideo.getResult();
+    private List<TMDBVideoEntity> searchVideos() throws PMCException {
+        try {
+            TMDBVideo tmdbVideo = new TMDBVideo(this, TMDBLang.ENGLISH);
+            return tmdbVideo.getResult();
+        } catch (PMCException e) {
+            throw new PMCException("BE: Video søgning fejl\n" + e.getMessage());
+        }
     }
 
     public String getOriginalTitle() {
@@ -101,28 +122,28 @@ public class TMDBMovieEntity {
         return genreIds;
     }
 
-    public TMDBExternalIDEntity getExternalIDs() {
+    public TMDBExternalIDEntity getExternalIDs() throws PMCException {
         if (externalIDs == null)
             externalIDs = searchExternalIDs();
 
         return externalIDs;
     }
 
-    public List<TMDBVideoEntity> getVideos() {
+    public List<TMDBVideoEntity> getVideos() throws PMCException {
         if (videos == null)
             videos = searchVideos();
 
         return videos;
     }
 
-    public List<TMDBCreditEntity> getCredits() {
+    public List<TMDBCreditEntity> getCredits() throws PMCException {
         if (credits == null)
             credits = searchCredits();
 
         return credits;
     }
 
-    public List<TMDBGenreEntity> getGenres() {
+    public List<TMDBGenreEntity> getGenres() throws PMCException {
         if (genres == null)
             genres = searchGenre();
 
@@ -133,7 +154,7 @@ public class TMDBMovieEntity {
         return overview;
     }
 
-    public OMDBMovieEntity getOMDBMovie() {
+    public OMDBMovieEntity getOMDBMovie() throws PMCException {
         if (omdbMovieEntity == null)
             omdbMovieEntity = searchOmdb();
 
@@ -171,22 +192,26 @@ public class TMDBMovieEntity {
 
     @Override
     public String toString() {
-        return "TMDBMovieEntity{\n" +
-                "    description='" + getDescription() + "',\n" +
-                "    originalTitle='" + getOriginalTitle() + "',\n" +
-                "    title='" + getTitle() + "',\n" +
-                "    genreIds=" + getGenreIds() + ",\n" +
-                "    posterPath='" + getPosterPath() + "',\n" +
-                "    backdropPath='" + getBackdropPath() + "',\n" +
-                "    releaseDate='" + getReleaseDate() + "',\n" +
-                "    id=" + getID() + ",\n" +
-                "    lang=" + getLang() + ",\n" +
-                "    omdbMovieEntity=" + getOMDBMovie() + ",\n" +
-                "    externalIDs=" + getExternalIDs() + ",\n" +
-                "    credits=" + getCredits() + ",\n" +
-                "    genres=" + getGenres() + ",\n" +
-                "    videos=" + getVideos() + ",\n" +
-                "}\n";
+        try {
+            return "TMDBMovieEntity{\n" +
+                    "    description='" + getDescription() + "',\n" +
+                    "    originalTitle='" + getOriginalTitle() + "',\n" +
+                    "    title='" + getTitle() + "',\n" +
+                    "    genreIds=" + getGenreIds() + ",\n" +
+                    "    posterPath='" + getPosterPath() + "',\n" +
+                    "    backdropPath='" + getBackdropPath() + "',\n" +
+                    "    releaseDate='" + getReleaseDate() + "',\n" +
+                    "    id=" + getID() + ",\n" +
+                    "    lang=" + getLang() + ",\n" +
+                    "    omdbMovieEntity=" + getOMDBMovie() + ",\n" +
+                    "    externalIDs=" + getExternalIDs() + ",\n" +
+                    "    credits=" + getCredits() + ",\n" +
+                    "    genres=" + getGenres() + ",\n" +
+                    "    videos=" + getVideos() + ",\n" +
+                    "}\n";
+        } catch (PMCException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

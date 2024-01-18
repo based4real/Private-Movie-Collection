@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import pmc.be.rest.tmdb.TMDBExternalIDEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.dal.rest.tmdb.TMDBConnector;
+import pmc.utils.PMCException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,18 +16,17 @@ public class TMDBExternalIDs extends TMDBConnector {
     private int movieID;
     private TMDBExternalIDEntity externalIDs;
 
-    public TMDBExternalIDs(int id) {
+    public TMDBExternalIDs(int id) throws PMCException {
         this.movieID = id;
         searchQuery(id);
     }
 
-    public TMDBExternalIDs(TMDBMovieEntity movie) {
+    public TMDBExternalIDs(TMDBMovieEntity movie) throws PMCException {
         this.movieID = movie.getID();
         searchQuery(movie.getID());
     }
 
-    public void searchQuery(int id) {
-        //List<TMDBMovie> movies = new ArrayList<>();
+    public void searchQuery(int id) throws PMCException {
         try {
             String idtoString = Integer.toString(id);
             String encQuery = URLEncoder.encode(idtoString, "UTF-8");
@@ -38,8 +38,8 @@ public class TMDBExternalIDs extends TMDBConnector {
                 externalIDs = parseJson(result);
             }
 
-        } catch (IOException | InterruptedException | URISyntaxException | JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | URISyntaxException | JSONException e) {
+            throw new PMCException("API: Kunne ikke søge efter external ids\n" + e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class TMDBExternalIDs extends TMDBConnector {
                 json.getString("facebook_id"),
                 json.getString("instagram_id"),
                 json.getString("twitter_id")
-                );
+        );
     }
 
     public TMDBExternalIDEntity getResult() {
