@@ -3,6 +3,7 @@ package pmc.gui.components.pmc;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -49,6 +50,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -211,6 +213,11 @@ public class PMCController implements IViewController {
     private void handleMoviePosterClick(MovieModel movieModel) {
         viewHandler.changeView(ViewType.INFO);
         infoController.setModel(movieModel);
+
+        if (infoController.isCached()) {
+            infoController.setDetailsModel(infoController.getCachedMovie());
+            return;
+        }
 
         performBackgroundTask(
                 () -> {
