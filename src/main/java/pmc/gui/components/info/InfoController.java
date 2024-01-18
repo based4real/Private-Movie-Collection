@@ -70,7 +70,8 @@ public class InfoController implements IViewController {
             this.model.creditsProperty().setAll(detailsModel.creditProperty());
             this.model.videosProperty().setAll(detailsModel.videoProperty());
 
-            movieDetails.add(detailsModel);
+            if (!getCachedList().contains(detailsModel))
+                movieDetails.add(detailsModel);
         }
     }
 }
