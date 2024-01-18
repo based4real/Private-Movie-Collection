@@ -46,28 +46,42 @@ public class GenresViewBuilder implements Builder<Region> {
         return tilePane;
     }
 
+
     private void updateGenreButtons() {
         tilePane.getChildren().clear();
 
         for (GenresModel genreModel : model) {
-            genreModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesUpdate) -> {
+            genreModel.getMovies().addListener((ListChangeListener.Change<? extends MovieModel> moviesChange) -> {
                 handleGenreMoviesChange(genreModel);
             });
+
+            if (!genreModel.getMovies().isEmpty()) {
+                addButtonForGenre(genreModel);
+            }
         }
     }
 
     private void handleGenreMoviesChange(GenresModel genreModel) {
-        if (!genreModel.getMovies().isEmpty()) {
-            Button btn = ButtonWidgets.actionButtonStyle(StringHandler.trimName(genreModel.nameProperty().get(), 15), "genre-category-button", event -> categoryClick(genreModel));
+        boolean hasButton = tilePane.getChildren().stream()
+                .anyMatch(node -> node instanceof Button && ((Button) node).getText().equals(genreModel.nameProperty().get()));
 
-            tilePane.getChildren().add(btn);
+        if (!genreModel.getMovies().isEmpty() && !hasButton) {
+            addButtonForGenre(genreModel);
+        } else if (genreModel.getMovies().isEmpty() && hasButton) {
+            removeButtonForGenre(genreModel);
         }
     }
 
+    private void addButtonForGenre(GenresModel genreModel) {
+        Button btn = ButtonWidgets.actionButtonStyle(StringHandler.trimName(genreModel.nameProperty().get(), 15), "genre-category-button", event -> genreClick(genreModel));
+        tilePane.getChildren().add(btn);
+    }
 
-    private void categoryClick(GenresModel genreModel) {
-        //if (!genreModel.getMovies().isEmpty())
+    private void removeButtonForGenre(GenresModel genreModel) {
+        tilePane.getChildren().removeIf(node -> node instanceof Button && ((Button) node).getText().equals(genreModel.nameProperty().get()));
+    }
+
+    private void genreClick(GenresModel genreModel) {
         this.viewChangehandler.accept(new MoviesData(genreModel.nameProperty().get(), genreModel.getMovies()));
     }
 }
-

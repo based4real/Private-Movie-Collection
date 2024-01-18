@@ -33,13 +33,24 @@ public class GenresModel {
     }
 
     private void setMatchFromModels(ObservableList<MovieModel> movieModels) {
-        movieModels.addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
-            FilteredList<MovieModel> filteredModels = new FilteredList<>(movieModels, movieModel ->
-                    movieModel.genreObservableList().stream().anyMatch(genre -> genre.getTmdbId() == this.idProperty().get())
-            );
+        // samme løsning som i CategoriesModel
 
-            matchingMovieModel.setAll(filteredModels);
-       });
+        movieModels.addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    change.getAddedSubList().stream()
+                            .filter(movieModel -> movieModel.genreObservableList().stream()
+                                    .anyMatch(genre -> genre.getTmdbId() == this.idProperty().get()))
+                            .forEach(matchingMovieModel::add);
+                }
+                if (change.wasRemoved()) {
+                    change.getRemoved().stream()
+                            .filter(movieModel -> movieModel.genreObservableList().stream()
+                                    .noneMatch(genre -> genre.getTmdbId() == this.idProperty().get()))
+                            .forEach(matchingMovieModel::remove);
+                }
+            }
+        });
     }
 
     public ObservableList<MovieModel> getMovies() {
