@@ -120,6 +120,7 @@
 
 .movie-poster-title:hover {
     -fx-text-fill: -accent-color;
+    -fx-cursor: hand;
 }
 
 .movie-poster-imdb-icon {
@@ -148,7 +149,7 @@
 }
 
 .hpage-title {
-    -fx-font-size: 16;
+    -fx-font-size: 18;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }

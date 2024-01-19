@@ -14,6 +14,7 @@ public class OtherWidgets {
                                            MoviePosterActions actions, Label title) {
         VBox results = new VBox(10);
         title.setMaxWidth(fitWidth);
+        title.setOnMouseClicked(e -> actions.info().accept(model));
         results.getChildren().addAll(new MoviePoster(model, fitWidth, fitHeight, rounding, actions), title);
         return results;
     }
@@ -29,12 +30,14 @@ public class OtherWidgets {
 
     public static VBox moviePosterWithTitleAndSubtitle(MovieModel model, double fitWidth, double fitHeight, double rounding,
                                                        MoviePosterActions actions, Label title, Label subtitle, FontIcon subIcon) {
-        VBox results = new VBox(10);
+        VBox results = new VBox(5);
         HBox subtitleContainer = new HBox(10);
+
+        subtitleContainer.setAlignment(Pos.CENTER_LEFT);
         title.setMaxWidth(fitWidth);
         subtitleContainer.getChildren().addAll(subIcon, subtitle);
         subtitleContainer.setMaxWidth(fitWidth);
-        subtitleContainer.setAlignment(Pos.CENTER_LEFT);
+        title.setOnMouseClicked(e -> actions.info().accept(model));
         results.getChildren().addAll(new MoviePoster(model, fitWidth, fitHeight, rounding, actions), title, subtitleContainer);
         return results;
     }

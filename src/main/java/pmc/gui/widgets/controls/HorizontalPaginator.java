@@ -94,8 +94,9 @@ public class HorizontalPaginator<T> extends VBox {
         navigationBox.setAlignment(Pos.CENTER_RIGHT);
 
         results.setAlignment(Pos.CENTER_LEFT);
-        results.setPadding(new Insets(10));
         results.getChildren().addAll(titleLabel, navigationBox);
+
+        results.setPadding(new Insets(20, 0, 0, 10));
 
         return results;
     }

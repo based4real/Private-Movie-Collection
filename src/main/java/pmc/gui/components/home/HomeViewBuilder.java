@@ -89,8 +89,10 @@ public class HomeViewBuilder implements Builder<Region> {
                     for (CategoriesModel addedCategory : change.getAddedSubList()) {
                         HorizontalPaginator<MovieModel> category = new HorizontalPaginator<>(
                                 addedCategory.getMovies(),
-                                this::createMoviePoster,
-                                addedCategory.nameProperty().get()
+                                movie -> OtherWidgets.moviePosterWithText(movie, 150, 224, 10, moviePosterActions,
+                                        LabelWidgets.styledLabel(movie.titleProperty(), "movie-poster-title")),
+                                addedCategory.nameProperty().get(),
+                                true
                         );
 
                         addedCategory.nameProperty().addListener((obs, ov, nv) -> {
