@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
@@ -17,6 +18,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.util.StringConverter;
+import org.controlsfx.control.CheckComboBox;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
@@ -32,14 +35,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FilterSortBox {
     private TextField searchField;
-    private ComboBox<GenresModel> genreComboBox;
+    private CheckComboBox<GenresModel> genreCheckComboBox;
     private TextField imdbRatingField;
     private ContextMenu searchResultsMenu;
     private List<GenresModel> selectedGenres;
@@ -48,7 +50,6 @@ public class FilterSortBox {
 
     private StackPane searchContainer;
     private StackPane imdbContainer;
-    private HBox selectedGenresDisplay;
 
     private boolean sortByTitle = false;
     private boolean sortByImdbRating = false;
@@ -98,20 +99,11 @@ public class FilterSortBox {
             }
         });
 
-        ContextMenu searchResultsMenu = new ContextMenu();
+        searchResultsMenu = new ContextMenu();
 
-        List<GenresModel> selectedGenres = new ArrayList<>();
-        selectedGenresDisplay = new HBox(5);
-        selectedGenresDisplay.setAlignment(Pos.CENTER_LEFT);
+        selectedGenres = new ArrayList<>();
 
-        // Genre selector
-        genreComboBox = new ComboBox<>();
-        FilteredList<GenresModel> filteredGenres = new FilteredList<>(
-                model.genreModels().sorted(Comparator.comparing(genreModel -> genreModel.nameProperty().get())),
-                genre -> true
-        );
-        genreComboBox.setItems(filteredGenres);
-        genreComboBox.setPromptText("Vælg genre...");
+        createCheckComboBox();
 
         // Imdb rating felt
         imdbRatingField = new TextField();
@@ -126,44 +118,8 @@ public class FilterSortBox {
         StackPane.setAlignment(imdbIcon, Pos.CENTER_LEFT);
         StackPane.setMargin(imdbIcon, new Insets(5));
 
-
-        // gør sådan at når vi 'dropdowner' at det udskriver som genre navn
-        genreComboBox.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(GenresModel item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                    setGraphic(null);
-                    setVisible(true);
-                } else {
-                    setText(item.nameProperty().get());
-                    setVisible(!selectedGenres.contains(item));
-                }
-            }
-        });
-
-
-        genreComboBox.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
-            if (nv != null && !selectedGenres.contains(nv)) {
-                selectedGenres.add(nv);
-                // combobx fejl hvis ikke Platform.runLater()
-                Platform.runLater(() -> updateComboBoxItems(genreComboBox, selectedGenres, model.genreModels()));
-                updateSelectedGenresDisplay(selectedGenresDisplay, selectedGenres, searchField, searchResultsMenu, genreComboBox, imdbRatingField);
-            }
-        });
-
-        // gør sådan at når vi vælger en genre at den vises som genre navn
-        genreComboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(GenresModel item, boolean empty) {
-                super.updateItem(item, empty);
-                setText("Vælg genre...");
-            }
-        });
-
         searchField.textProperty().addListener((obs, ov, nv) -> {
-            updateSearchResult(nv, searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            updateSearchResult(nv, searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
         });
 
         searchField.setOnKeyPressed(event -> {
@@ -174,20 +130,16 @@ public class FilterSortBox {
 
         searchField.focusedProperty().addListener((obs, ov, nv) -> {
             if (nv && searchField.getText().isEmpty()) {
-                updateSearchResult("", searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+                updateSearchResult("", searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
             }
         });
 
         imdbRatingField.textProperty().addListener((obs, ov, nv) -> {
-            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
         });
 
         imdbRatingField.focusedProperty().addListener((obs, ov, nv) -> {
-            if (nv) updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
-        });
-
-        genreComboBox.focusedProperty().addListener((obs, ov, nv) -> {
-            if (nv) updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            if (nv) updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
         });
 
         FontIcon enabledIcon = IconWidgets.styledIcon(Material2AL.CHECK, "menu-setting-enabled-icon");
@@ -201,7 +153,7 @@ public class FilterSortBox {
                 toggleImdb.setGraphic(null);
                 toggleGenres.setGraphic(null);
             }
-            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
         });
 
         toggleImdb.setOnAction(e -> {
@@ -213,7 +165,7 @@ public class FilterSortBox {
                 toggleTitle.setGraphic(null);
                 toggleGenres.setGraphic(null);
             }
-            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
         });
 
         toggleGenres.setOnAction(e -> {
@@ -225,7 +177,46 @@ public class FilterSortBox {
                 toggleTitle.setGraphic(null);
                 toggleImdb.setGraphic(null);
             }
-            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
+            updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
+        });
+    }
+
+    private void createCheckComboBox() {
+
+        FilteredList<GenresModel> filteredGenres = new FilteredList<>(
+                model.genreModels().sorted(Comparator.comparing(genreModel -> genreModel.nameProperty().get())),
+                genre -> true
+        );
+        genreCheckComboBox = new CheckComboBox<>(filteredGenres);
+        genreCheckComboBox.setTitle("Vælg genre...");
+        genreCheckComboBox.getCheckModel().getCheckedItems().addListener((ListChangeListener<GenresModel>) c -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    selectedGenres.addAll(c.getAddedSubList());
+                } else if (c.wasRemoved()) {
+                    selectedGenres.removeAll(c.getRemoved());
+                }
+                updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
+            }
+        });
+
+/*        genreCheckComboBox.setStyle("-fx-mark-color: deeppink");
+        System.out.println(genreCheckComboBox.getCssMetaData());*/
+
+        genreCheckComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(GenresModel genresModel) {
+                return genresModel == null ? "" : genresModel.nameProperty().get();
+            }
+
+            @Override
+            public GenresModel fromString(String string) {
+                return null;
+            }
+        });
+
+        genreCheckComboBox.focusedProperty().addListener((obs, ov, nv) -> {
+            if (nv) updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreCheckComboBox, selectedGenres, imdbRatingField);
         });
     }
 
@@ -237,50 +228,16 @@ public class FilterSortBox {
         return imdbContainer;
     }
 
-    public ComboBox<GenresModel> getGenreComboBox() {
-        return genreComboBox;
-    }
-
-    public HBox getSelectedGenresDisplay() {
-        return selectedGenresDisplay;
-    }
-
-    private void updateComboBoxItems(ComboBox<GenresModel> genreComboBox, List<GenresModel> selectedGenres, ObservableList<GenresModel> allGenres) {
-        List<GenresModel> filteredList = allGenres.stream()
-                .filter(genre -> !selectedGenres.contains(genre))
-                .collect(Collectors.toList());
-        genreComboBox.setItems(FXCollections.observableArrayList(filteredList));
-    }
-
-    private void updateSelectedGenresDisplay(HBox selectedGenresDisplay, List<GenresModel> selectedGenres,
-                                             TextField searchField, ContextMenu searchResultsMenu,
-                                             ComboBox<GenresModel> genreComboBox, TextField imdbRatingField) {
-        selectedGenresDisplay.getChildren().clear();
-        for (GenresModel genreModel : selectedGenres) {
-            Label genreLabel = LabelWidgets.styledLabel(genreModel.nameProperty(), "filter-genre-selected");
-
-            Button removeButton = ButtonWidgets.actionIconButton(Material2AL.CLOSE, "filter-genre-remove", e -> {
-                selectedGenres.remove(genreModel);
-                updateComboBoxItems(genreComboBox, selectedGenres, model.genreModels());
-                updateSelectedGenresDisplay(selectedGenresDisplay, selectedGenres, searchField, searchResultsMenu, genreComboBox, imdbRatingField);
-                updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
-            });
-
-            HBox genreBox = new HBox(genreLabel, removeButton);
-            genreBox.setAlignment(Pos.CENTER_LEFT);
-            selectedGenresDisplay.getChildren().add(genreBox);
-        }
-
-        updateSearchResult(searchField.getText(), searchResultsMenu, searchField, genreComboBox, selectedGenres, imdbRatingField);
-
+    public CheckComboBox<GenresModel> getGenreCheckComboBox() {
+        return genreCheckComboBox;
     }
 
     private void updateSearchResult(String searchQuery, ContextMenu searchResultsMenu,
-                                    TextField searchField, ComboBox<GenresModel> genreComboBox,
+                                    TextField searchField, CheckComboBox<GenresModel> genreComboBox,
                                     List<GenresModel> selectedGenres, TextField imdbRatingField) {
         searchResultsMenu.getItems().clear();
 
-        if (searchQuery == null && genreComboBox.getSelectionModel().isEmpty() && imdbRatingField.getText().isEmpty()) {
+        if (searchQuery == null && imdbRatingField.getText().isEmpty()) {
             searchResultsMenu.hide();
             return;
         }

@@ -179,20 +179,31 @@
 }
 
 .dialog-pane .button-bar {
-    -fx-background-color: darkgray;
+    -fx-background-color: -sidebar-color;
 }
 
 .dialog-pane .button-bar .ok-button {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-background-color: -accent-color;
+    -fx-cursor: hand;
 }
 
 .dialog-pane .button-bar .cancel-button {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-weight: bold;
-    -fx-background-color: grey;
+    -fx-background-color: darkgray;
+    -fx-cursor: hand;
 }
+
+.dialog-pane .button-bar .ok-button:hover {
+    -fx-text-fill: white;
+}
+
+.dialog-pane .button-bar .cancel-button:hover {
+    -fx-text-fill: white;
+}
+
 
 .add-repick {
     -fx-text-fill: -accent-color;
@@ -214,6 +225,35 @@
 
 .delete-icon:hover {
     -fx-fill: red;
+}
+
+.add-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 30;
+}
+
+.add-back-button {
+    -fx-background-color: derive(-primary-color, -40%);
+    -fx-text-fill: grey;
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+    -fx-pref-width: 80;
+    -fx-cursor: hand;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);*/
+}
+
+.add-back-button:hover {
+    -fx-background-color: derive(-primary-color, -60%);
+    -fx-text-fill: white;
+}
+
+.add-poster {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.7), 10, 0, 0, 0);
+}
+
+.add-textfield {
+
 }
 
 /*******************************************************************************
@@ -570,15 +610,16 @@
     -fx-padding: 5 5 5 25;
     -fx-background-color: -primary-color;
     -fx-background-radius: 20;
+    -fx-text-fill: white;
 }
 
 .imdb-textfield {
     -fx-background-radius: 5;
 }
 
-
 .icon-textfield:focused {
     -fx-background-color: white;
+    -fx-text-fill: black;
 }
 
 .icon-textfield-icon {
@@ -680,6 +721,16 @@
 .combo-box:focused .arrow {
     -fx-background-color: -accent-color;
 }
+
+.combo-box .list-cell .check-box .box {
+    -fx-background-color: -primary-color;
+}
+
+.combo-box .check-box .mark {
+    -fx-mark-color: -accent-color;
+    -fx-background-insets: 0;
+}
+
 
 .button-filter-imdb {
     -fx-min-width: 125;

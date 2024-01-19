@@ -68,7 +68,7 @@ public class HorizontalPaginator<T> extends VBox {
 
         results.setAlignment(Pos.CENTER_LEFT);
         results.setStyle("-fx-background-color: #323232");
-        results.setPadding(new Insets(10, 5, 10, 5));
+        results.setPadding(new Insets(10, 0, 10, 5));
 
         return results;
     }

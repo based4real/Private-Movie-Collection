@@ -419,7 +419,7 @@ public class PMCController implements IViewController {
                         model.fileProgressProperty().set(0);
                     });
                     FileManagementService.downloadImageToDir(addMovieData.posterUrl(), "data/posters", addMovieData.posterPath(), 250, 374);
-                    FileManagementService.copyFileToDir(new File(addMovieData.filePath()), "data/movies", this::updateTaskProgress);
+                    FileManagementService.copyFileToDir(new File(addMovieData.filePath()), String.valueOf(addMovieData.tmdbId()), "data/movies", this::updateTaskProgress);
                     Platform.runLater(() -> {
                         model.fileProgressProperty().set(0);
                         model.copyingFileProperty().set(false);
