@@ -7,6 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 import javafx.collections.ListChangeListener;
+import pmc.gui.common.MovieDataWrapper;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviesData;
 import pmc.gui.utils.StringHandler;
@@ -82,6 +83,6 @@ public class GenresViewBuilder implements Builder<Region> {
     }
 
     private void genreClick(GenresModel genreModel) {
-        this.viewChangehandler.accept(new MoviesData(genreModel.nameProperty().get(), genreModel.getMovies()));
+        this.viewChangehandler.accept(new MoviesData(new MovieDataWrapper(genreModel)));
     }
 }

@@ -31,6 +31,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
+import pmc.gui.common.MovieDataWrapper;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MovieUpdate;
 import pmc.gui.common.MoviesData;
@@ -360,7 +361,7 @@ public class InfoViewBuilder implements Builder<Region> {
     }
 
     private void buttonGenre(GenresModel genreModel) {
-        this.viewChangehandler.accept(new MoviesData(genreModel.nameProperty().get(), genreModel.getMovies()));
+        this.viewChangehandler.accept(new MoviesData(new MovieDataWrapper(genreModel)));
     }
 
 }

@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.util.Builder;
+import pmc.gui.common.MovieDataWrapper;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviesData;
 import pmc.gui.utils.StringHandler;
@@ -82,7 +83,6 @@ public class CategoriesViewBuilder implements Builder<Region> {
     }
 
     private void categoryClick(CategoriesModel categoryModel) {
-       // if (!categoryModel.getMovies().isEmpty())
-        this.viewChangehandler.accept(new MoviesData(categoryModel.nameProperty().get(), categoryModel.getMovies()));
+        this.viewChangehandler.accept(new MoviesData(new MovieDataWrapper(categoryModel)));
     }
 }

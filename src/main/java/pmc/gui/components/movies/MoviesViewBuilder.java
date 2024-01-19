@@ -98,6 +98,7 @@ public class MoviesViewBuilder implements Builder<Region> {
 
     private void addPosters() {
         updatePosters();
+
         model.moviesProperty().addListener((ListChangeListener.Change<? extends MovieModel> change) -> {
             updatePosters();
         });

@@ -8,10 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
-import pmc.gui.common.IViewController;
-import pmc.gui.common.MovieModel;
-import pmc.gui.common.MoviePosterActions;
-import pmc.gui.common.MoviesData;
+import pmc.be.Movie;
+import pmc.gui.common.*;
 
 import java.util.function.Consumer;
 import java.util.logging.Filter;
@@ -21,6 +19,7 @@ public class MoviesController implements IViewController {
     private final MoviesViewBuilder viewBuilder;
 
     private final StringProperty title = new SimpleStringProperty("");
+    private MovieDataWrapper wrap;
 
     public MoviesController(ObservableList<MovieModel> model, MoviePosterActions moviePosterActions) {
         this.model = new MoviesModel();
@@ -37,11 +36,33 @@ public class MoviesController implements IViewController {
         return title;
     }
 
-    public void setModel(MoviesData movieData) {
-        this.model.titleProperty().set(movieData.title());
+    public ObservableList<MovieModel> movieProperty() {
+        return this.model.moviesProperty();
+    }
+
+    public void setMovies(ObservableList<MovieModel> movies) {
+        this.model.setMovies(movies);
+    }
+
+    public void setDetails(String title, ObservableList<MovieModel> list) {
+        this.model.titleProperty().set(title);
 
         // todo: må faktisk ikke gøres - at kalde viewBuilder herfra, men lige nu er det løsningen
-        viewBuilder.setMoviesFilter(movieModel -> movieData.movies().contains(movieModel));
+        viewBuilder.setMoviesFilter(movieModel -> list.contains(movieModel));
+    }
+
+    public MovieDataWrapper getMoviedata() {
+        return wrap;
+    }
+
+    public void setModel(MoviesData movieData) {
+        MovieDataWrapper wrap = movieData.movieDataWrapper();
+        this.wrap = wrap;
+
+        switch(wrap.getDataType()) {
+            case GENRE -> setDetails(wrap.getGenreModel().nameProperty().get(), wrap.getGenreModel().getMovies());
+            case CATEGORY -> setDetails(wrap.getCategoryModel().nameProperty().get(), wrap.getCategoryModel().getMovies());
+        }
     }
 
 }

@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 public class CategoriesController implements IViewController {
     private final Builder<Region> viewBuilder;
 
+    private ObservableList<CategoriesModel> model;
+
     public CategoriesController(ObservableList<CategoriesModel> model, Consumer<MoviesData> viewChangeHandler) {
         this.viewBuilder = new CategoriesViewBuilder(model, viewChangeHandler);
     }

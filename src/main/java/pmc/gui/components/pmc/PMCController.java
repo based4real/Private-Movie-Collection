@@ -236,6 +236,7 @@ public class PMCController implements IViewController {
         viewHandler.changeView(ViewType.PLAYBACK);
     }
 
+    private String activePage;
     private void handleGenreCategoryClick(MoviesData moviedata) {
         moviesController.setModel(moviedata);
         viewHandler.changeView(ViewType.MOVIES);
@@ -267,7 +268,6 @@ public class PMCController implements IViewController {
     }
 
     private void showEditMovieDialog(MovieModel movieModel) {
-
         EditMovieController editMovieController = new EditMovieController(
                 movieModel, model.categoryModels(), this::handleCategoryUpdate
         );
@@ -286,6 +286,17 @@ public class PMCController implements IViewController {
             List<Category> updatedCategories = movieManager.updateMovieCategories(movie, currentCategories, categoryId);
             data.movieModel().categoryObservableList().setAll(updatedCategories);
             updateCategoryModels(data.movieModel());
+
+            MovieDataWrapper wrap = this.moviesController.getMoviedata();
+            CategoriesModel categoryModel = wrap.getCategoryModel();
+
+            if (categoryId != categoryModel.idProperty().get())
+                return;
+
+            if (wrap == null || wrap.getDataType() != MovieDataWrapper.Type.CATEGORY)
+                return;
+
+            this.moviesController.setDetails(wrap.getCategoryModel().nameProperty().get(), wrap.getCategoryModel().getMovies());
         } catch (PMCException e) {
             ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
