@@ -114,10 +114,11 @@ public class PMCViewBuilder implements Builder<Region> {
 
         Platform.runLater(pmc::requestFocus);
 
+        Platform.runLater(pmc::requestFocus);
         model.activeViewProperty().addListener((obs, ov, nv) -> {
+            pmc.requestFocus();
             Platform.runLater(pmc::requestFocus);
         });
-
         return results;
     }
 
