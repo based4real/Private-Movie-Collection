@@ -35,16 +35,4 @@ public class DBConnector {
     public Connection getConnection() throws SQLServerException {
         return dataSource.getConnection();
     }
-
-    public static void main(String[] args) throws SQLException, IOException {
-
-        DBConnector databaseConnector = new DBConnector();
-
-        try (Connection connection = databaseConnector.getConnection()) {
-            System.out.println("Is it open? " + !connection.isClosed());
-        } //Connection gets closed here
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

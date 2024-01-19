@@ -63,19 +63,4 @@ public class GenreDAO_DB extends AbstractDAO<Genre> {
     protected void setUpdateStatementId(PreparedStatement stmt, Genre original) throws SQLException {
         stmt.setInt(2, original.getTmdbId()); // todo: pga kun tmdbid fungerer ikke
     }
-
-    public static void main(String[] args) throws DataAccessException {
-        IDAO<Genre> dao = new GenreDAO_DB();
-
-        for (Genre g : dao.getAll()) {
-            System.out.println(g.getTmdbId());
-        }
-
-        dao.delete(new Genre(18));
-
-
-        for (Genre g : dao.getAll()) {
-            System.out.println(g.getTmdbId());
-        }
-    }
 }

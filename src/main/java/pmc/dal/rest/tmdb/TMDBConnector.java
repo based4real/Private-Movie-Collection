@@ -2,11 +2,8 @@ package pmc.dal.rest.tmdb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import pmc.be.rest.tmdb.TMDBMovieEntity;
-import pmc.dal.rest.tmdb.movie.TMDBMovie;
 import pmc.utils.ConfigSystem;
 import pmc.utils.JsonHelper;
-import pmc.dal.rest.tmdb.movie.TMDBSearch;
 import pmc.utils.PMCException;
 
 import java.io.IOException;
@@ -15,7 +12,6 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 
 public class TMDBConnector {
     private ConfigSystem configSystem;
@@ -40,7 +36,7 @@ public class TMDBConnector {
         }
     }
 
-    private boolean isValidToken() throws IOException, URISyntaxException, JSONException, InterruptedException, PMCException {
+    public boolean isValidToken() throws IOException, URISyntaxException, JSONException, PMCException {
         URI uri = new URI(getAPI() + "/authentication");
         JSONObject responseJson = getJsonHelper().httpResponseToObject(getResponse(uri));
 
@@ -49,91 +45,15 @@ public class TMDBConnector {
         return responseJson.getBoolean("success");
     }
 
-    public String getAPI() throws PMCException {
+    protected String getAPI() throws PMCException {
         return configSystem.getTMDBAPIUrl();
     }
 
-    public String getImageUrl() throws PMCException {
+    protected String getImageUrl() throws PMCException {
         return configSystem.getTMDBImageUrl();
     }
 
     protected JsonHelper getJsonHelper() {
         return JsonHelper.getInstance();
-    }
-
-    public static void main(String[] args) throws IOException, JSONException, URISyntaxException, InterruptedException, PMCException {
-/*        TMDBSearch tmdbSearch = new TMDBSearch("shutter island", TMDBLang.DANISH);
-
-        TMDBConnector tmdbConnector = new TMDBConnector();
-        System.out.println(tmdbConnector.isValidToken());
-
-        OMDBConnector omdbConnector = new OMDBConnector();
-        System.out.println(omdbConnector.isValidToken());
-
-        TMDBMovieEntity tmdbMovieEntity = tmdbSearch.getResult().getFirst();
-        OMDBMovieEntity omdbMovieEntity = tmdbMovieEntity.getOMDBMovie();
-
-        TMDBMovie tmdbMovie = new TMDBMovie(3176);
-        System.out.println(tmdbMovie.getResult().getTitle());
-
-        System.out.println(tmdbMovieEntity.getTitle());
-        System.out.println(tmdbMovieEntity.getDescription());
-
-        System.out.println(omdbMovieEntity.getAwards());
-        System.out.println(omdbMovieEntity.getImdbID());
-        System.out.println(omdbMovieEntity.getImdbRating());
-
-        System.out.println(tmdbMovieEntity.getExternalIDs().getImdbID());
-
-        for (TMDBGenreEntity tmdbGenre : tmdbMovieEntity.getGenres()) {
-             System.out.println(tmdbGenre.getID() + " " + tmdbGenre.getName());
-         }
-
-        //for (TMDBCreditEntity tmdbCredit : tmdbMovieEntity.getCredits()) {
-        //     System.out.println(tmdbCredit.getName() + " " + tmdbCredit.getCharacterName() + " " + tmdbCredit.getImage());
-        //}
-
-        for (TMDBVideoEntity tmdbVideo1 : tmdbMovieEntity.getVideos())
-            System.out.println(tmdbVideo1.getYoutubeUrl());
-
-        //  TMDBGenre tmdbGenre = new TMDBGenre(TMDBLang.FRENCH);
-        //   for (TMDBGenreEntity tmdbGenre1 : tmdbGenre.getResult())
-        //      System.out.println(tmdbGenre1.getName());
-
-       //  OMDBSearch omdbSearch = new OMDBSearch("tt0048058", OMDBSearchMethod.IMDB);
-        //  System.out.println(omdbSearch.getResult().getTitle());*/
-
-
-//        System.out.println(first);
-
-        List<String> titles = List.of(
-                "Shutter Island",
-                "Battle Royale",
-                "Druk",
-                "Shawshank",
-                "Oppenheimer",
-                "barbie",
-                "far til fire",
-                "james bond",
-                "fast and furious",
-                "harakiri",
-                "Rojo Amanecer",
-                "Kho Gaye Hum Kahan");
-
-        for(String title : titles) {
-            TMDBMovieEntity first = new TMDBSearch(title).getResult().getFirst();
-
-            System.out.println("tmdb id: " + first.getID());
-            System.out.println("imdb id: " + first.getExternalIDs().getImdbID());
-            System.out.println("title: " + first.getOriginalTitle());
-            System.out.println("imdb rating: " + first.getOMDBMovie().getRuntime());
-            System.out.println("runtime: " + first.getRuntime());
-            System.out.println("posterPath: " + first.getPosterPath());
-            System.out.println("genres: " + first.getGenreIds());
-            System.out.println("\n");
-        }
-
-
-//        System.out.println(new TMDBSearch("a", lang).getResult());
     }
 }

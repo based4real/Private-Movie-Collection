@@ -141,24 +141,4 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
     public List<Category> getCategoriesForMovie(Movie movie) throws DataAccessException {
         return getTForU(movie);
     }
-
-    public static void main(String[] args) throws DataAccessException {
-        ICatMovieDAO dao = new CatMovieDAO_DB();
-
-        Category category = new Category(1, "Engelsk");
-        Movie movie = new Movie(11, -1, "", "test", 0.0F, 1, "", "", null);
-//        dao.removeRelation(category, movie);
-
-
-
-        List<Movie> movies = dao.getMoviesForCategory(category);
-        for (Movie m : movies) {
-            System.out.println(m);
-        }
-
-        List<Category> categories = dao.getCategoriesForMovie(movie);
-        for (Category c : categories) {
-            System.out.println(c);
-        }
-    }
 }

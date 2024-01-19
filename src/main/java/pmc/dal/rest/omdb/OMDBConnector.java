@@ -50,7 +50,7 @@ public class OMDBConnector {
         return JsonHelper.getInstance();
     }
 
-    public String getAPI() throws PMCException {
+    protected String getAPI() throws PMCException {
         return configSystem.getOMDBAPIUrl();
     }
 

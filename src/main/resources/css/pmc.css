@@ -676,18 +676,22 @@
 }
 
 .button-filter-imdb {
-    -fx-min-width: 125;
+    -fx-min-width: 100;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 0);
     -fx-font-size: 12;
-    -fx-text-fill: grey;
+    -fx-text-fill: lightgrey;
     -fx-border-radius: 4;
     -fx-background-color: -primary-color;
     -fx-border-color: rgba(255, 255, 255, 0.1);
 }
 
 .button-filter-imdb:hover {
-    -fx-text-fill: white;
+    -fx-text-fill: -accent-color;
     -fx-border-radius: 4;
+    -fx-border-color: -topb;
     -fx-cursor: hand;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+}
+
+.label-sort-style {
+    -fx-text-fill: grey;
 }

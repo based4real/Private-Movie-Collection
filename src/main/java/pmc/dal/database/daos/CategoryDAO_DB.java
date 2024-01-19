@@ -67,21 +67,4 @@ public class CategoryDAO_DB extends AbstractDAO<Category> {
     protected void setUpdateStatementId(PreparedStatement stmt, Category original) throws SQLException {
         stmt.setInt(2, original.getId());
     }
-
-    public static void main(String[] args) throws DataAccessException {
-        IDAO<Category> dao = new CategoryDAO_DB();
-
-        for (Category c : dao.getAll()) {
-            System.out.println(c.getName());
-        }
-
-//        dao.delete(new Category(2, "test slet"));
-
-//        dao.update(new Category(2, "Engelsk"), new Category(2, "ENGLISH"));
-
-        for (Category c : dao.getAll()) {
-            System.out.println(c.getName());
-        }
-
-    }
 }

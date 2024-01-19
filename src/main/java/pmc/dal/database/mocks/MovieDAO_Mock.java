@@ -128,19 +128,4 @@ public class MovieDAO_Mock implements IDAO<Movie> {
         int index = rand.nextInt(posterFiles.length);
         return POSTER_DIR + posterFiles[index];
     }
-
-    /**
-     * Til at se test data i terminal.
-     */
-    public static void main(String[] args) {
-        IDAO<Movie> movieIDAO = new MovieDAO_Mock();
-
-        try {
-            for (Movie m : movieIDAO.getAll()) {
-                System.out.println(m);
-            }
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

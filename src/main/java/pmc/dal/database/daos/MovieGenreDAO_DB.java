@@ -135,21 +135,4 @@ public class MovieGenreDAO_DB implements IMovieGenreDAO {
     public List<Movie> getMoviesForGenre(Genre genre) throws DataAccessException {
         return getTForU(genre);
     }
-
-    public static void main(String[] args) throws DataAccessException {
-        IMovieGenreDAO dao = new MovieGenreDAO_DB();
-        Genre genre = new Genre(36);
-        Movie movie = new Movie(9, -1, "", "test", 0.0F, 0, "", "", null);
-
-//        dao.removeRelation(movie, genre);
-        List<Movie> movies = dao.getMoviesForGenre(genre);
-        for (Movie m : movies) {
-            System.out.println(m);
-        }
-
-        List<Genre> genres = dao.getGenresForMovie(movie);
-        for (Genre g : genres) {
-            System.out.println(g);
-        }
-    }
 }
