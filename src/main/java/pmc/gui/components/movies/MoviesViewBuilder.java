@@ -4,10 +4,12 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -20,6 +22,7 @@ import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
 import pmc.gui.utils.SortState;
 import pmc.gui.widgets.*;
+import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.icons.IconWidgets;
 
 import java.util.Comparator;
@@ -33,6 +36,7 @@ public class MoviesViewBuilder implements Builder<Region> {
     private TilePane tilePane;
 
     private SortState currentSortState = SortState.NONE;
+    private Button sortButton;
 
     public MoviesViewBuilder(MoviesModel model, MoviePosterActions moviePosterActions) {
         this.model = model;
@@ -48,9 +52,7 @@ public class MoviesViewBuilder implements Builder<Region> {
         VBox vBox = new VBox(20);
         Label title = LabelWidgets.styledLabel(model.titleProperty(), "hpage-title");
 
-        // tester sortering
-        Button sortButton = new Button("Sorter på IMDb Rating");
-        sortButton.setOnAction(e -> sortByImdbRating());
+        sortButton = ButtonWidgets.actionButtonStyle("Sorter på IMDB rating", "button-filter-imdb", event -> sortByImdbRating());
 
         addPosters();
         vBox.getChildren().addAll(title, sortButton, tilePane);
@@ -63,13 +65,16 @@ public class MoviesViewBuilder implements Builder<Region> {
         Comparator<MovieModel> comparator = switch (currentSortState) {
             case NONE -> {
                 currentSortState = SortState.ASCENDING;
+                sortButton.setText("Stigende IMDB rating");
                 yield Comparator.comparing(m -> (double) m.imdbRatingProperty().get());
             }
             case ASCENDING -> {
                 currentSortState = SortState.DESCENDING;
+                sortButton.setText("Faldende IMDB rating");
                 yield Comparator.<MovieModel, Double>comparing(m -> (double) m.imdbRatingProperty().get()).reversed();
             }
             case DESCENDING -> {
+                sortButton.setText("Sorter på IMDB rating");
                 currentSortState = SortState.NONE;
                 yield null;
             }

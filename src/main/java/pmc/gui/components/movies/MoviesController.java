@@ -12,6 +12,7 @@ import pmc.be.Movie;
 import pmc.gui.common.*;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.logging.Filter;
 
 public class MoviesController implements IViewController {
@@ -42,6 +43,11 @@ public class MoviesController implements IViewController {
 
     public void setMovies(ObservableList<MovieModel> movies) {
         this.model.setMovies(movies);
+    }
+
+    public void setMovieFilter(MovieModel movie) {
+        Predicate<MovieModel> filter = movieModel -> movieModel.equals(movie);
+        viewBuilder.setMoviesFilter(filter);
     }
 
     public void setDetails(String title, ObservableList<MovieModel> list) {

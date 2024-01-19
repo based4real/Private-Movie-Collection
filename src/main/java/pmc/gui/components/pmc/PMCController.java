@@ -290,7 +290,7 @@ public class PMCController implements IViewController {
             MovieDataWrapper wrap = this.moviesController.getMoviedata();
             CategoriesModel categoryModel = wrap.getCategoryModel();
 
-            if (categoryId != categoryModel.idProperty().get())
+            if (categoryModel == null || categoryId != categoryModel.idProperty().get())
                 return;
 
             if (wrap == null || wrap.getDataType() != MovieDataWrapper.Type.CATEGORY)

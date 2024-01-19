@@ -327,11 +327,11 @@
 }
 
 
-    /*******************************************************************************
-     *                                                                             *
-     * Info Page                                                                   *
-     *                                                                             *
-     ******************************************************************************/
+/*******************************************************************************
+ *                                                                             *
+ * Info Page                                                                   *
+ *                                                                             *
+ ******************************************************************************/
 .info-header {
     -fx-fill: white; /* For Text in JavaFX you have to use -fx-fill... */
     -fx-text-fill: white;
@@ -663,7 +663,6 @@
     -fx-cursor: hand;
 }
 
-
 .combo-box .arrow-button {
     -fx-background-color: -primary-color;
 }
@@ -674,4 +673,21 @@
 
 .combo-box:focused .arrow {
     -fx-background-color: -accent-color;
+}
+
+.button-filter-imdb {
+    -fx-min-width: 125;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 0);
+    -fx-font-size: 12;
+    -fx-text-fill: lightgrey;
+    -fx-border-radius: 4;
+    -fx-background-color: -primary-color;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+.button-filter-imdb:hover {
+    -fx-text-fill: white;
+    -fx-border-radius: 4;
+    -fx-border-color: rgba(229, 161, 12, 0.4);
+    -fx-cursor: hand;
 }
