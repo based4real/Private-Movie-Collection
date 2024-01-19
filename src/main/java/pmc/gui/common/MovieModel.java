@@ -1,14 +1,11 @@
 package pmc.gui.common;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pmc.be.Category;
 import pmc.be.Genre;
 import pmc.be.Movie;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
-import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
 
 import java.time.LocalDateTime;

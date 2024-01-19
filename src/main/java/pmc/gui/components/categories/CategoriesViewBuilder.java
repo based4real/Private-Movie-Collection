@@ -15,7 +15,6 @@ import pmc.gui.utils.StringHandler;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.ScrollPaneWidgets;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class CategoriesViewBuilder implements Builder<Region> {

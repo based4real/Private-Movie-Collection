@@ -13,8 +13,6 @@ import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
 import pmc.gui.widgets.icons.IconWidgets;
 
-import java.util.function.Consumer;
-
 import static pmc.gui.widgets.ImageWidgets.scaledRoundedImage;
 
 // todo: refactor

@@ -2,18 +2,11 @@ package pmc.gui.components.movies;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.Region;
-import javafx.util.Builder;
-import pmc.be.Movie;
 import pmc.gui.common.*;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.logging.Filter;
 
 public class MoviesController implements IViewController {
     private final MoviesModel model;

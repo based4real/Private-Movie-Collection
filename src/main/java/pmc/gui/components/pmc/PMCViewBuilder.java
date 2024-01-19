@@ -1,36 +1,22 @@
 package pmc.gui.components.pmc;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.util.Builder;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
-import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
 import org.kordamp.ikonli.material2.Material2MZ;
 import org.kordamp.ikonli.material2.Material2OutlinedAL;
 import pmc.gui.common.MovieModel;
-import pmc.gui.components.genres.GenresModel;
 import pmc.gui.widgets.*;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.controls.NavigationGroup;
-import pmc.gui.widgets.icons.IconWidgets;
-
-import javax.swing.text.View;
 
 /**
  * Ansvarlig for at bygge brugergrænsefladen for det overordnede View i Private Movie Collection (PMC) applikationen.

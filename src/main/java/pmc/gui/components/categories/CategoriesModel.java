@@ -7,12 +7,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import pmc.be.Category;
 import pmc.gui.common.MovieModel;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CategoriesModel {
 

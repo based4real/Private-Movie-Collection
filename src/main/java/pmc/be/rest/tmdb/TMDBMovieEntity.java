@@ -10,7 +10,6 @@ import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.dal.rest.tmdb.movie.TMDBVideo;
 import pmc.utils.PMCException;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

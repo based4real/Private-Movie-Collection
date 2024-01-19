@@ -374,38 +374,38 @@
  *                                                                             *
  ******************************************************************************/
 .info-header {
-    -fx-fill: white; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-fill: white;
     -fx-text-fill: white;
     -fx-font-size: 32;
     -fx-font-weight: bold;
 }
 
 .info-director {
-    -fx-fill: grey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-fill: grey;
     -fx-text-fill: grey;
     -fx-font-size: 12;
 }
 
 .info-directored {
-    -fx-fill: grey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-fill: grey;
     -fx-text-fill: grey;
     -fx-font-size: 12;
 }
 
 .info-others {
-    -fx-fill: lightgrey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-fill: lightgrey;
     -fx-text-fill: lightgrey;
     -fx-font-size: 14;
 }
 
 .info-genre {
-    -fx-fill: lightgrey; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-fill: lightgrey;
     -fx-text-fill: lightgrey;
     -fx-font-size: 14;
 }
 
 .info-description {
-    -fx-fill: white; /* For Text in JavaFX you have to use -fx-fill... */
+    -fx-fill: white;
     -fx-text-fill: white;
     -fx-font-size: 14;
 }

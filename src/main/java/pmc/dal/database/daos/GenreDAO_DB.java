@@ -2,7 +2,6 @@ package pmc.dal.database.daos;
 
 import pmc.be.Genre;
 import pmc.dal.database.common.AbstractDAO;
-import pmc.dal.database.common.IDAO;
 import pmc.dal.exception.DataAccessException;
 
 import java.sql.*;

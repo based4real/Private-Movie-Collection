@@ -5,7 +5,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 
 import java.util.function.Predicate;

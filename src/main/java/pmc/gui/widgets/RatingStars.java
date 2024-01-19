@@ -2,7 +2,6 @@ package pmc.gui.widgets;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;

@@ -6,7 +6,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
 import pmc.gui.components.categories.CategoriesModel;
@@ -15,7 +14,6 @@ import pmc.gui.widgets.OtherWidgets;
 import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.MoviePoster;
 import pmc.gui.widgets.ScrollPaneWidgets;
-import pmc.gui.widgets.icons.IconWidgets;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

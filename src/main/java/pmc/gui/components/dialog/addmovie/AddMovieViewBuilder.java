@@ -1,7 +1,5 @@
 package pmc.gui.components.dialog.addmovie;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -18,7 +16,6 @@ import pmc.gui.widgets.LabelWidgets;
 import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.icons.IconWidgets;
 
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public class AddMovieViewBuilder implements Builder<Region> {

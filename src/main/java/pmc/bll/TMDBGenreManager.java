@@ -6,7 +6,6 @@ import pmc.dal.rest.tmdb.movie.TMDBGenre;
 import pmc.utils.PMCException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TMDBGenreManager {

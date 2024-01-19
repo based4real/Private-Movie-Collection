@@ -11,11 +11,9 @@ import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBMovieEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
-import pmc.dal.rest.tmdb.extra.TMDBLang;
 import pmc.utils.PMCException;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class MovieDetailsModel {
     private final IntegerProperty tmdbid = new SimpleIntegerProperty();

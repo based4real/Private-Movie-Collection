@@ -3,7 +3,6 @@ package pmc.gui.components.pmc;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -50,8 +49,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Hoved Controller for Private Movie Collection (PMC) applikationen.<br>
@@ -161,7 +158,7 @@ public class PMCController implements IViewController {
                     try {
                         model.genreModels().setAll(convertToGenreModels(genres));
                     } catch (PMCException e) {
-                        throw new RuntimeException(e); // Træls
+                        ErrorHandler.showErrorDialog("Fejl", e.getMessage());
                     }
                 },
                 error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
@@ -190,7 +187,7 @@ public class PMCController implements IViewController {
                     try {
                         model.categoryModels().setAll(convertToCategoryModels(categories));
                     } catch (PMCException e) {
-                        throw new RuntimeException(e); // Træls
+                        ErrorHandler.showErrorDialog("Fejl", e.getMessage());
                     }
                 },
                 error -> ErrorHandler.showErrorDialog("Fejl", "Der var et problem at hente data: " + error.getMessage())
@@ -509,7 +506,7 @@ public class PMCController implements IViewController {
                 }
             }
         } catch (PMCException e) {
-            throw new RuntimeException(e);
+            ErrorHandler.showErrorDialog("Fejl", e.getMessage());
         }
     }
 

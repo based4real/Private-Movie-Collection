@@ -5,7 +5,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
 import pmc.be.Category;
-import pmc.gui.common.MovieModel;
 import pmc.gui.components.dialog.IDialogController;
 
 public class AddCategoryController implements IDialogController<AddCategoryData> {

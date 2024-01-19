@@ -1,7 +1,5 @@
 package pmc.gui.components.dialog.addmovie;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -9,15 +7,12 @@ import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieDetailsModel;
-import pmc.gui.common.MovieModel;
 import pmc.gui.components.dialog.IDialogController;
 import pmc.gui.utils.ErrorHandler;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class AddMovieController implements IDialogController<AddMovieData> {
     private final AddMovieModel model;

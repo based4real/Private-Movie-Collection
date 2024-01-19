@@ -1,6 +1,5 @@
 package pmc.gui.utils;
 
-
 import javax.imageio.ImageIO;
 
 import java.awt.*;
@@ -29,7 +28,7 @@ public class FileManagementService {
         String extension = "";
         int i = sourceFile.getName().lastIndexOf('.');
         if (i > 0) {
-            extension = sourceFile.getName().substring(i); // includes the dot, e.g., ".mp4"
+            extension = sourceFile.getName().substring(i);
         }
 
         File destFile = new File(destDir, name + extension);

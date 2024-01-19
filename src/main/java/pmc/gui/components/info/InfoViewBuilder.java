@@ -1,10 +1,7 @@
 package pmc.gui.components.info;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableStringValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -18,15 +15,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.util.Builder;
 import javafx.util.Duration;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
 import org.kordamp.ikonli.javafx.FontIcon;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
@@ -36,7 +29,6 @@ import pmc.gui.common.MovieModel;
 import pmc.gui.common.MovieUpdate;
 import pmc.gui.common.MoviesData;
 import pmc.gui.components.genres.GenresModel;
-import pmc.gui.utils.ErrorHandler;
 import pmc.gui.utils.StringHandler;
 import pmc.gui.utils.Webbrowser;
 import pmc.gui.widgets.*;
@@ -45,12 +37,6 @@ import pmc.gui.widgets.controls.HorizontalPaginator;
 import pmc.gui.widgets.icons.IconWidgets;
 import pmc.gui.widgets.icons.ToggleableIcon;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Stack;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class InfoViewBuilder implements Builder<Region> {

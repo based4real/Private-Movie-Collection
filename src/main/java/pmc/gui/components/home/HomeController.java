@@ -8,8 +8,6 @@ import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
 import pmc.gui.components.categories.CategoriesModel;
 
-import java.util.function.Consumer;
-
 public class HomeController implements IViewController {
     private final Builder<Region> viewBuilder;
 

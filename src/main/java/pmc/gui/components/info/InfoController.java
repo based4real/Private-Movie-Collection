@@ -5,11 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
-import pmc.be.Movie;
 import pmc.gui.common.*;
 import pmc.gui.components.genres.GenresModel;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 

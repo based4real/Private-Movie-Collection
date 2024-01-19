@@ -4,7 +4,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.layout.Region;
 import javafx.util.Builder;
 import pmc.gui.common.IViewController;
-import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviesData;
 
 import java.util.function.Consumer;

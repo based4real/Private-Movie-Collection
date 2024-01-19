@@ -20,13 +20,11 @@ import pmc.gui.widgets.icons.IconWidgets;
 import java.util.function.Consumer;
 
 public class EditMovieViewBuilder implements Builder<Region> {
-    private final EditMovieModel model;
     private final MovieModel movieToEdit;
     private final ObservableList<CategoriesModel> categories;
     private final Consumer<EditMovieData> updateHandler;
 
-    public EditMovieViewBuilder(EditMovieModel model, MovieModel movieToEdit, ObservableList<CategoriesModel> categories, Consumer<EditMovieData> updateHandler) {
-        this.model = model;
+    public EditMovieViewBuilder(MovieModel movieToEdit, ObservableList<CategoriesModel> categories, Consumer<EditMovieData> updateHandler) {
         this.movieToEdit = movieToEdit;
         this.categories = categories;
         this.updateHandler = updateHandler;

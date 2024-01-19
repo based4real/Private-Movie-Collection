@@ -1,9 +1,7 @@
 package pmc.gui.components.info;
 
-import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import pmc.be.rest.tmdb.TMDBCreditEntity;
@@ -11,9 +9,6 @@ import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.be.rest.tmdb.TMDBVideoEntity;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.genres.GenresModel;
-
-import java.util.function.Consumer;
-import java.util.logging.Filter;
 
 public class InfoModel {
     private final StringProperty posterPath = new SimpleStringProperty("");

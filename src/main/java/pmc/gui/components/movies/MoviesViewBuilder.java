@@ -4,20 +4,15 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Builder;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeBrands;
-import pmc.be.Category;
-import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieModel;
 import pmc.gui.common.MoviePosterActions;
 import pmc.gui.utils.SortState;
@@ -26,7 +21,6 @@ import pmc.gui.widgets.buttons.ButtonWidgets;
 import pmc.gui.widgets.icons.IconWidgets;
 
 import java.util.Comparator;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class MoviesViewBuilder implements Builder<Region> {
