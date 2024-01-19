@@ -37,8 +37,6 @@ public class TMDBMovie extends TMDBConnector {
             String encQuery = URLEncoder.encode(idToString, "UTF-8");
 
             URI uri = new URI(super.getAPI() + "/movie/" + encQuery + "?" + lang.get());
-
-            System.out.println(uri);
             JSONObject results = super.getJsonHelper().httpResponseToObject(super.getResponse(uri));
 
             if (results.length() > 0)
