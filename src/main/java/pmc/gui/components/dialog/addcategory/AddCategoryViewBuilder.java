@@ -65,6 +65,8 @@ public class AddCategoryViewBuilder implements Builder<Region> {
         ListView<Category> categoryListView = new ListView<>(filteredCategories);
         categoryListView.setCellFactory(lv -> createCategoryCell());
 
+        categoryListView.getStyleClass().add("listview-add");
+
         results.add(categoryListView, 0, row++, 1, 1);
 
         Button btn = new Button("Opret");

@@ -201,6 +201,8 @@ public class InfoViewBuilder implements Builder<Region> {
             GenresModel genreModel = genreModels.get(i);
             Label genreText = LabelWidgets.styledLabel(genreModel.nameProperty(), "info-genre");
             genreText.setOnMouseClicked(event -> buttonGenre(genreModel));
+            createToolTip(genreText, "Gå til " + genreModel.nameProperty().get() + " side");
+
             genres.getChildren().add(genreText);
 
             // Tilføjer komma
@@ -224,6 +226,9 @@ public class InfoViewBuilder implements Builder<Region> {
 
         Label imdbRating = LabelWidgets.styledLabel("5.0", "info-imdb-rating");
         imdbRating.setPadding(new Insets(5,0,0,0));
+
+        imdbRating.setOnMouseClicked(event -> imdbRatingClick());
+        createToolTip(imdbRating, "Åben IMDB side");
 
         model.movieModelProperty().addListener((observable, oldValue, newValue) -> {
             imdbRating.setText(String.valueOf(newValue.imdbRatingProperty().get()));
@@ -358,6 +363,10 @@ public class InfoViewBuilder implements Builder<Region> {
 
     private void personClick(TMDBCreditEntity credit) {
         Webbrowser.openTMDBCredits(credit.getID());
+    }
+
+    private void imdbRatingClick() {
+        Webbrowser.openIMDB(model.movieModelProperty().get().imdbIdProperty().get());
     }
 
     private void buttonGenre(GenresModel genreModel) {

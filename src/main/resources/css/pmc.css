@@ -467,6 +467,12 @@
     -fx-text-fill: white;
 }
 
+.info-imdb-rating:hover {
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+
 .info-rating-star {
     -fx-font-size: 15;
     -fx-fill: grey

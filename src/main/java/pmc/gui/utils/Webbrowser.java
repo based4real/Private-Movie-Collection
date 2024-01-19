@@ -30,6 +30,10 @@ public class Webbrowser {
         openURL("https://www.themoviedb.org/person/" + id);
     }
 
+    public static void openIMDB(String id) {
+        openURL("https://www.imdb.com/title/" + id);
+    }
+
     public static void openTMDBInfo(int id) {
         openURL("https://www.themoviedb.org/movie/" + id);
     }
