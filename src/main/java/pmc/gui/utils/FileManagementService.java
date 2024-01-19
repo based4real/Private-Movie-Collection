@@ -23,9 +23,16 @@ public class FileManagementService {
         Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    public static void copyFileToDir(File sourceFile, String destDir, Consumer<Double> onProgressUpdate) throws IOException {
+    public static void copyFileToDir(File sourceFile, String name, String destDir, Consumer<Double> onProgressUpdate) throws IOException {
         lastReportedProgress = 0;
-        File destFile = new File(destDir, sourceFile.getName());
+
+        String extension = "";
+        int i = sourceFile.getName().lastIndexOf('.');
+        if (i > 0) {
+            extension = sourceFile.getName().substring(i); // includes the dot, e.g., ".mp4"
+        }
+
+        File destFile = new File(destDir, name + extension);
 
         File dir = new File(destDir);
         if (!dir.exists()) dir.mkdir();

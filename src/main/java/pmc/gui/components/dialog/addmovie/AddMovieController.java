@@ -2,6 +2,7 @@ package pmc.gui.components.dialog.addmovie;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.Region;
@@ -10,6 +11,7 @@ import pmc.be.rest.tmdb.TMDBGenreEntity;
 import pmc.gui.common.MovieDetailsModel;
 import pmc.gui.common.MovieModel;
 import pmc.gui.components.dialog.IDialogController;
+import pmc.gui.utils.ErrorHandler;
 
 import java.io.File;
 import java.util.List;
@@ -36,6 +38,9 @@ public class AddMovieController implements IDialogController<AddMovieData> {
     public void initializeDialog(Dialog<AddMovieData> dialog) {
         this.dialog = dialog;
 
+        Node okBtn = dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okBtn.disableProperty().bind(model.fileChosenViewProperty().not());
+
         dialog.setResultConverter(dialogBtn -> {
             if (dialogBtn == ButtonType.OK) {
                 // todo: håndter at sige OK når der ikke er noget data.
@@ -45,12 +50,19 @@ public class AddMovieController implements IDialogController<AddMovieData> {
 
                 // todo: opbevar imdb rating som string i DB? for at undgå N/A
                 float imdbRating = 0.0F;
-                if (!model.imdbRatingProperty().get().equals("N/A")) {
+                if (model.imdbRatingProperty().get() == null || model.tmdbIdProperty().get() == -1 || model.imdbIdProperty() == null) {
+                    ErrorHandler.showErrorDialog("Fejl", "Filmen findes ikke.");
+                    return null;
+                }
+
+                if (!model.imdbRatingProperty().get().equals("N/A") && !model.imdbRatingProperty().get().isEmpty()) {
                     imdbRating = Float.parseFloat(model.imdbRatingProperty().get());
                 }
 
+
+
                 return new AddMovieData(
-                        Integer.parseInt(model.tmdbRatingProperty().get()),
+                        model.tmdbIdProperty().get(),
                         model.imdbIdProperty().get(),
                         model.originalTitleProperty().get(),
                         imdbRating, // håndter N/A
@@ -70,12 +82,15 @@ public class AddMovieController implements IDialogController<AddMovieData> {
         this.model.imdbIdProperty().set(model.imdbIdProperty().get());
         this.model.titleProperty().set(model.titleProperty().get());
         this.model.originalTitleProperty().set(model.originalTitleProperty().get());
-        this.model.tmdbRatingProperty().set(model.tmdbRatingProperty().get());
+        this.model.tmdbIdProperty().set(model.tmdbIdProperty().get());
         this.model.imdbRatingProperty().set(model.imdbRatingProperty().get());
         System.out.println(model.posterPathProperty().get());
         this.model.posterPathProperty().set(model.posterPathProperty().get());
         System.out.println(this.model.posterPathProperty().get());
         this.model.descriptionProperty().set(model.descriptionProperty().get());
+
+        this.model.releaseYearProperty().set(model.releaseProperty().get());
+        this.model.runtimeProperty().set(model.runtimeProperty().get());
 
         this.model.posterUrlProperty().set("https://image.tmdb.org/t/p/original" + model.posterPathProperty().get());
 

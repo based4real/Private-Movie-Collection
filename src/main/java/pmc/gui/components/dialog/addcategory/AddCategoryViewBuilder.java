@@ -48,7 +48,7 @@ public class AddCategoryViewBuilder implements Builder<Region> {
         searchField.setPromptText("Søg efter kategori");
         searchField.setMaxWidth(Double.MAX_VALUE);
         GridPane.setColumnSpan(searchField, 1);
-        results.add(searchField, 0, row++, 1, 1);
+        results.add(searchField, 0, row++, 2, 1);
 
         FilteredList<Category> filteredCategories = new FilteredList<>(model.getCategories(), p -> true);
         searchField.textProperty().addListener((obs, ov, nv) -> {
@@ -64,10 +64,11 @@ public class AddCategoryViewBuilder implements Builder<Region> {
 
         ListView<Category> categoryListView = new ListView<>(filteredCategories);
         categoryListView.setCellFactory(lv -> createCategoryCell());
-        
-        results.add(categoryListView, 0, row++, 1, 1);
+
+        results.add(categoryListView, 0, row++, 2, 1);
 
         Button btn = new Button("Opret");
+        btn.getStyleClass().add("add-back-button");
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setOnAction(event -> handleAddCategory.accept(model.nameProperty().get()));
 

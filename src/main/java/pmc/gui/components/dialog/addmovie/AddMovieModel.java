@@ -1,9 +1,6 @@
 package pmc.gui.components.dialog.addmovie;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pmc.be.rest.tmdb.TMDBGenreEntity;
@@ -13,6 +10,8 @@ public class AddMovieModel {
     private final BooleanProperty fileChosenView = new SimpleBooleanProperty(false);
     private final BooleanProperty chosenFile = new SimpleBooleanProperty(false);
 
+
+    private final IntegerProperty tmdbId = new SimpleIntegerProperty(-1);
     private final StringProperty imdbId = new SimpleStringProperty("");
     private final StringProperty title = new SimpleStringProperty("");
     private final StringProperty originalTitle = new SimpleStringProperty("");
@@ -24,6 +23,9 @@ public class AddMovieModel {
     private final StringProperty posterPath = new SimpleStringProperty("");
     private final StringProperty posterUrl = new SimpleStringProperty("");
 
+    private final StringProperty runtime = new SimpleStringProperty("");
+    private final StringProperty releaseYear = new SimpleStringProperty("");
+
     private ObservableList<TMDBGenreEntity> genres = FXCollections.observableArrayList();
 
     private final StringProperty fileName = new SimpleStringProperty("");
@@ -31,6 +33,7 @@ public class AddMovieModel {
     private final StringProperty absoluteFilePath = new SimpleStringProperty("");
 
     public void resetFetchedData() {
+        tmdbId.set(-1);
         imdbId.set("");
         title.set("");
         originalTitle.set("");
@@ -40,6 +43,11 @@ public class AddMovieModel {
         description.set("");
         posterUrl.set("");
         genres = FXCollections.observableArrayList();
+    }
+
+
+    public IntegerProperty tmdbIdProperty() {
+        return tmdbId;
     }
 
     public BooleanProperty chooseFileViewProperty() {
@@ -97,6 +105,15 @@ public class AddMovieModel {
     public StringProperty posterUrlProperty() {
         return posterUrl;
     }
+
+    public StringProperty runtimeProperty() {
+        return runtime;
+    }
+
+    public StringProperty releaseYearProperty() {
+        return releaseYear;
+    }
+
 
     public ObservableList<TMDBGenreEntity> getGenres() {
         return genres;

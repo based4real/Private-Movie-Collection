@@ -181,7 +181,7 @@ public class PMCViewBuilder implements Builder<Region> {
         progressBar.progressProperty().bind(model.fileProgressProperty());
         progressBar.visibleProperty().bind(model.copyingFileProperty());
 
-        results.getChildren().addAll(menuIcon, pmc, iconSearchFieldSpacer, filterSortBox.getSearchField(), filterSortBox.getImdbRatingField(), filterSortBox.getGenreComboBox(), filterSortBox.getSelectedGenresDisplay(), space, progressBar, addCategoryIcon, addMovieIcon);
+        results.getChildren().addAll(menuIcon, pmc, iconSearchFieldSpacer, filterSortBox.getSearchField(), filterSortBox.getImdbRatingField(), filterSortBox.getGenreCheckComboBox(), space, progressBar, addCategoryIcon, addMovieIcon);
         results.setAlignment(Pos.CENTER_LEFT);
 
         return results;
